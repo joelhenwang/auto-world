@@ -1,0 +1,16 @@
+{
+  "active_characters": [
+    "Mira Talren",
+    "Dain Arcen"
+  ],
+  "expected_fake_model_calls": 10,
+  "model": "fake/stage1-first-day-v1",
+  "phases": [
+    "dawn",
+    "morning",
+    "evening"
+  ],
+  "scenario_id": "stage1-first-day-v1",
+  "scenario_test_passed": true,
+  "seed": "caldris-embervale-v1:stage1"
+}

@@ -1,14 +1,16 @@
 # Current Stage
 
-**Updated:** 2026-07-29T18:30:00Z  
-**Updated by:** parent coding agent  
+**Updated:** 2026-07-29T20:14:53Z
+**Updated by:** integration subagent
 **Repository:** autonomous-fictional-world  
-**Current branch:** `cursor/s1-db-001-5704`  
-**Stage:** 1 — First Complete Three-Phase Day | **Status:** IN_PROGRESS
+**Current branch:** `cursor/s1-integration-5704`
+**Stage:** 1 — First Complete Three-Phase Day | **Status:** GATE_PASS_PENDING_REVIEW
 
 ## Current objective
 
-Deliver Stage 1 (`26_STAGE_1_FIRST_COMPLETE_DAY.md`) ending in **S1-QA-001** gate PASS with evidence under `docs/status/evidence/stage-1/`.
+Parent-review and merge the completed Stage 1 vertical slice. The deterministic
+S1-QA-001 gate passes at `8b64197`; evidence is under
+`docs/status/evidence/stage-1/`.
 
 Active characters: Mira Talren + Dain Arcen. Enabled phases: dawn → morning → evening.
 
@@ -17,17 +19,17 @@ Active characters: Mira Talren + Dain Arcen. Enabled phases: dawn → morning �
 | Task ID | Status | Notes |
 |---|---|---|
 | S0-QA-002 | VERIFIED on main | Stage 0 GATE_PASS; contracts FROZEN |
-| S1-DB-001 | IN_PROGRESS | action/scene/reaction/stream schema + repos |
-| S1-KNOW-001 | READY | after/overlaps DB contracts |
-| S1-MODEL-001 | READY | prompts/schemas/fake corpus |
-| S1-GRAPH-001 | BLOCKED | needs KNOW + MODEL |
-| S1-SIM-001 | READY | pure activation/scene assembly |
-| S1-GRAPH-002 | BLOCKED | needs GRAPH-001 |
-| S1-SIM-002 | BLOCKED | needs DB + graph outputs |
-| S1-ORCH-001 | BLOCKED | needs SIM-002 |
-| S1-API-001 | BLOCKED | after projections stable |
-| S1-UI-001 | BLOCKED | after API |
-| S1-QA-001 | BLOCKED | gate last |
+| S1-DB-001 | VERIFIED | migration `0003`, scene/stream repositories |
+| S1-KNOW-001 | VERIFIED | sealed perspective context + leakage tests |
+| S1-MODEL-001 | VERIFIED | prompts/schemas/fake corpus |
+| S1-GRAPH-001 | VERIFIED | bounded character decision pipeline |
+| S1-SIM-001 | VERIFIED | activation/scene assembly |
+| S1-GRAPH-002 | VERIFIED | reaction/resolution pipelines |
+| S1-SIM-002 | VERIFIED | atomic idempotent scene commit |
+| S1-ORCH-001 | VERIFIED | first-day workflow, budget, pause/resume |
+| S1-API-001 | VERIFIED | REST/OpenAPI/WebSocket/player commands |
+| S1-UI-001 | VERIFIED | Vue runtime client; tests/build green |
+| S1-QA-001 | GATE_PASS | 154 offline tests; fake scenario + live smoke pass |
 
 ## Stage 0 freeze (do not break)
 
@@ -38,11 +40,16 @@ Active characters: Mira Talren + Dain Arcen. Enabled phases: dawn → morning �
 - Default tests: no live OpenRouter (`openrouter_live` opt-in)
 - Additive contract changes only; new Alembic revisions
 
-## Latest verified baseline (pre Stage 1)
+## Latest verified baseline
 
 ```bash
-uv sync && uv run ruff check backend scripts tools && uv run basedpyright && uv run pytest
-# static green; unit/contract suites green; integration needs Docker
+sudo chmod 666 /var/run/docker.sock
+uv run python scripts/run_stage1_gate.py
+# PASS: 154 passed, 2 live tests deselected; frontend 5 passed + build
+uv run pytest -o addopts='' -m openrouter_live \
+  backend/tests/live/test_stage1_openrouter.py \
+  backend/tests/unit/test_openrouter_errors.py
+# PASS: 2 passed
 ```
 
-Evidence Stage 0: `docs/status/evidence/stage-0/`
+Evidence: `docs/status/evidence/stage-1/stage-gate-report.md`

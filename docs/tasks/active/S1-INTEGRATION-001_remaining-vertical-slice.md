@@ -2,7 +2,7 @@
 
 **Stage:** 1  
 **Workstream:** GRAPH/SIM/ORCH/API/UI/QA  
-**Status:** IN_PROGRESS  
+**Status:** COMPLETE_PENDING_PARENT_REVIEW
 **Priority:** P0  
 **Owner:** integration subagent  
 **Reviewer(s):** parent integration agent  
@@ -188,4 +188,9 @@ assumptions, contract deviations, unresolved risks, and next action.
 
 ## 18. Parent verification
 
-Pending parent review after push.
+Automated gate PASS at `8b64197`; evidence:
+`docs/status/evidence/stage-1/stage-gate-report.md`.
+
+Parent actions: review the commit series, run or accept
+`uv run python scripts/run_stage1_gate.py`, merge the branch, and set the final
+Stage 1 contract freeze/sign-off.

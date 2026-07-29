@@ -1,4 +1,4 @@
-# Contract Freeze — Stage 0
+# Contract Freeze — Stage 0 + Stage 1 candidate
 
 **Status:** FROZEN  
 **Freeze date:** 2026-07-29  
@@ -56,3 +56,24 @@ uv run python scripts/run_stage0_gate.py
 | Date | Change/CR | Old hash | New hash | Affected tasks | Approved by |
 |---|---|---|---|---|---|
 | 2026-07-29 | S1-DB-001 additive migration `0003_stage1_action_scene_tables` + scene repos (no Stage 0 reinterpretation) | `0002_core_stage0_tables` | `0003_stage1_action_scene_tables` | S1-* | pending review |
+
+## Stage 1 candidate freeze
+
+**Status:** GATE_PASS_PENDING_PARENT_FREEZE
+**Tested commit:** `8b641978f6a6ff4772118dce9c53b88454783275`
+**Gate report:** `docs/status/evidence/stage-1/stage-gate-report.md`
+
+The following additive Stage 1 contracts are candidates for freeze after the
+parent merges and reviews the integration branch:
+
+| Contract | Version/evidence | Allowed Stage 2 change |
+|---|---|---|
+| `ActionProposal` / `ReactionProposal` / `SceneResolution` | `1.0` / generated domain schemas | additive only |
+| `SealedContextPackage` | `1.0` | additive sections with leakage tests |
+| phase/scene orchestration semantics | `stage1-first-day-v1` | preserve simultaneous intents and barriers |
+| scene atomic commit/idempotency | `SceneCommitService` | no alternate canon path |
+| REST/WebSocket core | OpenAPI `7ca48ab0…f63a` | additive v1 endpoints/events |
+| prompt/corpus contracts | character/reaction/resolver v1 | version new prompt IDs |
+
+No Stage 0 frozen contract was reinterpreted. Stage 1 uses migration `0003`,
+the existing `EventCommitService`, and the existing `DeterministicPhaseRunner`.
