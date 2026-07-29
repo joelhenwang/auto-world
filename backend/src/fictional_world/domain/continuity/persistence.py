@@ -133,6 +133,19 @@ class ActivityPersistenceRecord(StrictContract):
     version: int = Field(default=0, ge=0)
 
 
+class TravelProgressPersistenceRecord(StrictContract):
+    """Per-activity route progress (``travel_progress`` table)."""
+
+    activity_id: UUID
+    route_id: UUID
+    distance_completed: Decimal = Field(default=Decimal("0"), ge=0)
+    phases_elapsed: int = Field(default=0, ge=0)
+    current_segment_index: int = Field(default=0, ge=0)
+    last_tick_phase_index: int = Field(ge=0)
+    status: str = Field(default="in_progress", min_length=1, max_length=50)
+    version: int = Field(default=0, ge=0)
+
+
 class HookPersistenceRecord(StrictContract):
     id: UUID
     world_id: UUID
@@ -250,4 +263,3 @@ class NarrativeMetricPersistenceRecord(StrictContract):
     window_end_phase: int = Field(ge=0)
     payload: JsonObject = Field(default_factory=dict)
     recorded_at: datetime | None = None
-
