@@ -9,4 +9,4 @@ backend/tests/integration/test_stage1_api.py::test_stage1_runtime_reads_and_play
     return await dependant.call(**values)
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-7 passed, 2 warnings in 4.42s
+7 passed, 2 warnings in 4.96s
