@@ -2,7 +2,7 @@
 
 **Stage:** 2  
 **Workstream:** SIM  
-**Status:** READY  
+**Status:** COMPLETE  
 **Priority:** P0  
 **Depends:** S2-DB-001, S2-CHAR-001  
 **AGENTS conceptual branch:** `task/S2-SIM-001-calendar-travel`
@@ -22,3 +22,12 @@ Ten-phase calendar, sleep/activation suppression, Activity state machine, route-
 ## Out of scope
 
 - Multi-party dialogue budgets (S2-SIM-002); Temporal requirement
+
+## Delivered
+
+- `application/simulation/time.py` — Stage 1/2 phase profiles; full-day walk
+- `application/simulation/activation.py` — Stage 2 `ActivationDecision` + sleep schedule
+- `application/simulation/activity.py` — activity SM, travel progress, encounters, invalidation
+- `application/simulation/request_estimate.py` — `estimate_phase_model_requests`
+- Additive `stage2=` flag on `DeterministicPhaseRunner` (no Stage 1 filter)
+- Unit tests in `tests/unit/application/simulation/test_s2_sim_001_calendar_travel.py`
