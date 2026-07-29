@@ -1,9 +1,10 @@
 # Integration Status
 
-**Updated:** 2026-07-29T20:55:00Z  
-**Integration owner:** next Stage 2 parent agent  
-**Integration branch/worktree:** `main` @ `7727c7f`  
-**Target stage:** 2 (READY — implementation not started)
+**Updated:** 2026-07-29T21:45:00Z  
+**Integration owner:** Stage 2 parent coding agent  
+**Integration branch/worktree:** `cursor/s2-db-001-persistence-085f`  
+**Target stage:** 2 (IN_PROGRESS)  
+**Main tip at kickoff:** `5c9299e` (PR #20 freeze docs; Stage 1 code from PR #19 @ `7727c7f`)
 
 ## Contract baseline
 
@@ -11,23 +12,35 @@
 |---|---|---|
 | Stage 0 | FROZEN | additive only |
 | Stage 1 | FROZEN @ `7727c7f` | see `CONTRACT_FREEZE.md` |
-| Stage 2 | not started | first producer: S2-DB-001 |
+| Stage 2 schema | COMPLETE locally | S2-DB-001 → `0004_stage2_continuity_tables` |
 
-## Task matrix (prep only)
+## Task matrix
 
-| Task ID | Status | Notes |
+| Task ID | Status | Branch / notes |
 |---|---|---|
 | S1-* | VERIFIED on main | PR #19 |
-| S2-DB-001 | READY | packet drafted; no code |
-| S2-CONTENT-001 | READY | packet drafted; no code |
-| remaining S2-* | NOT STARTED | create from `27` §6 when owned |
+| S2 kickoff/freeze docs | MERGED | PR #20 |
+| S2-DB-001 | COMPLETE (awaiting merge) | `cursor/s2-db-001-persistence-085f` |
+| S2-CONTENT-001 | READY | packet drafted; after/with DB |
+| S2-CHAR-001 | NOT STARTED | after DB |
+| S2-KNOW-001 | NOT STARTED | after DB |
+| S2-MEM-001 | NOT STARTED | after KNOW |
+| S2-WORLD-001 | NOT STARTED | after DB |
+| S2-WORLD-002 | NOT STARTED | after WORLD-001 |
+| S2-SIM-001 | NOT STARTED | after CHAR/travel contracts |
+| S2-SIM-002 | NOT STARTED | after SIM-001 |
+| S2-GRAPH-001 | NOT STARTED | after CHAR/KNOW/WORLD |
+| S2-ORCH-001 | NOT STARTED | after SIM/GRAPH |
+| S2-API-001 | NOT STARTED | after ORCH contracts |
+| S2-UI-001 | NOT STARTED | after API |
+| S2-QA-001 | NOT STARTED | final gate |
 
-## Baseline
+## Merge order
 
-```bash
-uv run python scripts/run_stage1_gate.py
+```text
+S2-DB-001 → S2-CONTENT-001 → (CHAR ‖ KNOW ‖ MEM ‖ WORLD*) → SIM → GRAPH → ORCH → API → UI → QA
 ```
 
 ## Current failures
 
-None. Stage 2 not started.
+None. S2-DB-001 integration tests green (`test_stage2_schema` + `test_migrations_baseline`).

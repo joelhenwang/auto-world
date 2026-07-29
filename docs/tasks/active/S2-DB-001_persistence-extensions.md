@@ -2,11 +2,11 @@
 
 **Stage:** 2  
 **Workstream:** DB  
-**Status:** READY  
+**Status:** IN_PROGRESS  
 **Priority:** P0  
 **Owner:** parent coding agent  
-**Branch/worktree:** TBD `cursor/s2-db-001-5704`  
-**Upstream commit:** `7727c7f` (main after Stage 1)  
+**Branch/worktree:** `cursor/s2-db-001-persistence-085f`  
+**Upstream commit:** `5c9299e` (main after Stage 1 + freeze docs)  
 **Target merge order:** first Stage 2 implementation packet  
 **AGENTS conceptual branch:** `task/S2-DB-001-persistence-extensions`
 
@@ -99,13 +99,16 @@ docs/handoffs/**
 
 ## 9. Acceptance criteria
 
-- [ ] Sole Alembic head after `0003`
-- [ ] Named constraints/indexes
-- [ ] Repos + UoW wired for new aggregates needed by CHAR/KNOW stubs
-- [ ] Integration tests green with Docker
-- [ ] Schema snapshot regenerated
-- [ ] Handoff written
+- [x] Sole Alembic head after `0003`
+- [x] Named constraints/indexes
+- [x] Repos + UoW wired for new aggregates needed by CHAR/KNOW stubs
+- [x] Integration tests green with Docker
+- [x] Schema snapshot regenerated
+- [x] Handoff written
 
 ## 10. Handoff recipient
 
 Parent → S2-CHAR-001 / S2-KNOW-001 / S2-CONTENT-001
+
+**Status:** COMPLETE (implementation) — awaiting parent review/merge
+

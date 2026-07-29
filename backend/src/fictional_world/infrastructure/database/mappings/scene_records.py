@@ -104,6 +104,9 @@ def scene_to_record(
         started_at=row.started_at,
         completed_at=row.completed_at,
         version=int(row.version),
+        continuation_id=row.continuation_id,
+        director_hook_id=row.director_hook_id,
+        observer_eligibility=_json_obj(row.observer_eligibility),
         actions=tuple(
             SceneActionRecord(
                 scene_id=a.scene_id,

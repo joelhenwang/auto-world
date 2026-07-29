@@ -13,6 +13,21 @@ from fictional_world.infrastructure.database.repositories.budgets import (
 from fictional_world.infrastructure.database.repositories.characters import (
     SqlAlchemyCharacterRepository,
 )
+from fictional_world.infrastructure.database.repositories.continuity import (
+    SqlAlchemyActivityRepository,
+    SqlAlchemyBeliefRepository,
+    SqlAlchemyClaimRepository,
+    SqlAlchemyCommitmentRepository,
+    SqlAlchemyDayRunRepository,
+    SqlAlchemyDiaryEntryRepository,
+    SqlAlchemyGoalRepository,
+    SqlAlchemyHookRepository,
+    SqlAlchemyNpcRepository,
+    SqlAlchemyPlanRepository,
+    SqlAlchemyRelationshipEdgeRepository,
+    SqlAlchemyRouteRepository,
+    SqlAlchemySummaryRepository,
+)
 from fictional_world.infrastructure.database.repositories.events import SqlAlchemyEventRepository
 from fictional_world.infrastructure.database.repositories.phases import SqlAlchemyPhaseRepository
 from fictional_world.infrastructure.database.repositories.scenes import (
@@ -67,6 +82,19 @@ class SqlAlchemyUnitOfWork:
         self.stream_events = cast(SqlAlchemyStreamEventRepository, None)
         self.player_controls = cast(SqlAlchemyPlayerControlRepository, None)
         self.user_commands = cast(SqlAlchemyUserCommandRepository, None)
+        self.goals = cast(SqlAlchemyGoalRepository, None)
+        self.plans = cast(SqlAlchemyPlanRepository, None)
+        self.commitments = cast(SqlAlchemyCommitmentRepository, None)
+        self.relationship_edges = cast(SqlAlchemyRelationshipEdgeRepository, None)
+        self.claims = cast(SqlAlchemyClaimRepository, None)
+        self.beliefs = cast(SqlAlchemyBeliefRepository, None)
+        self.activities = cast(SqlAlchemyActivityRepository, None)
+        self.routes = cast(SqlAlchemyRouteRepository, None)
+        self.hooks = cast(SqlAlchemyHookRepository, None)
+        self.npcs = cast(SqlAlchemyNpcRepository, None)
+        self.summaries = cast(SqlAlchemySummaryRepository, None)
+        self.diary_entries = cast(SqlAlchemyDiaryEntryRepository, None)
+        self.day_runs = cast(SqlAlchemyDayRunRepository, None)
 
     async def __aenter__(self) -> SqlAlchemyUnitOfWork:
         self.session = self._session_factory()
@@ -90,6 +118,19 @@ class SqlAlchemyUnitOfWork:
         self.stream_events = SqlAlchemyStreamEventRepository(self.session)
         self.player_controls = SqlAlchemyPlayerControlRepository(self.session)
         self.user_commands = SqlAlchemyUserCommandRepository(self.session)
+        self.goals = SqlAlchemyGoalRepository(self.session)
+        self.plans = SqlAlchemyPlanRepository(self.session)
+        self.commitments = SqlAlchemyCommitmentRepository(self.session)
+        self.relationship_edges = SqlAlchemyRelationshipEdgeRepository(self.session)
+        self.claims = SqlAlchemyClaimRepository(self.session)
+        self.beliefs = SqlAlchemyBeliefRepository(self.session)
+        self.activities = SqlAlchemyActivityRepository(self.session)
+        self.routes = SqlAlchemyRouteRepository(self.session)
+        self.hooks = SqlAlchemyHookRepository(self.session)
+        self.npcs = SqlAlchemyNpcRepository(self.session)
+        self.summaries = SqlAlchemySummaryRepository(self.session)
+        self.diary_entries = SqlAlchemyDiaryEntryRepository(self.session)
+        self.day_runs = SqlAlchemyDayRunRepository(self.session)
         return self
 
     async def __aexit__(

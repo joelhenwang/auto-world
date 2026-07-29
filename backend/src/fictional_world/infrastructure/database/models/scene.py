@@ -96,7 +96,9 @@ class ActionProposalRow(Base):
         SmallInteger, nullable=False, server_default=text("1")
     )
     continuation_activity_id: Mapped[uuid.UUID | None] = mapped_column(
-        Uuid(as_uuid=True), nullable=True
+        Uuid(as_uuid=True),
+        ForeignKey(f"{WORLDSIM_SCHEMA}.activity.id", use_alter=True),
+        nullable=True,
     )
     desired_effects: Mapped[object] = mapped_column(
         JSONB, nullable=False, server_default=text("'{}'::jsonb")
@@ -189,6 +191,15 @@ class SceneRow(Base):
     started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     version: Mapped[int] = mapped_column(BigInteger, nullable=False, server_default=text("0"))
+    continuation_id: Mapped[uuid.UUID | None] = mapped_column(Uuid(as_uuid=True), nullable=True)
+    director_hook_id: Mapped[uuid.UUID | None] = mapped_column(
+        Uuid(as_uuid=True),
+        ForeignKey(f"{WORLDSIM_SCHEMA}.hook.id", use_alter=True),
+        nullable=True,
+    )
+    observer_eligibility: Mapped[object] = mapped_column(
+        JSONB, nullable=False, server_default=text("'{}'::jsonb")
+    )
 
 
 class SceneActionRow(Base):

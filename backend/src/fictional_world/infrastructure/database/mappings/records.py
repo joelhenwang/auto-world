@@ -281,6 +281,10 @@ def event_to_record(
         supersedes_event_id=row.supersedes_event_id,
         consistency_status=row.consistency_status,
         committed_at=row.committed_at,
+        director_provenance=(
+            None if row.director_provenance is None else _json_obj(row.director_provenance)
+        ),
+        npc_provenance=None if row.npc_provenance is None else _json_obj(row.npc_provenance),
         effects=effect_records,
     )
 
