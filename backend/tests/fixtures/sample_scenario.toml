@@ -1,0 +1,10 @@
+scenario_id = "stage0-harness-smoke-v1"
+seed = "caldris-embervale-v1"
+model_script = "none"
+random_script = "none"
+
+[[steps]]
+action = "noop"
+
+[[assertions]]
+invariant = "no_duplicate_events"
