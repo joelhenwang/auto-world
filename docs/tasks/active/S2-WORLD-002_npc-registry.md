@@ -2,10 +2,10 @@
 
 **Stage:** 2  
 **Workstream:** WORLD  
-**Status:** READY  
+**Status:** COMPLETE  
 **Priority:** P0  
-**Owner:** parent coding agent  
-**Branch/worktree:** TBD `cursor/s2-world-002-*-085f`  
+**Owner:** coding subagent (S2-WORLD-002)  
+**Branch/worktree:** `cursor/s2-world-002-npc-085f`  
 **Depends:** S2-WORLD-001 (proposal path), S2-KNOW-001 (NPC knowledge package)  
 **AGENTS conceptual branch:** `task/S2-WORLD-002-npc-registry`
 
