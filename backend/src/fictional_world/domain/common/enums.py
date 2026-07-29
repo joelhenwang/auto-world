@@ -173,7 +173,11 @@ class SourceKind(StrEnum):
 
 
 class TaskState(StrEnum):
-    """Operational task lifecycle states (Stage 0 surface for S0-ORCH-001)."""
+    """Operational task lifecycle states (Stage 0 surface for S0-ORCH-001).
+
+    Handbook READY maps to ``pending``; LEASED maps to ``claimed``.
+    Retry delay uses ``available_at`` rather than a separate WAITING_RETRY state.
+    """
 
     PENDING = "pending"
     CLAIMED = "claimed"
@@ -182,3 +186,20 @@ class TaskState(StrEnum):
     FAILED = "failed"
     DEAD_LETTER = "dead_letter"
     CANCELLED = "cancelled"
+
+
+class OutboxState(StrEnum):
+    """Transactional outbox message lifecycle (Stage 0)."""
+
+    PENDING = "pending"
+    CLAIMED = "claimed"
+    COMPLETED = "completed"
+
+
+class BudgetStatus(StrEnum):
+    """``request_budget_ledger.status`` values (DB CHECK-aligned)."""
+
+    RESERVED = "reserved"
+    CONSUMED = "consumed"
+    RELEASED = "released"
+    EXPIRED = "expired"

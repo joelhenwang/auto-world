@@ -3,11 +3,14 @@
 from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
+from datetime import datetime, timedelta
 from uuid import UUID
 
-from sqlalchemy import select
+from sqlalchemy import and_, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from fictional_world.domain.common.enums import OutboxState
+from fictional_world.domain.common.errors import InvalidStateTransition
 from fictional_world.domain.events.persistence import OutboxMessageRecord
 from fictional_world.domain.knowledge.persistence import ObservationPersistenceRecord
 from fictional_world.domain.memory.persistence import RecentMemoryRecord
@@ -198,6 +201,8 @@ class SqlAlchemyOutboxRepository:
             claim_expires_at=message.claim_expires_at,
             completed_at=message.completed_at,
         )
+        if message.available_at is not None:
+            row.available_at = message.available_at
         self._session.add(row)
         await self._session.flush()
         return outbox_to_record(row)
@@ -209,7 +214,84 @@ class SqlAlchemyOutboxRepository:
         row = result.scalar_one_or_none()
         return outbox_to_record(row) if row is not None else None
 
+    async def get(self, message_id: UUID) -> OutboxMessageRecord | None:
+        row = await self._session.get(OutboxMessageRow, message_id)
+        return outbox_to_record(row) if row is not None else None
+
     async def insert_many(
         self, messages: Sequence[OutboxMessageRecord]
     ) -> Sequence[OutboxMessageRecord]:
         return [await self.insert(message) for message in messages]
+
+    async def claim_available(
+        self,
+        *,
+        worker_id: str,
+        lease_duration: timedelta,
+        now: datetime,
+        limit: int = 1,
+    ) -> Sequence[OutboxMessageRecord]:
+        claimable = (
+            select(OutboxMessageRow)
+            .where(
+                OutboxMessageRow.available_at <= now,
+                OutboxMessageRow.state != OutboxState.COMPLETED.value,
+                or_(
+                    and_(
+                        OutboxMessageRow.state == OutboxState.PENDING.value,
+                        or_(
+                            OutboxMessageRow.claim_expires_at.is_(None),
+                            OutboxMessageRow.claim_expires_at <= now,
+                        ),
+                    ),
+                    and_(
+                        OutboxMessageRow.state == OutboxState.CLAIMED.value,
+                        OutboxMessageRow.claim_expires_at.is_not(None),
+                        OutboxMessageRow.claim_expires_at <= now,
+                    ),
+                ),
+            )
+            .order_by(OutboxMessageRow.created_at.asc())
+            .limit(limit)
+            .with_for_update(skip_locked=True)
+        )
+        result = await self._session.execute(claimable)
+        rows = list(result.scalars().all())
+        claimed: list[OutboxMessageRecord] = []
+        for row in rows:
+            row.state = OutboxState.CLAIMED.value
+            row.claimed_by = worker_id
+            row.claim_expires_at = now + lease_duration
+            row.attempt_count = int(row.attempt_count) + 1
+            claimed.append(outbox_to_record(row))
+        await self._session.flush()
+        return claimed
+
+    async def complete(
+        self,
+        message_id: UUID,
+        *,
+        worker_id: str,
+        now: datetime,
+    ) -> OutboxMessageRecord:
+        row = await self._session.get(OutboxMessageRow, message_id, with_for_update=True)
+        if row is None:
+            raise OptimisticConcurrencyError(
+                entity="outbox_message",
+                entity_id=str(message_id),
+                expected_version=-1,
+            )
+        if OutboxState(row.state) == OutboxState.COMPLETED:
+            return outbox_to_record(row)
+        if row.claimed_by != worker_id or OutboxState(row.state) != OutboxState.CLAIMED:
+            raise InvalidStateTransition(
+                entity="outbox_message",
+                from_state=f"{row.state}:{row.claimed_by}",
+                to_state=OutboxState.COMPLETED.value,
+            )
+        row.state = OutboxState.COMPLETED.value
+        row.completed_at = now
+        row.claimed_by = None
+        row.claim_expires_at = None
+        await self._session.flush()
+        return outbox_to_record(row)
