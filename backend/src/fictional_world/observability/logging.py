@@ -10,9 +10,7 @@ from typing import Any
 _CORRELATION_ID: ContextVar[str | None] = ContextVar("correlation_id", default=None)
 
 _SECRET_PATTERNS: tuple[re.Pattern[str], ...] = (
-    re.compile(
-        r"(?i)(api[_-]?key|password|secret)\s*[:=]\s*([^\s,;]+)"
-    ),
+    re.compile(r"(?i)(api[_-]?key|password|secret)\s*[:=]\s*([^\s,;]+)"),
     re.compile(r"(?i)\b(sk-[A-Za-z0-9_-]{8,})\b"),
     re.compile(r"(?i)(Bearer\s+)([A-Za-z0-9._\-+=/]{8,})"),
     re.compile(r"(?i)(Authorization\s*:\s*Bearer\s+)([A-Za-z0-9._\-+=/]{8,})"),
