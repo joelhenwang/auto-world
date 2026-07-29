@@ -1,0 +1,18 @@
+{
+  "alembic_head": "0004_stage2_continuity_tables",
+  "collected_at": "20260729T232111Z",
+  "gate_script_exit_nonzero_count": 0,
+  "git_commit": "5322d9de0e6da9a342e1deb5922ea2ab7f207fc0",
+  "hashes": {
+    "database-schema.sql": "08236d04096262d07026aecb9e79bfeaf8aa9a6733d0c80d80a76f5cc77ccab2",
+    "frontend/pnpm-lock.yaml": "22002950d79c21ad580902db44355d4e0f817b76e7a4ed2d4b8c3ed0520c32ac",
+    "openapi.json": "ec9569b32e9308d771c90f357a3562829d28f218f099b22bc0b3599149b60bf2",
+    "uv.lock": "c43c220b80302e42f452d72c65a02e97ebd101ff73845fe866c1eb3010e5454e"
+  },
+  "leakage_corpus_assertions": 496,
+  "model_mode": "fake",
+  "scenario_id": "stage2-seven-day-world-v1",
+  "seed_content_version": 2,
+  "seed_fixture": "stage2",
+  "seed_id": "caldris-embervale-v1"
+}
