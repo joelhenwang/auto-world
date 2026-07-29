@@ -9,7 +9,7 @@
 ## Current objective
 
 Parent-review and merge the completed Stage 1 vertical slice. The deterministic
-S1-QA-001 gate passes at `4f3fea0`; evidence is under
+S1-QA-001 gate passes at `23814db`; evidence is under
 `docs/status/evidence/stage-1/`.
 
 Active characters: Mira Talren + Dain Arcen. Enabled phases: dawn → morning → evening.
