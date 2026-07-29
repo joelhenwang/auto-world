@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "decision_request_id": "33333333-3333-4333-8333-333333333333",
+  "actor_id": "61e05284-c7df-50d7-9631-9aa1fee29b95",
+  "action_family": "communicate",
+  "description": "Mira approaches Dain and asks him about the condition of the east bridge without assuming how he will answer.",
+  "utterance": "You came in from the east road. Is the bridge holding after last night's rain?",
+  "target_entity_ids": ["b8835163-1a5e-5e8a-93a5-8c94a5ff71f5"],
+  "target_location_id": null,
+  "relevant_goal_ids": [],
+  "continuation_activity_id": null,
+  "visibility": "observable",
+  "estimated_duration_phases": 1,
+  "interruptible": true,
+  "interruption_conditions": ["Dain declines the conversation.", "Either character is called away."],
+  "resource_intentions": [],
+  "desired_outcomes": [
+    {
+      "description": "Ask for Dain's observed bridge conditions.",
+      "target_entity_ids": ["b8835163-1a5e-5e8a-93a5-8c94a5ff71f5"]
+    }
+  ],
+  "fallback": {
+    "action_family": "observe",
+    "description": "Review the public route board for east-road notices."
+  }
+}

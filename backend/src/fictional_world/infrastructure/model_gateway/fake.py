@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import json
 import time
 from dataclasses import dataclass, field
 from enum import StrEnum
+from json import JSONDecodeError
+from pathlib import Path
 from typing import Any
 
 from pydantic import BaseModel, ValidationError
@@ -37,6 +40,8 @@ class FakeModelGatewayAdapter:
     """Deterministic adapter keyed by request_id or role."""
 
     scripts: dict[str, FakeScriptKind] = field(default_factory=dict)
+    corpus_scripts: dict[str, str] = field(default_factory=dict)
+    corpus_dir: Path | None = None
     default_kind: FakeScriptKind = FakeScriptKind.VALID
     valid_payload: str = '{"ok": true}'
     embed_dimensions: int = 2048
@@ -47,13 +52,40 @@ class FakeModelGatewayAdapter:
     def script(self, *, key: str, kind: FakeScriptKind) -> None:
         self.scripts[key] = kind
 
+    def script_corpus(self, *, key: str, filename: str) -> None:
+        """Select a corpus file for a request-ID or role script key."""
+
+        self.corpus_scripts[key] = filename
+
     def _resolve(self, *, role: str, request_id: str) -> FakeScriptKind:
         return self.scripts.get(request_id) or self.scripts.get(role) or self.default_kind
 
+    def _resolve_corpus(self, *, role: str, request_id: str) -> str | None:
+        return self.corpus_scripts.get(request_id) or self.corpus_scripts.get(role)
+
+    def _load_corpus(self, filename: str) -> str:
+        if self.corpus_dir is None:
+            raise ValueError("corpus_dir is required for corpus scripts")
+        root = self.corpus_dir.resolve()
+        corpus_path = (root / filename).resolve()
+        if not corpus_path.is_relative_to(root):
+            raise ValueError("corpus filename escapes corpus_dir")
+        return corpus_path.read_text(encoding="utf-8")
+
     async def generate(self, request: TextGenerationRequest) -> TextGenerationResult:
         kind = self._resolve(role=request.role, request_id=request.request_id)
+        corpus_filename = self._resolve_corpus(
+            role=request.role,
+            request_id=request.request_id,
+        )
         self.calls.append(
-            {"type": "text", "role": request.role, "request_id": request.request_id, "kind": kind}
+            {
+                "type": "text",
+                "role": request.role,
+                "request_id": request.request_id,
+                "kind": kind,
+                "corpus": corpus_filename,
+            }
         )
         started = time.perf_counter()
         if kind is FakeScriptKind.TIMEOUT:
@@ -87,6 +119,16 @@ class FakeModelGatewayAdapter:
             )
 
         raw = self.valid_payload
+        if corpus_filename is not None:
+            try:
+                raw = self._load_corpus(corpus_filename)
+            except (OSError, ValueError) as exc:
+                raise ModelGatewayError(
+                    ModelGatewayErrorCode.MALFORMED_RESPONSE,
+                    f"fake corpus unavailable: {corpus_filename}",
+                    request_id=request.request_id,
+                    retryable=False,
+                ) from exc
         if kind is FakeScriptKind.MALFORMED_JSON:
             raw = "{not-json"
         elif kind is FakeScriptKind.SCHEMA_INVALID:
@@ -94,41 +136,34 @@ class FakeModelGatewayAdapter:
         elif kind is FakeScriptKind.SEMANTIC_INVALID:
             raw = '{"ok": false, "reason": "semantic"}'
 
-        parsed: BaseModel | None = None
-        if request.output_schema is not None and kind is FakeScriptKind.VALID:
-            try:
-                parsed = request.output_schema.model_validate_json(raw)
-            except ValidationError as exc:
-                raise ModelGatewayError(
-                    ModelGatewayErrorCode.SCHEMA_VALIDATION_ERROR,
-                    str(exc),
-                    request_id=request.request_id,
-                    retryable=True,
-                ) from exc
-        elif request.output_schema is not None and kind is FakeScriptKind.MALFORMED_JSON:
-            raise ModelGatewayError(
-                ModelGatewayErrorCode.MALFORMED_RESPONSE,
-                "malformed JSON",
-                request_id=request.request_id,
-                retryable=True,
-            )
-        elif request.output_schema is not None and kind is FakeScriptKind.SCHEMA_INVALID:
-            try:
-                request.output_schema.model_validate_json(raw)
-            except ValidationError as exc:
-                raise ModelGatewayError(
-                    ModelGatewayErrorCode.SCHEMA_VALIDATION_ERROR,
-                    str(exc),
-                    request_id=request.request_id,
-                    retryable=True,
-                ) from exc
-        elif kind is FakeScriptKind.SEMANTIC_INVALID:
+        if kind is FakeScriptKind.SEMANTIC_INVALID:
             raise ModelGatewayError(
                 ModelGatewayErrorCode.SEMANTIC_VALIDATION_ERROR,
                 "semantic invalid",
                 request_id=request.request_id,
                 retryable=True,
             )
+
+        parsed: BaseModel | None = None
+        if request.output_schema is not None:
+            try:
+                raw_object: object = json.loads(raw)
+            except JSONDecodeError as exc:
+                raise ModelGatewayError(
+                    ModelGatewayErrorCode.MALFORMED_RESPONSE,
+                    "malformed JSON",
+                    request_id=request.request_id,
+                    retryable=True,
+                ) from exc
+            try:
+                parsed = request.output_schema.model_validate(raw_object)
+            except ValidationError as exc:
+                raise ModelGatewayError(
+                    ModelGatewayErrorCode.SCHEMA_VALIDATION_ERROR,
+                    str(exc),
+                    request_id=request.request_id,
+                    retryable=True,
+                ) from exc
 
         latency_ms = int((time.perf_counter() - started) * 1000)
         return TextGenerationResult(
