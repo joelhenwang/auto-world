@@ -19,6 +19,11 @@ from fictional_world.domain.events.persistence import (
 from fictional_world.domain.knowledge.persistence import ObservationPersistenceRecord
 from fictional_world.domain.memory.persistence import RecentMemoryRecord
 from fictional_world.domain.phases.records import PhaseRunRecord
+from fictional_world.domain.seed.records import (
+    CharacterCardVersionRecord,
+    LocationRecord,
+    WorldConfigRecord,
+)
 from fictional_world.domain.world.records import (
     AggregateVersionRecord,
     WorldClockRecord,
@@ -49,6 +54,20 @@ class WorldRepository(Protocol):
         self, clock: WorldClockRecord, *, expected_version: int | None
     ) -> WorldClockRecord: ...
 
+    async def update_status(
+        self,
+        world_id: UUID,
+        *,
+        status: str,
+        expected_version: int,
+    ) -> WorldRecord: ...
+
+    async def insert_config(self, config: WorldConfigRecord) -> WorldConfigRecord: ...
+
+    async def set_config_created_event(
+        self, config_id: UUID, *, created_event_id: UUID
+    ) -> WorldConfigRecord: ...
+
 
 class CharacterRepository(Protocol):
     async def insert_entity(self, entity: EntityRecord) -> EntityRecord: ...
@@ -67,6 +86,22 @@ class CharacterRepository(Protocol):
         *,
         expected_version: int,
     ) -> CharacterStateRecord: ...
+
+    async def insert_location(self, location: LocationRecord) -> LocationRecord: ...
+
+    async def get_location(self, entity_id: UUID) -> LocationRecord | None: ...
+
+    async def insert_card(self, card: CharacterCardVersionRecord) -> CharacterCardVersionRecord: ...
+
+    async def get_card(self, card_id: UUID) -> CharacterCardVersionRecord | None: ...
+
+    async def set_character_card(
+        self, character_id: UUID, *, card_version_id: UUID
+    ) -> CharacterRecord: ...
+
+    async def set_entity_created_event(
+        self, entity_id: UUID, *, created_event_id: UUID
+    ) -> EntityRecord: ...
 
 
 class PhaseRepository(Protocol):

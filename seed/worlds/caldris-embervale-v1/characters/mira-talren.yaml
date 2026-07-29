@@ -1,0 +1,54 @@
+character:
+  key: character/mira-talren
+  focus_role: main
+  canonical_name: Mira Talren
+  pronouns: she/her
+  age: 22
+  species: human
+  culture: embervale-marcher
+  occupation: junior route courier and map annotator
+  current_location: location/veycross/cinder-lantern-inn
+
+identity:
+  formative_history: >-
+    Mira grew up above her aunt's repair shop near the west road. Her father, a
+    route surveyor, disappeared during a winter mapping contract when she was
+    thirteen; no body was recovered. She joined the Compact to understand roads
+    and make absence legible.
+
+appearance:
+  height_cm: 166
+  build: lean, conditioned by walking and climbing
+  hair: dark auburn, wavy, usually tied at the nape
+  eyes: grey-green
+  clothing: practical green-grey courier coat, weathered boots, map tube
+
+psychology:
+  traits:
+    openness: 0.72
+    conscientiousness: 0.38
+    trust_tendency: -0.22
+  values:
+    - {label: truthful_maps_and_records, weight: 0.90}
+  fears:
+    - {label: unexplained_disappearance, weight: 0.82}
+  desires:
+    - {label: become_a_trusted_independent_surveyor, weight: 0.80}
+    - {label: learn_what_happened_to_her_father, weight: 0.76}
+
+expression:
+  register: direct and practical
+  rhythm: short observations followed by precise questions
+  humour: dry
+
+resources:
+  stamina: 54
+  mana: 34
+  energy: 70
+  hunger: 20
+  pain: 0
+  stress: 18
+  social_need: 35
+  valence: 0.05
+  arousal: 0.25
+  dominance: -0.1

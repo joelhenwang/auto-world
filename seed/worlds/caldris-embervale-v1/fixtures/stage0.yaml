@@ -1,0 +1,12 @@
+fixture: stage0
+description: Stage 0 foundation — inn + Mira; deterministic wait/observe/rest later.
+active_locations:
+  - location/veycross/cinder-lantern-inn
+active_characters:
+  - character/mira-talren
+enabled_effects:
+  - wait
+  - observe
+  - rest
+phase_count: 1
+model_calls: false
