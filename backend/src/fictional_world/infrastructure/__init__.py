@@ -1,1 +1,1 @@
-"""Infrastructure adapters (database, model gateway, etc.)."""
+"""Infrastructure package."""
