@@ -7,6 +7,11 @@ from dataclasses import dataclass
 from uuid import UUID
 
 from fictional_world.agents._pipeline import invoke_with_one_regeneration, json_text
+from fictional_world.agents.restricted_effects import (
+    GraphTaskRole,
+    effect_kind_allowed,
+    restricted_effect_kinds,
+)
 from fictional_world.application.models.messages import (
     ModelMessage,
     ProviderRoutingOptions,
@@ -175,17 +180,7 @@ def _render_request(
     renderer: PromptRenderer,
 ) -> TextGenerationRequest:
     scene = graph_input.scene
-    allowed_effects = (
-        "wait",
-        "observe",
-        "rest",
-        "move_entity",
-        "spend_resource(stamina_only)",
-        "advance_activity",
-        "create_claim",
-        "create_recent_memory",
-        "schedule_effect",
-    )
+    allowed_effects = sorted(restricted_effect_kinds(GraphTaskRole.RESOLVER))
     variables = {
         "scene_snapshot": json_text(
             {
@@ -283,6 +278,8 @@ def _validate_resolution(
     proposals_by_actor = {proposal.actor_id: proposal for proposal in graph_input.proposals}
 
     for effect in resolution.effects:
+        if not effect_kind_allowed(effect.kind, GraphTaskRole.RESOLVER):
+            raise ValueError(f"effect kind is outside Stage 1: {effect.kind}")
         if not set(effect.source_attempt_ids).issubset(attempt_ids):
             raise ValueError("effect provenance references an attempt outside the scene")
         if isinstance(effect, (WaitEffect, RestEffect)):

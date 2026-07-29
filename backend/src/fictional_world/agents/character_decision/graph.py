@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass
 from uuid import UUID
 
@@ -37,7 +38,11 @@ _ALLOWED_ACTIONS = frozenset(ActionFamily(value) for value in STAGE1_ACTION_FAMI
 
 @dataclass(frozen=True, slots=True)
 class DecisionGraphInput:
-    """All authority available to one Stage 1 character decision."""
+    """All authority available to one character decision.
+
+    Stage 2 additive fields (``goals``, ``plans``, ``claims``) enrich the sealed
+    package context without replacing it. Empty tuples preserve Stage 1 behaviour.
+    """
 
     context: SealedContextPackage
     phase_label: str
@@ -51,6 +56,9 @@ class DecisionGraphInput:
     can_rest: bool = True
     can_observe: bool = True
     model_profile_id: str = "stage0-character_decision-v1"
+    goals: tuple[dict[str, object], ...] = ()
+    plans: tuple[dict[str, object], ...] = ()
+    claims: tuple[dict[str, object], ...] = ()
 
 
 def _validate_input(graph_input: DecisionGraphInput) -> None:
@@ -66,6 +74,34 @@ def _validate_input(graph_input: DecisionGraphInput) -> None:
         raise ValueError("continuation activity is not allowed")
 
 
+def _compose_goals_and_plans(
+    package_content: object,
+    graph_input: DecisionGraphInput,
+) -> object:
+    """Merge additive Stage 2 goals/plans with the sealed package section."""
+
+    if not graph_input.goals and not graph_input.plans:
+        return package_content
+    return {
+        "sealed_package": package_content,
+        "goals": list(graph_input.goals),
+        "plans": list(graph_input.plans),
+    }
+
+
+def _compose_known_lore(
+    sections: Mapping[ContextSectionId, object],
+    graph_input: DecisionGraphInput,
+) -> dict[str, object]:
+    known_lore: dict[str, object] = {
+        "private_beliefs": sections.get(ContextSectionId.PRIVATE_BELIEFS, []),
+        "known_local_map": sections.get(ContextSectionId.KNOWN_LOCAL_MAP, []),
+    }
+    if graph_input.claims:
+        known_lore["claims"] = list(graph_input.claims)
+    return known_lore
+
+
 def _render_request(
     graph_input: DecisionGraphInput,
     *,
@@ -73,10 +109,7 @@ def _render_request(
     renderer: PromptRenderer,
 ) -> TextGenerationRequest:
     sections = context_sections(graph_input.context)
-    known_lore = {
-        "private_beliefs": sections.get(ContextSectionId.PRIVATE_BELIEFS, []),
-        "known_local_map": sections.get(ContextSectionId.KNOWN_LOCAL_MAP, []),
-    }
+    known_lore = _compose_known_lore(sections, graph_input)
     allowed_ids = {
         "actor_id": str(graph_input.context.observer_id),
         "entity_ids": sorted(str(value) for value in graph_input.allowed_entity_ids),
@@ -91,7 +124,12 @@ def _render_request(
         "stable_identity": json_text(sections.get(ContextSectionId.STABLE_IDENTITY, {})),
         "current_state": json_text(sections.get(ContextSectionId.CURRENT_STATE, {})),
         "current_perception": json_text(sections.get(ContextSectionId.CURRENT_PERCEPTION, [])),
-        "goals_and_plans": json_text(sections.get(ContextSectionId.GOALS_AND_PLANS, [])),
+        "goals_and_plans": json_text(
+            _compose_goals_and_plans(
+                sections.get(ContextSectionId.GOALS_AND_PLANS, []),
+                graph_input,
+            )
+        ),
         "relationships": json_text(sections.get(ContextSectionId.RELATIONSHIPS, [])),
         "recent_memory": json_text(sections.get(ContextSectionId.RECENT_MEMORY, [])),
         "capabilities": json_text(sections.get(ContextSectionId.CAPABILITIES, {})),
