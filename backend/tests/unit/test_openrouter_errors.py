@@ -95,7 +95,8 @@ async def test_openrouter_live_smoke_opt_in() -> None:
     gateway = OpenRouterGateway(
         api_key=api_key,
         profiles={profile.profile_id: profile},
-        http_client=httpx.AsyncClient(timeout=60.0),
+        base_url=os.environ.get("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
+        timeout=httpx.Timeout(60.0),
     )
     try:
         result = await gateway.generate(
