@@ -20,7 +20,7 @@ defineEmits<{
 <template>
   <header class="runtime-header">
     <div>
-      <p class="eyebrow">Stage 1 · First complete day</p>
+      <p class="eyebrow">Stage 2 · Seven-day world</p>
       <h1>{{ world?.name ?? 'Caldris: Embervale' }}</h1>
       <p v-if="clock" class="fictional-time">
         Year {{ clock.year }}, day {{ clock.day }} ·

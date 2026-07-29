@@ -8,6 +8,21 @@ describe('TimelinePanel', () => {
     const wrapper = mount(TimelinePanel, {
       props: {
         loading: false,
+        characters: [
+          {
+            id: 'mira',
+            name: 'Mira Talren',
+            location_id: 'inn',
+            life_status: 'alive',
+            stamina: '82',
+            energy: '74',
+            pain: '0',
+            stress: '12',
+            active_activity_id: null,
+            state_version: 1,
+          },
+        ],
+        locations: [{ id: 'inn', name: 'The Embervale Inn' }],
         events: [
           {
             id: 'stream-1',
@@ -16,7 +31,11 @@ describe('TimelinePanel', () => {
             event_type: 'scene.committed',
             occurred_at: '2026-07-29T00:00:00Z',
             fictional_time: { phase_name: 'dawn' },
-            payload: { canonical_summary: 'Mira and Dain share news at the inn.' },
+            payload: {
+              canonical_summary: 'Mira and Dain share news at the inn.',
+              character_ids: ['mira'],
+              location_id: 'inn',
+            },
             schema_version: '1',
             phase_run_id: 'phase-1',
             scene_id: 'scene-1',
@@ -32,5 +51,7 @@ describe('TimelinePanel', () => {
     expect(wrapper.get('.scene-placeholder').attributes('aria-label')).toContain(
       'Image unavailable',
     )
+    expect(wrapper.text()).toContain('All characters')
+    expect(wrapper.text()).toContain('All locations')
   })
 })

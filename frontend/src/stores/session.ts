@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 import type { PlayerControlRead } from '../api/client'
 
-export type UserMode = 'watcher' | 'player'
+export type UserMode = 'watcher' | 'director' | 'player'
 
 export const useSessionStore = defineStore('session', {
   state: () => ({
@@ -14,6 +14,9 @@ export const useSessionStore = defineStore('session', {
   getters: {
     observerId: (state): string | undefined =>
       state.mode === 'player' ? state.selectedCharacterId : undefined,
+    /** Watcher/director may see Director metrics; player must not. */
+    canViewDirector: (state): boolean =>
+      state.mode === 'watcher' || state.mode === 'director',
   },
   actions: {
     enterPlayer(characterId: string, control: PlayerControlRead) {
@@ -23,6 +26,11 @@ export const useSessionStore = defineStore('session', {
     },
     enterWatcher() {
       this.mode = 'watcher'
+      this.selectedCharacterId = undefined
+      this.control = undefined
+    },
+    enterDirector() {
+      this.mode = 'director'
       this.selectedCharacterId = undefined
       this.control = undefined
     },
