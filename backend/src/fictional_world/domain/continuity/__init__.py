@@ -16,6 +16,7 @@ from fictional_world.domain.continuity.goals import (
 from fictional_world.domain.continuity.persistence import (
     ActivityPersistenceRecord,
     CommitmentPersistenceRecord,
+    DailyAuditPersistenceRecord,
     DayRunPersistenceRecord,
     DiaryEntryPersistenceRecord,
     GoalPersistenceRecord,
@@ -27,6 +28,7 @@ from fictional_world.domain.continuity.persistence import (
     RelationshipEdgePersistenceRecord,
     RoutePersistenceRecord,
     SummaryPersistenceRecord,
+    SummarySourcePersistenceRecord,
 )
 from fictional_world.domain.continuity.plans import (
     create_primary_plan,
@@ -54,6 +56,7 @@ __all__ = [
     "ActivityPersistenceRecord",
     "CommitmentPersistenceRecord",
     "CommitmentStatus",
+    "DailyAuditPersistenceRecord",
     "DayRunPersistenceRecord",
     "DiaryEntryPersistenceRecord",
     "GoalPersistenceRecord",
@@ -69,6 +72,7 @@ __all__ = [
     "RelationshipEvidenceInput",
     "RoutePersistenceRecord",
     "SummaryPersistenceRecord",
+    "SummarySourcePersistenceRecord",
     "abandon",
     "activate",
     "apply_relationship_evidence",
