@@ -30,6 +30,7 @@ from fictional_world.domain.continuity.persistence import (
     RoutePersistenceRecord,
     SummaryPersistenceRecord,
     SummarySourcePersistenceRecord,
+    TravelProgressPersistenceRecord,
 )
 from fictional_world.domain.continuity.plans import (
     create_primary_plan,
@@ -45,10 +46,12 @@ from fictional_world.domain.continuity.relevance import (
     rank_goals_for_context,
 )
 from fictional_world.domain.continuity.statuses import (
+    ActivityStatus,
     CommitmentStatus,
     GoalStatus,
     PlanStatus,
     PlanStepStatus,
+    TravelProgressStatus,
 )
 from fictional_world.domain.continuity.plans import (
     create_primary_plan,
@@ -74,6 +77,7 @@ __all__ = [
     "DIMINISHING_RETURNS_RATE",
     "NORMAL_SCENE_MAX_ABS_DELTA",
     "ActivityPersistenceRecord",
+    "ActivityStatus",
     "CommitmentPersistenceRecord",
     "CommitmentStatus",
     "DayRunPersistenceRecord",

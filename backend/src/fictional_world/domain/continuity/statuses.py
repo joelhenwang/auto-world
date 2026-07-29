@@ -38,3 +38,19 @@ class CommitmentStatus(StrEnum):
     FULFILLED = "fulfilled"
     BROKEN = "broken"
     WAIVED = "waived"
+
+
+class ActivityStatus(StrEnum):
+    """Lifecycle for persistent multi-phase activities (handbook ``05``/``09``)."""
+
+    ACTIVE = "active"
+    INTERRUPTED = "interrupted"
+    COMPLETED = "completed"
+    INVALIDATED = "invalidated"
+
+
+class TravelProgressStatus(StrEnum):
+    IN_PROGRESS = "in_progress"
+    ARRIVED = "arrived"
+    INTERRUPTED = "interrupted"
+    INVALIDATED = "invalidated"

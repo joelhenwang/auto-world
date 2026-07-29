@@ -30,7 +30,7 @@
 | S2-MEM-001 | NOT STARTED | after KNOW |
 | S2-WORLD-001 | NOT STARTED | after DB |
 | S2-WORLD-002 | NOT STARTED | after WORLD-001 |
-| S2-SIM-001 | NOT STARTED | after CHAR/travel contracts |
+| S2-SIM-001 | COMPLETE | calendar/activation/travel pure services |
 | S2-SIM-002 | NOT STARTED | after SIM-001 |
 | S2-GRAPH-001 | NOT STARTED | after CHAR/KNOW/WORLD |
 | S2-ORCH-001 | NOT STARTED | after SIM/GRAPH |

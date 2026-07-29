@@ -29,15 +29,24 @@ from fictional_world.application.orchestration.protocol import (
 from fictional_world.application.orchestration.scripted_actions import mira_stage0_effects
 from fictional_world.application.orchestration.task_queue import CreateTaskCommand, TaskQueueService
 from fictional_world.application.ports.repositories import UnitOfWork
+from fictional_world.application.simulation.activation import ActivationResult
 from fictional_world.application.simulation.commit import (
     CommitOperationCommand,
     EventCommitService,
     expected_character_state_key,
 )
+from fictional_world.application.simulation.request_estimate import (
+    PhaseRequestEstimate,
+    estimate_phase_model_requests,
+)
 from fictional_world.application.simulation.scene_assembly import assemble_scenes
 from fictional_world.application.simulation.scene_commit import (
     CommitSceneCommand,
     SceneCommitService,
+)
+from fictional_world.application.simulation.time import (
+    STAGE1_ENABLED_PHASE_NAMES,
+    STAGE2_ENABLED_PHASE_NAMES,
 )
 from fictional_world.domain.common.enums import BudgetStatus
 from fictional_world.domain.common.errors import DomainError
@@ -61,7 +70,9 @@ from fictional_world.domain.world.records import WorldClockRecord
 
 WORKER_ID = "stage0-phase-runner"
 STAGE1_WORKER_ID = "stage1-phase-runner"
-STAGE1_ENABLED_PHASES = frozenset({"dawn", "morning", "evening"})
+STAGE2_WORKER_ID = "stage2-phase-runner"
+STAGE1_ENABLED_PHASES = STAGE1_ENABLED_PHASE_NAMES
+STAGE2_ENABLED_PHASES = STAGE2_ENABLED_PHASE_NAMES
 STAGE1_CHARACTER_IDS = (
     seed_uuid("character/mira-talren"),
     seed_uuid("character/dain-arcen"),
@@ -97,7 +108,7 @@ def _manifest_hash(manifest: dict[str, Any]) -> str:
 
 
 class DeterministicPhaseRunner:
-    """Postgres-backed Stage 0 runner with an additive Stage 1 graph profile."""
+    """Postgres-backed Stage 0 runner with additive Stage 1 / Stage 2 profiles."""
 
     def __init__(
         self,
@@ -105,7 +116,10 @@ class DeterministicPhaseRunner:
         *,
         model_gateway: TextModelGateway | None = None,
         stage1: bool = False,
+        stage2: bool = False,
     ) -> None:
+        if stage1 and stage2:
+            raise PhaseRunnerError("stage1 and stage2 profiles are mutually exclusive")
         self._uow = uow
         self._tasks = TaskQueueService(uow)
         self._commit = EventCommitService()
@@ -113,6 +127,22 @@ class DeterministicPhaseRunner:
         self._budget = BudgetService(uow)
         self._model_gateway = model_gateway
         self._stage1 = stage1
+        self._stage2 = stage2
+
+    def estimate_phase_requests(
+        self,
+        activations: tuple[ActivationResult, ...] | list[ActivationResult],
+        *,
+        director_call_planned: bool = False,
+        ambiguous_scene_count: int = 0,
+    ) -> PhaseRequestEstimate:
+        """Estimate mandatory model requests before starting a phase (Stage 2)."""
+
+        return estimate_phase_model_requests(
+            activations,
+            director_call_planned=director_call_planned,
+            ambiguous_scene_count=ambiguous_scene_count,
+        )
 
     async def start_world(self, world_id: UUID) -> None:
         world = await self._uow.worlds.get(world_id)
@@ -218,6 +248,11 @@ class DeterministicPhaseRunner:
         if self._stage1:
             while target.phase_name not in STAGE1_ENABLED_PHASES:
                 target = advance_world_clock(target)
+        elif self._stage2 and target.phase_name not in STAGE2_ENABLED_PHASES:
+            # Stage 2 uses the full ten-phase calendar; no skipping.
+            raise PhaseRunnerError(
+                f"Stage 2 profile does not recognize phase {target.phase_name!r}"
+            )
         return target
 
     async def _run_phase(
@@ -798,7 +833,12 @@ class DeterministicPhaseRunner:
         if task.state is TaskState.SUCCEEDED:
             return
         now = datetime.now(UTC)
-        worker_id = STAGE1_WORKER_ID if self._stage1 else WORKER_ID
+        if self._stage2:
+            worker_id = STAGE2_WORKER_ID
+        elif self._stage1:
+            worker_id = STAGE1_WORKER_ID
+        else:
+            worker_id = WORKER_ID
         if task.lease_owner == worker_id and task.state in {
             TaskState.CLAIMED,
             TaskState.RUNNING,
