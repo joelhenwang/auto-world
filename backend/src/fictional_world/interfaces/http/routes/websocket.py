@@ -1,4 +1,4 @@
-"""Replayable Stage 1 world stream WebSocket."""
+"""Replayable Stage 1/2 world stream WebSocket."""
 
 from __future__ import annotations
 
@@ -12,6 +12,12 @@ from fictional_world.infrastructure.database.unit_of_work import SqlAlchemyUnitO
 from fictional_world.interfaces.http.dto import StreamEventRead
 
 router = APIRouter(tags=["websocket"])
+
+# Additive Stage 2 envelope types retained for OpenAPI/clients; replay still uses
+# stream_event + replay_complete + pong + error. Future day/director projections
+# may emit day.finalized / director.metric / day.progress without breaking clients.
+_STAGE2_ENVELOPE_TYPES = frozenset({"day.finalized", "director.metric", "day.progress"})
+_ = _STAGE2_ENVELOPE_TYPES
 
 
 @router.websocket("/ws/v1/worlds/{world_id}")
