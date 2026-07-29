@@ -104,3 +104,33 @@ uv run ruff check backend && uv run ruff format --check backend && uv run basedp
 ### Handoff
 
 `docs/handoffs/2026-07-29_S0-ORCH002.md`
+
+## 2026-07-29T17:10:41Z — S0-API-001 / S0-OPS-001
+
+**Agent/person:** parent coding agent
+**Branch/worktree:** `cursor/s0-api001-ops001-09ce`
+**Task IDs:** `S0-API-001`, `S0-OPS-001`
+**Starting HEAD:** `7350ce5`
+**Ending HEAD:** pending tip after handoff commit
+
+### Intended outcome
+
+Minimal FastAPI/CLI control surface plus structured logging, correlation IDs, and secret redaction.
+
+### Completed
+
+- Health + world/clock/phase/event reads; advance/reconcile commands
+- world_cli + OpenAPI export
+- Observability logging/audit skeleton
+- 90 passed full suite
+
+### Verification
+
+```bash
+uv run ruff check backend scripts && uv run ruff format --check backend scripts && uv run basedpyright && uv run pytest
+# 90 passed, 1 deselected
+```
+
+### Handoff
+
+`docs/handoffs/2026-07-29_S0-API001-OPS001.md`

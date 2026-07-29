@@ -12,6 +12,8 @@ dependencies = [
     "psycopg[binary]>=3.2,<4",
     "httpx>=0.28.1",
     "pyyaml>=6.0",
+    "fastapi>=0.115,<1",
+    "uvicorn[standard]>=0.32,<1",
 ]
 
 [dependency-groups]
@@ -57,6 +59,7 @@ select = ["E", "F", "I", "B", "UP", "SIM", "ASYNC", "RUF", "C4", "DTZ", "T20", "
 
 [tool.ruff.lint.per-file-ignores]
 "scripts/**" = ["T20", "S603", "S607"]
+"backend/src/fictional_world/interfaces/cli/**" = ["T20"]
 "backend/tests/**" = ["S101", "S603", "S607"]
 "tools/**" = ["T20"]
 "backend/migrations/**" = ["I001", "E501"]

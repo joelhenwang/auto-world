@@ -1,12 +1,12 @@
 # Thin aliases — underlying commands remain the source of truth (handbook 20 §7).
 
-.PHONY: help bootstrap sync test lint format typecheck check compose-config compose-up compose-down migrate seed export-schemas export-db-schema pre-commit verify-migrations
+.PHONY: help bootstrap sync test lint format typecheck check compose-config compose-up compose-down migrate seed export-schemas export-db-schema export-openapi api world-cli pre-commit verify-migrations
 
 help:
 	@echo "Stage 0 aliases:"
 	@echo "  make sync / test / lint / format / typecheck / check"
-	@echo "  make export-schemas / export-db-schema / verify-migrations / migrate"
-	@echo "  make compose-up / compose-down / bootstrap"
+	@echo "  make export-schemas / export-db-schema / export-openapi / verify-migrations / migrate"
+	@echo "  make api / world-cli / seed / compose-up / compose-down / bootstrap"
 
 sync:
 	uv sync
@@ -54,3 +54,12 @@ migrate:
 
 seed:
 	uv run python scripts/seed_world.py
+
+export-openapi:
+	uv run python scripts/export_openapi.py
+
+api:
+	uv run uvicorn fictional_world.interfaces.http.app:app --host 127.0.0.1 --port 8000
+
+world-cli:
+	uv run python scripts/world_cli.py $(ARGS)
