@@ -260,3 +260,36 @@ keep Stage 1 assembler leakage green; no migrations / MEM / CHAR.
 ### Handoff
 
 `docs/handoffs/2026-07-29_S2-KNOW-001.md`
+
+---
+
+## 2026-07-29T23:30:00Z — S2-QA-001 Stage 2 gate
+
+**Agent/person:** coding subagent (S2-QA-001)  
+**Branch/worktree:** `cursor/s2-qa-001-gate-085f`  
+**Task IDs:** `S2-QA-001`  
+**Starting HEAD:** `96fa898`
+
+### Intended outcome
+
+Run Stage 2 hard exit gate (handbook 27 §10), collect evidence under
+`docs/status/evidence/stage-2/`, freeze Stage 2 contracts, keep Stage 1 gate
+runnable.
+
+### Completed
+
+- `scripts/run_stage2_gate.py` (mirrors Stage 1 disposable DB + evidence pattern)
+- Leakage corpus >=100 assertions + day-boundary restart idempotency tests
+- Human review worksheet stub
+- Status/freeze/handoff/packet updates
+
+### Verification
+
+```bash
+sudo chmod 666 /var/run/docker.sock
+uv run python scripts/run_stage2_gate.py
+```
+
+### Handoff
+
+`docs/handoffs/2026-07-29_S2-QA-001.md`

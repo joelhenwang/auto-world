@@ -46,9 +46,7 @@ async def _require_world(world_id: UUID, uow: UowDep) -> None:
         raise not_found("world", world_id)
 
 
-async def _runner(
-    uow: UowDep, settings: SettingsDep, world_id: UUID
-) -> DeterministicPhaseRunner:
+async def _runner(uow: UowDep, settings: SettingsDep, world_id: UUID) -> DeterministicPhaseRunner:
     return await phase_runner_for_world(uow, settings, world_id)
 
 
