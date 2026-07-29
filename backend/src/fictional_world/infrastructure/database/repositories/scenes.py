@@ -176,6 +176,9 @@ class SqlAlchemySceneRepository:
             started_at=scene.started_at,
             completed_at=scene.completed_at,
             version=scene.version,
+            continuation_id=scene.continuation_id,
+            director_hook_id=scene.director_hook_id,
+            observer_eligibility=dict(scene.observer_eligibility),
         )
         self._session.add(row)
         await self._session.flush()
@@ -227,6 +230,9 @@ class SqlAlchemySceneRepository:
         row.mutable_aggregate_ids = list(scene.mutable_aggregate_ids) or None
         row.started_at = scene.started_at
         row.completed_at = scene.completed_at
+        row.continuation_id = scene.continuation_id
+        row.director_hook_id = scene.director_hook_id
+        row.observer_eligibility = dict(scene.observer_eligibility)
         row.version = expected_version + 1
         await self._session.flush()
         actions, participants = await self._children(scene.id)

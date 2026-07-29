@@ -52,6 +52,8 @@ class WorldEventRecord(StrictContract):
     supersedes_event_id: UUID | None = None
     consistency_status: str = Field(min_length=1, max_length=50)
     committed_at: datetime | None = None
+    director_provenance: JsonObject | None = None
+    npc_provenance: JsonObject | None = None
     effects: tuple[EventEffectRecord, ...] = ()
 
 

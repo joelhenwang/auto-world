@@ -12,12 +12,31 @@ from fictional_world.domain.characters.records import (
     CharacterStateRecord,
     EntityRecord,
 )
+from fictional_world.domain.continuity.persistence import (
+    ActivityPersistenceRecord,
+    CommitmentPersistenceRecord,
+    DayRunPersistenceRecord,
+    DiaryEntryPersistenceRecord,
+    GoalPersistenceRecord,
+    HookPersistenceRecord,
+    NpcLifecyclePersistenceRecord,
+    NpcProfilePersistenceRecord,
+    PlanPersistenceRecord,
+    PlanStepPersistenceRecord,
+    RelationshipEdgePersistenceRecord,
+    RoutePersistenceRecord,
+    SummaryPersistenceRecord,
+)
 from fictional_world.domain.events.persistence import (
     EventEffectRecord,
     OutboxMessageRecord,
     WorldEventRecord,
 )
-from fictional_world.domain.knowledge.persistence import ObservationPersistenceRecord
+from fictional_world.domain.knowledge.persistence import (
+    BeliefPersistenceRecord,
+    ClaimPersistenceRecord,
+    ObservationPersistenceRecord,
+)
 from fictional_world.domain.memory.persistence import RecentMemoryRecord
 from fictional_world.domain.phases.records import (
     PhaseRunRecord,
@@ -431,6 +450,144 @@ class UserCommandRepository(Protocol):
     async def insert(self, command: UserCommandRecord) -> UserCommandRecord: ...
 
 
+class GoalRepository(Protocol):
+    async def get(self, goal_id: UUID) -> GoalPersistenceRecord | None: ...
+
+    async def insert(self, goal: GoalPersistenceRecord) -> GoalPersistenceRecord: ...
+
+    async def list_for_owner(
+        self, owner_character_id: UUID, *, world_id: UUID
+    ) -> Sequence[GoalPersistenceRecord]: ...
+
+
+class PlanRepository(Protocol):
+    async def get(self, plan_id: UUID) -> PlanPersistenceRecord | None: ...
+
+    async def insert(self, plan: PlanPersistenceRecord) -> PlanPersistenceRecord: ...
+
+    async def list_for_goal(self, goal_id: UUID) -> Sequence[PlanPersistenceRecord]: ...
+
+    async def insert_step(self, step: PlanStepPersistenceRecord) -> PlanStepPersistenceRecord: ...
+
+
+class CommitmentRepository(Protocol):
+    async def get(self, commitment_id: UUID) -> CommitmentPersistenceRecord | None: ...
+
+    async def insert(
+        self, commitment: CommitmentPersistenceRecord
+    ) -> CommitmentPersistenceRecord: ...
+
+    async def list_for_debtor(
+        self, debtor_character_id: UUID, *, world_id: UUID
+    ) -> Sequence[CommitmentPersistenceRecord]: ...
+
+
+class RelationshipEdgeRepository(Protocol):
+    async def get(
+        self, source_character_id: UUID, target_character_id: UUID
+    ) -> RelationshipEdgePersistenceRecord | None: ...
+
+    async def insert(
+        self, edge: RelationshipEdgePersistenceRecord
+    ) -> RelationshipEdgePersistenceRecord: ...
+
+    async def list_for_source(
+        self, source_character_id: UUID, *, world_id: UUID
+    ) -> Sequence[RelationshipEdgePersistenceRecord]: ...
+
+
+class ClaimRepository(Protocol):
+    async def get(self, claim_id: UUID) -> ClaimPersistenceRecord | None: ...
+
+    async def insert(self, claim: ClaimPersistenceRecord) -> ClaimPersistenceRecord: ...
+
+    async def list_for_speaker(
+        self, speaker_id: UUID, *, world_id: UUID, limit: int = 50
+    ) -> Sequence[ClaimPersistenceRecord]: ...
+
+
+class BeliefRepository(Protocol):
+    async def get(self, belief_id: UUID) -> BeliefPersistenceRecord | None: ...
+
+    async def insert(self, belief: BeliefPersistenceRecord) -> BeliefPersistenceRecord: ...
+
+    async def list_for_character(
+        self, character_id: UUID, *, world_id: UUID, limit: int = 50
+    ) -> Sequence[BeliefPersistenceRecord]: ...
+
+
+class ActivityRepository(Protocol):
+    async def get(self, activity_id: UUID) -> ActivityPersistenceRecord | None: ...
+
+    async def insert(self, activity: ActivityPersistenceRecord) -> ActivityPersistenceRecord: ...
+
+    async def list_for_owner(
+        self, owner_entity_id: UUID, *, world_id: UUID
+    ) -> Sequence[ActivityPersistenceRecord]: ...
+
+
+class RouteRepository(Protocol):
+    async def get(self, route_id: UUID) -> RoutePersistenceRecord | None: ...
+
+    async def insert(self, route: RoutePersistenceRecord) -> RoutePersistenceRecord: ...
+
+    async def list_for_world(self, world_id: UUID) -> Sequence[RoutePersistenceRecord]: ...
+
+
+class HookRepository(Protocol):
+    async def get(self, hook_id: UUID) -> HookPersistenceRecord | None: ...
+
+    async def insert(self, hook: HookPersistenceRecord) -> HookPersistenceRecord: ...
+
+    async def list_for_world(
+        self, world_id: UUID, *, status: str | None = None
+    ) -> Sequence[HookPersistenceRecord]: ...
+
+
+class NpcRepository(Protocol):
+    async def get_profile(self, character_id: UUID) -> NpcProfilePersistenceRecord | None: ...
+
+    async def insert_profile(
+        self, profile: NpcProfilePersistenceRecord
+    ) -> NpcProfilePersistenceRecord: ...
+
+    async def get_lifecycle(self, character_id: UUID) -> NpcLifecyclePersistenceRecord | None: ...
+
+    async def insert_lifecycle(
+        self, lifecycle: NpcLifecyclePersistenceRecord
+    ) -> NpcLifecyclePersistenceRecord: ...
+
+
+class SummaryRepository(Protocol):
+    async def get(self, summary_id: UUID) -> SummaryPersistenceRecord | None: ...
+
+    async def insert(self, summary: SummaryPersistenceRecord) -> SummaryPersistenceRecord: ...
+
+    async def list_for_owner(
+        self, owner_character_id: UUID, *, world_id: UUID, limit: int = 50
+    ) -> Sequence[SummaryPersistenceRecord]: ...
+
+
+class DiaryEntryRepository(Protocol):
+    async def get(self, entry_id: UUID) -> DiaryEntryPersistenceRecord | None: ...
+
+    async def insert(self, entry: DiaryEntryPersistenceRecord) -> DiaryEntryPersistenceRecord: ...
+
+    async def list_for_owner(
+        self, owner_character_id: UUID, *, world_id: UUID, limit: int = 50
+    ) -> Sequence[DiaryEntryPersistenceRecord]: ...
+
+
+class DayRunRepository(Protocol):
+    async def get(self, day_run_id: UUID) -> DayRunPersistenceRecord | None: ...
+
+    async def find_by_idempotency_key(self, key: str) -> DayRunPersistenceRecord | None: ...
+
+    async def insert(self, day_run: DayRunPersistenceRecord) -> DayRunPersistenceRecord: ...
+
+    async def list_for_world(self, world_id: UUID) -> Sequence[DayRunPersistenceRecord]: ...
+
+
 class UnitOfWork(Protocol):
     worlds: WorldRepository
     characters: CharacterRepository
@@ -452,6 +609,19 @@ class UnitOfWork(Protocol):
     stream_events: StreamEventRepository
     player_controls: PlayerControlRepository
     user_commands: UserCommandRepository
+    goals: GoalRepository
+    plans: PlanRepository
+    commitments: CommitmentRepository
+    relationship_edges: RelationshipEdgeRepository
+    claims: ClaimRepository
+    beliefs: BeliefRepository
+    activities: ActivityRepository
+    routes: RouteRepository
+    hooks: HookRepository
+    npcs: NpcRepository
+    summaries: SummaryRepository
+    diary_entries: DiaryEntryRepository
+    day_runs: DayRunRepository
 
     async def __aenter__(self) -> UnitOfWork: ...
 

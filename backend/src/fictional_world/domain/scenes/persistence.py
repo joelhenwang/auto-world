@@ -79,6 +79,9 @@ class SceneRecord(StrictContract):
     started_at: datetime | None = None
     completed_at: datetime | None = None
     version: int = Field(default=0, ge=0)
+    continuation_id: UUID | None = None
+    director_hook_id: UUID | None = None
+    observer_eligibility: JsonObject = Field(default_factory=dict)
     actions: tuple[SceneActionRecord, ...] = ()
     participants: tuple[SceneParticipantRecord, ...] = ()
 

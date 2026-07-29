@@ -132,7 +132,11 @@ class CharacterStateRow(Base):
     valence: Mapped[Decimal] = mapped_column(Numeric(5, 2), nullable=False)
     arousal: Mapped[Decimal] = mapped_column(Numeric(5, 2), nullable=False)
     dominance: Mapped[Decimal] = mapped_column(Numeric(5, 2), nullable=False)
-    active_activity_id: Mapped[uuid.UUID | None] = mapped_column(Uuid(as_uuid=True), nullable=True)
+    active_activity_id: Mapped[uuid.UUID | None] = mapped_column(
+        Uuid(as_uuid=True),
+        ForeignKey(f"{WORLDSIM_SCHEMA}.activity.id", use_alter=True),
+        nullable=True,
+    )
     current_card_version_id: Mapped[uuid.UUID] = mapped_column(
         Uuid(as_uuid=True),
         ForeignKey(f"{WORLDSIM_SCHEMA}.character_card_version.id"),

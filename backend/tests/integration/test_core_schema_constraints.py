@@ -336,8 +336,8 @@ async def test_rejects_duplicate_user_command_idempotency(migrated_engine: Async
 @pytest.mark.migration
 @pytest.mark.requires_docker
 @pytest.mark.asyncio
-async def test_alembic_head_is_0003(postgres_container: dict[str, str]) -> None:
+async def test_alembic_head_is_0004(postgres_container: dict[str, str]) -> None:
     url = _normalize_url(postgres_container["url"])
     heads = _alembic(url, "heads").stdout.strip().splitlines()
     assert len(heads) == 1
-    assert "0003_stage1_action_scene_tables" in heads[0]
+    assert "0004_stage2_continuity_tables" in heads[0]

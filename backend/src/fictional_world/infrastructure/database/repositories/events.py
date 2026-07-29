@@ -74,6 +74,8 @@ class SqlAlchemyEventRepository:
             idempotency_key=event.idempotency_key,
             supersedes_event_id=event.supersedes_event_id,
             consistency_status=event.consistency_status,
+            director_provenance=event.director_provenance,
+            npc_provenance=event.npc_provenance,
         )
         self._session.add(row)
         await self._session.flush()

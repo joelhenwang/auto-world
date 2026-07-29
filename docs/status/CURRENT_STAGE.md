@@ -1,53 +1,49 @@
 # Current Stage
 
-**Updated:** 2026-07-29T20:55:00Z  
-**Updated by:** parent coding agent  
+**Updated:** 2026-07-29T21:45:00Z  
+**Updated by:** coding subagent (S2-DB-001)  
 **Repository:** autonomous-fictional-world  
-**Current branch:** `main` @ `7727c7f` (Stage 1 merged)  
-**Stage:** 1 — First Complete Three-Phase Day | **Status:** GATE_PASS / FROZEN  
-**Next stage:** 2 — Coherent Seven-Day World | **Status:** READY (not started)
+**Current branch:** `cursor/s2-db-001-persistence-085f`  
+**Stage:** 2 — Coherent Seven-Day World | **Status:** IN_PROGRESS  
+**Previous stage:** 1 — First Complete Three-Phase Day | **Status:** GATE_PASS / FROZEN @ `7727c7f` (docs tip `5c9299e`)
 
 ## Current objective
 
-Stage 1 is merged and frozen. **Do not implement Stage 2 in this handoff.**  
-The next parent agent owns Stage 2 kickoff + implementation from handbook `27`.
+Land S2-DB-001 review/merge, then S2-CONTENT-001 / S2-CHAR-001 / S2-KNOW-001.
 
-## Stage 1 (done)
+Active packet: **S2-DB-001** — implementation COMPLETE (Alembic `0004`).
+
+## Stage 1 (frozen — do not break)
+
+| Item | Rule |
+|---|---|
+| Migration `0003` | new revisions only |
+| Simultaneous intents | same sealed snapshot per phase |
+| Knowledge isolation | no omniscient character context |
+| Canon path | typed effects + atomic commit only |
+| OpenAPI/WS v1 | additive |
+| Default tests | no live OpenRouter |
+
+Evidence: `docs/status/evidence/stage-1/stage-gate-report.md` (**PASS**)
+
+## Stage 2 task matrix
 
 | Task ID | Status |
 |---|---|
-| S0-QA-002 … S1-QA-001 | VERIFIED on main |
+| S2-DB-001 | COMPLETE (awaiting merge) |
+| S2-CONTENT-001 | READY (packet drafted) |
+| S2-CHAR-001 … S2-QA-001 | NOT STARTED (create from `27` §6 when owned) |
 
-Evidence: `docs/status/evidence/stage-1/stage-gate-report.md` (**PASS**)  
-Merge: PR #19 → `7727c7f`
-
-## Stage 2 prep (docs only — no code yet)
-
-| Artefact | Path |
-|---|---|
-| Kickoff handoff | `docs/handoffs/2026-07-29_S2-KICKOFF.md` |
-| First DB packet | `docs/tasks/active/S2-DB-001_persistence-extensions.md` |
-| Seed packet | `docs/tasks/active/S2-CONTENT-001_seed-expansion.md` |
-| Contract freeze | `docs/status/CONTRACT_FREEZE.md` (Stages 0–1 FROZEN) |
-
-## Stage 1 freeze (do not break)
-
-- Simultaneous intents from one sealed snapshot
-- Perspective-safe `SealedContextPackage` v1
-- Atomic `SceneCommitService` / typed effects only
-- Stage 1 OpenAPI/WS core additive-only
-- Migration head `0003` — new Alembic revisions only
-- Default tests: no live OpenRouter
-
-## Baseline before Stage 2 coding
+## Baseline confirmed this session
 
 ```bash
-git checkout main && git pull
-uv sync
-sudo service docker start && sudo chmod 666 /var/run/docker.sock
-uv run python scripts/run_stage1_gate.py
+uv run ruff check backend scripts tools   # pass
+uv run basedpyright                       # 0 errors
+uv run pytest backend/tests/integration/test_stage2_schema.py \
+  backend/tests/integration/test_migrations_baseline.py -q   # 10 passed
 ```
 
-## Next agent
+## Next concrete step
 
-Implement Stage 2 per `27_STAGE_2_SEVEN_DAY_WORLD.md`, starting with freeze confirmation + `S2-DB-001` / `S2-CONTENT-001`. Use the Stage 2 parent kickoff prompt in the S2 kickoff handoff.
+Parent review/merge `0004_stage2_continuity_tables`, then S2-CONTENT-001 seed expansion
+and/or S2-CHAR-001 / S2-KNOW-001 using new UoW repos.

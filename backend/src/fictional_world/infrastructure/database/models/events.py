@@ -95,6 +95,8 @@ class WorldEventRow(Base):
     committed_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
+    director_provenance: Mapped[object | None] = mapped_column(JSONB, nullable=True)
+    npc_provenance: Mapped[object | None] = mapped_column(JSONB, nullable=True)
 
 
 class EventEffectRow(Base):
