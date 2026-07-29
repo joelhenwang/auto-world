@@ -29,7 +29,10 @@ def _run(cmd: list[str], *, outfile: Path | None = None, env: dict[str, str] | N
         text=True,
         capture_output=True,
     )
-    body = (result.stdout or "") + (result.stderr or "")
+    raw_body = (result.stdout or "") + (result.stderr or "")
+    body = "\n".join(line.rstrip() for line in raw_body.splitlines())
+    if raw_body:
+        body += "\n"
     if outfile is not None:
         outfile.write_text(body, encoding="utf-8")
     if result.returncode != 0:
