@@ -11,10 +11,14 @@ from uuid import UUID
 
 from fictional_world.application.orchestration.phase_runner import DeterministicPhaseRunner
 from fictional_world.application.ports.repositories import UnitOfWork
-from fictional_world.application.seed import import_caldris_stage0, import_caldris_stage1
+from fictional_world.application.seed import (
+    import_caldris_stage0,
+    import_caldris_stage1,
+    import_caldris_stage2,
+)
 from fictional_world.domain.phases.states import PhaseRunState
 from fictional_world.domain.seed.ids import seed_uuid
-from fictional_world.testing import Stage1FakeModelGateway
+from fictional_world.testing import Stage1FakeModelGateway, Stage2FakeModelGateway
 
 
 @dataclass(frozen=True, slots=True)
@@ -201,6 +205,151 @@ async def run_stage1_first_day(
             await _evaluate_stage1_invariants(uow, spec, result)
     result.passed = not result.failures
     return result
+
+
+async def run_stage2_seven_day(
+    uow_factory: UowFactory,
+    *,
+    pack_root: Path,
+    spec: ScenarioSpec,
+) -> ScenarioResult:
+    """Run the fake-model Stage 2 seven-day soak with per-day UoW boundaries."""
+
+    result = ScenarioResult(scenario_id=spec.scenario_id)
+    for step in spec.steps:
+        if step.action == "seed_caldris_stage2":
+            async with uow_factory() as uow:
+                seeded = await import_caldris_stage2(uow, root=pack_root)
+                await uow.commit()
+                result.world_id = seeded.world_id
+                result.task_trace.append(f"seed:{seeded.seed_id}:stage2:{seeded.already_imported}")
+                result.event_timeline.append("WORLD_SEEDED")
+            continue
+        if step.action == "run_stage2_seven_day":
+            if result.world_id is None:
+                result.failures.append("run_stage2_seven_day before seed")
+                break
+            for day_index in range(7):
+                async with uow_factory() as uow:
+                    gateway = Stage2FakeModelGateway()
+                    day = await DeterministicPhaseRunner(
+                        uow,
+                        model_gateway=gateway,
+                        stage2=True,
+                    ).run_day(result.world_id)
+                    await uow.commit()
+                    result.task_trace.append(
+                        f"day:{day.day_index}:phases={len(day.phase_results)}"
+                        f":day_run={day.day_run_id}:hard={day.hard_audit_violations}"
+                    )
+                    for advance in day.phase_results:
+                        result.event_timeline.extend(
+                            f"phase:{advance.absolute_phase_index}:{event_id}"
+                            for event_id in advance.event_ids
+                        )
+                        if advance.snapshot_id is not None:
+                            result.state_hashes.append(str(advance.snapshot_id))
+                    result.model_calls.extend(gateway.calls)
+                    if day.day_index != day_index:
+                        result.failures.append(
+                            f"expected day_index {day_index}, got {day.day_index}"
+                        )
+            continue
+        result.failures.append(f"unknown Stage 2 action: {step.action}")
+        break
+
+    if result.world_id is not None:
+        async with uow_factory() as uow:
+            await _evaluate_stage2_invariants(uow, spec, result)
+    result.passed = not result.failures
+    return result
+
+
+async def _evaluate_stage2_invariants(
+    uow: UnitOfWork,
+    spec: ScenarioSpec,
+    result: ScenarioResult,
+) -> None:
+    world_id = result.world_id
+    if world_id is None:
+        result.failures.append("missing world_id after Stage 2 steps")
+        return
+
+    focus_ids = (
+        seed_uuid("character/mira-talren"),
+        seed_uuid("character/dain-arcen"),
+        seed_uuid("character/iri-voss"),
+        seed_uuid("character/torren-kest"),
+    )
+    for assertion in spec.assertions:
+        invariant = assertion.invariant
+        if invariant is None:
+            continue
+        result.invariant_report.append(invariant)
+        if invariant == "seven_days_ten_phases":
+            for index in range(70):
+                phase = await uow.phases.find_by_world_and_index(world_id, index)
+                if phase is None or PhaseRunState(phase.state) is not PhaseRunState.COMPLETED:
+                    result.failures.append(f"phase {index} missing or incomplete")
+                    break
+            continue
+        if invariant == "four_focus_characters":
+            present = set(await uow.characters.list_character_ids_for_world(world_id))
+            missing = [
+                str(character_id) for character_id in focus_ids if character_id not in present
+            ]
+            if missing:
+                result.failures.append(f"missing focus characters: {missing}")
+            continue
+        if invariant == "same_snapshot_per_phase_intents":
+            # Sample waking phases across the week (skip sleep-only night/midnight).
+            sample_indexes = [0, 2, 7, 10, 22, 37, 52, 67]
+            for index in sample_indexes:
+                phase = await uow.phases.find_by_world_and_index(world_id, index)
+                if phase is None:
+                    result.failures.append(f"phase {index} missing for snapshot check")
+                    continue
+                if phase.phase_name in {"night", "midnight"}:
+                    continue
+                snapshot = await uow.snapshots.get_for_phase(phase.id)
+                proposals = await uow.action_proposals.list_for_phase(phase.id)
+                if snapshot is None:
+                    result.failures.append(f"phase {phase.id} missing snapshot")
+                    continue
+                if not proposals:
+                    # Sleep/skip-only phases may have zero intents.
+                    continue
+                if {proposal.snapshot_id for proposal in proposals} != {snapshot.id}:
+                    result.failures.append(f"phase {phase.id} intents use different snapshots")
+            continue
+        if invariant == "seven_day_runs":
+            day_runs = await uow.day_runs.list_for_world(world_id)
+            if len(day_runs) != 7:
+                result.failures.append(f"expected 7 day_run rows, got {len(day_runs)}")
+            elif any(row.status != "completed" for row in day_runs):
+                result.failures.append("one or more day_run rows are not completed")
+            elif {row.day_index for row in day_runs} != set(range(7)):
+                result.failures.append("day_run day_index set is not 0..6")
+            continue
+        if invariant == "no_hard_audit_violations":
+            day_runs = await uow.day_runs.list_for_world(world_id)
+            for day_run in day_runs:
+                audit = await uow.daily_audits.get_by_day_run(day_run.id)
+                if audit is None:
+                    result.failures.append(f"daily_audit missing for day_run {day_run.id}")
+                elif audit.hard_violation_count != 0:
+                    result.failures.append(
+                        f"hard audit violations on day {day_run.day_index}: "
+                        f"{audit.hard_violation_count}"
+                    )
+            continue
+        if invariant == "no_duplicate_events":
+            events = await uow.events.list_for_world(world_id, limit=5_000)
+            keys = [event.idempotency_key for event in events]
+            if len(keys) != len(set(keys)):
+                result.failures.append("duplicate Stage 2 event idempotency keys")
+            continue
+        result.failures.append(f"unknown Stage 2 invariant: {invariant}")
 
 
 async def _evaluate_stage1_invariants(

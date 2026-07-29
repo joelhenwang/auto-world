@@ -15,6 +15,7 @@ from fictional_world.domain.characters.records import (
 from fictional_world.domain.continuity.persistence import (
     ActivityPersistenceRecord,
     CommitmentPersistenceRecord,
+    DailyAuditPersistenceRecord,
     DayRunPersistenceRecord,
     DiaryEntryPersistenceRecord,
     GoalPersistenceRecord,
@@ -27,6 +28,7 @@ from fictional_world.domain.continuity.persistence import (
     RelationshipEdgePersistenceRecord,
     RoutePersistenceRecord,
     SummaryPersistenceRecord,
+    SummarySourcePersistenceRecord,
 )
 from fictional_world.domain.events.persistence import (
     EventEffectRecord,
@@ -595,6 +597,10 @@ class SummaryRepository(Protocol):
 
     async def insert(self, summary: SummaryPersistenceRecord) -> SummaryPersistenceRecord: ...
 
+    async def insert_sources(
+        self, sources: Sequence[SummarySourcePersistenceRecord]
+    ) -> Sequence[SummarySourcePersistenceRecord]: ...
+
     async def list_for_owner(
         self, owner_character_id: UUID, *, world_id: UUID, limit: int = 50
     ) -> Sequence[SummaryPersistenceRecord]: ...
@@ -617,7 +623,20 @@ class DayRunRepository(Protocol):
 
     async def insert(self, day_run: DayRunPersistenceRecord) -> DayRunPersistenceRecord: ...
 
+    async def save(
+        self,
+        day_run: DayRunPersistenceRecord,
+        *,
+        expected_version: int,
+    ) -> DayRunPersistenceRecord: ...
+
     async def list_for_world(self, world_id: UUID) -> Sequence[DayRunPersistenceRecord]: ...
+
+
+class DailyAuditRepository(Protocol):
+    async def get_by_day_run(self, day_run_id: UUID) -> DailyAuditPersistenceRecord | None: ...
+
+    async def insert(self, audit: DailyAuditPersistenceRecord) -> DailyAuditPersistenceRecord: ...
 
 
 class UnitOfWork(Protocol):
@@ -656,6 +675,7 @@ class UnitOfWork(Protocol):
     summaries: SummaryRepository
     diary_entries: DiaryEntryRepository
     day_runs: DayRunRepository
+    daily_audits: DailyAuditRepository
 
     async def __aenter__(self) -> UnitOfWork: ...
 

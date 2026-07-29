@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "note": "Stage 2 quiet corpus uses Stage2FakeModelGateway pattern scripts keyed by phase_label + actor seed; these JSON files are reference payloads for contract tests.",
+  "roles": ["character_decision", "character_reaction", "resolver"],
+  "characters": [
+    "character/mira-talren",
+    "character/dain-arcen",
+    "character/iri-voss",
+    "character/torren-kest"
+  ],
+  "phases": [
+    "dawn",
+    "sunrise",
+    "morning",
+    "noon",
+    "afternoon",
+    "sunset",
+    "dusk",
+    "evening",
+    "night",
+    "midnight"
+  ],
+  "activation": {
+    "night": "sleep",
+    "midnight": "sleep",
+    "other": "full_decision_unless_continue_activity"
+  }
+}

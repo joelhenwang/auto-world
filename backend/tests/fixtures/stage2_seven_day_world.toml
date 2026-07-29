@@ -1,0 +1,28 @@
+scenario_id = "stage2-seven-day-world-v1"
+seed = "caldris-embervale-v1:stage2"
+model_script = "fake/stage2-seven-day-v1"
+random_script = "deterministic"
+
+[[steps]]
+action = "seed_caldris_stage2"
+
+[[steps]]
+action = "run_stage2_seven_day"
+
+[[assertions]]
+invariant = "seven_days_ten_phases"
+
+[[assertions]]
+invariant = "four_focus_characters"
+
+[[assertions]]
+invariant = "same_snapshot_per_phase_intents"
+
+[[assertions]]
+invariant = "seven_day_runs"
+
+[[assertions]]
+invariant = "no_hard_audit_violations"
+
+[[assertions]]
+invariant = "no_duplicate_events"
