@@ -22,6 +22,7 @@ from fictional_world.infrastructure.database.repositories.continuity import (
     SqlAlchemyDiaryEntryRepository,
     SqlAlchemyGoalRepository,
     SqlAlchemyHookRepository,
+    SqlAlchemyNarrativeMetricRepository,
     SqlAlchemyNpcRepository,
     SqlAlchemyPlanRepository,
     SqlAlchemyRelationshipEdgeRepository,
@@ -93,6 +94,7 @@ class SqlAlchemyUnitOfWork:
         self.activities = cast(SqlAlchemyActivityRepository, None)
         self.routes = cast(SqlAlchemyRouteRepository, None)
         self.hooks = cast(SqlAlchemyHookRepository, None)
+        self.narrative_metrics = cast(SqlAlchemyNarrativeMetricRepository, None)
         self.npcs = cast(SqlAlchemyNpcRepository, None)
         self.summaries = cast(SqlAlchemySummaryRepository, None)
         self.diary_entries = cast(SqlAlchemyDiaryEntryRepository, None)
@@ -130,6 +132,7 @@ class SqlAlchemyUnitOfWork:
         self.activities = SqlAlchemyActivityRepository(self.session)
         self.routes = SqlAlchemyRouteRepository(self.session)
         self.hooks = SqlAlchemyHookRepository(self.session)
+        self.narrative_metrics = SqlAlchemyNarrativeMetricRepository(self.session)
         self.npcs = SqlAlchemyNpcRepository(self.session)
         self.summaries = SqlAlchemySummaryRepository(self.session)
         self.diary_entries = SqlAlchemyDiaryEntryRepository(self.session)

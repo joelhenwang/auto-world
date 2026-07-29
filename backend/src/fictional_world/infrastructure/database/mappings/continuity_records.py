@@ -12,6 +12,7 @@ from fictional_world.domain.continuity.persistence import (
     DiaryEntryPersistenceRecord,
     GoalPersistenceRecord,
     HookPersistenceRecord,
+    NarrativeMetricPersistenceRecord,
     NpcLifecyclePersistenceRecord,
     NpcProfilePersistenceRecord,
     PlanPersistenceRecord,
@@ -32,6 +33,7 @@ from fictional_world.infrastructure.database.models.continuity import (
     DiaryEntryRow,
     GoalRow,
     HookRow,
+    NarrativeMetricRow,
     NpcLifecycleRow,
     NpcProfileRow,
     PlanRow,
@@ -222,6 +224,19 @@ def hook_to_record(row: HookRow) -> HookPersistenceRecord:
         version=int(row.version),
         created_at=row.created_at,
         updated_at=row.updated_at,
+    )
+
+
+def narrative_metric_to_record(row: NarrativeMetricRow) -> NarrativeMetricPersistenceRecord:
+    return NarrativeMetricPersistenceRecord(
+        id=row.id,
+        world_id=row.world_id,
+        metric_key=row.metric_key,
+        metric_value=row.metric_value,
+        window_start_phase=int(row.window_start_phase),
+        window_end_phase=int(row.window_end_phase),
+        payload=_json_obj(row.payload),
+        recorded_at=row.recorded_at,
     )
 
 
