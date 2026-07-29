@@ -141,9 +141,7 @@ async def test_pause_at_snapshot_and_resume(
     async with SqlAlchemyUnitOfWork(uow_factory) as uow:
         seeded = await import_caldris_stage0(uow, root=PACK)
         runner = DeterministicPhaseRunner(uow)
-        paused = await runner.request_phase_advance(
-            seeded.world_id, stop_after_snapshot=True
-        )
+        paused = await runner.request_phase_advance(seeded.world_id, stop_after_snapshot=True)
         await uow.commit()
 
     assert paused.snapshot_id is not None
@@ -192,8 +190,7 @@ async def test_restart_after_commit_no_duplicate_events(
     ticks = [
         e
         for e in events
-        if e.event_type == "WORLD_TICK"
-        and e.structured_facts.get("absolute_phase_index") == 0
+        if e.event_type == "WORLD_TICK" and e.structured_facts.get("absolute_phase_index") == 0
     ]
     assert len(ticks) == 1
     assert first.phase_run_id

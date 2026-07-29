@@ -141,7 +141,9 @@ class DeterministicPhaseRunner:
         completed = False
         if result is not None:
             latest = await self._uow.phases.get(result.phase_run_id)
-            completed = latest is not None and PhaseRunState(latest.state) is PhaseRunState.COMPLETED
+            completed = (
+                latest is not None and PhaseRunState(latest.state) is PhaseRunState.COMPLETED
+            )
         return ReconciliationReport(
             world_id=world_id,
             active_phase_id=phase.id,
@@ -431,7 +433,11 @@ class DeterministicPhaseRunner:
             )
             return result.event_id
 
-        effects = mira_stage0_effects(mira_id=mira_id, inn_id=inn_id)
+        effects = mira_stage0_effects(
+            mira_id=mira_id,
+            inn_id=inn_id,
+            absolute_phase_index=clock.absolute_phase_index,
+        )
         result = await self._commit.commit(
             self._uow,
             CommitOperationCommand(
@@ -531,13 +537,9 @@ class DeterministicPhaseRunner:
         ):
             return current
         updated = clock.model_copy(update={"version": current.version})
-        return await self._uow.worlds.upsert_clock(
-            updated, expected_version=current.version
-        )
+        return await self._uow.worlds.upsert_clock(updated, expected_version=current.version)
 
-    async def _set_state(
-        self, phase: PhaseRunRecord, state: PhaseRunState
-    ) -> PhaseRunRecord:
+    async def _set_state(self, phase: PhaseRunRecord, state: PhaseRunState) -> PhaseRunRecord:
         if PhaseRunState(phase.state) is state:
             return phase
         return await self._uow.phases.save(

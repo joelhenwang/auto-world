@@ -301,7 +301,6 @@ class BudgetRepository(Protocol):
     ) -> Sequence[RequestBudgetRecord]: ...
 
 
-
 class PhaseSnapshotRepository(Protocol):
     async def get(self, snapshot_id: UUID) -> PhaseSnapshotRecord | None: ...
 

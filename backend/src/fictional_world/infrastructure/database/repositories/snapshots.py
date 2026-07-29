@@ -49,6 +49,7 @@ class SqlAlchemyPhaseSnapshotRepository:
             sealed_at=snapshot.sealed_at,
         )
         self._session.add(row)
+        await self._session.flush()
         for character in snapshot.characters:
             self._session.add(
                 PhaseSnapshotCharacterRow(
@@ -68,9 +69,7 @@ class SqlAlchemyPhaseSnapshotRepository:
 
     async def _hydrate(self, row: PhaseSnapshotRow) -> PhaseSnapshotRecord:
         result = await self._session.execute(
-            select(PhaseSnapshotCharacterRow).where(
-                PhaseSnapshotCharacterRow.snapshot_id == row.id
-            )
+            select(PhaseSnapshotCharacterRow).where(PhaseSnapshotCharacterRow.snapshot_id == row.id)
         )
         characters = list(result.scalars().all())
         return snapshot_to_record(row, characters)

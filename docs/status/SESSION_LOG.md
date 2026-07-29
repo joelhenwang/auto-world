@@ -74,3 +74,33 @@ uv run python scripts/generate_json_schemas.py
 ### Handoff
 
 `docs/handoffs/2026-07-29_S0-ENG002-DOM001-QA001.md`
+
+## 2026-07-29T17:03:47Z — S0-ORCH-002 deterministic phase runner
+
+**Agent/person:** parent coding agent
+**Branch/worktree:** `cursor/s0-orch002-phase-runner-09ce`
+**Task IDs:** `S0-ORCH-002`
+**Starting HEAD:** `9b3177d`
+**Ending HEAD:** pending tip after handoff commit
+
+### Intended outcome
+
+Postgres-backed WorldOrchestrator phase runner with clock advance, snapshot seal, scripted Mira actions, pause/resume, and restart idempotency.
+
+### Completed
+
+- DeterministicPhaseRunner + clock helper + scripted actions
+- PhaseSnapshotRepository wiring through UoW
+- ObserveEffect location-target validation fix
+- Unit + integration tests; full suite 81 passed
+
+### Verification
+
+```bash
+uv run ruff check backend && uv run ruff format --check backend && uv run basedpyright && uv run pytest
+# 81 passed, 1 deselected
+```
+
+### Handoff
+
+`docs/handoffs/2026-07-29_S0-ORCH002.md`

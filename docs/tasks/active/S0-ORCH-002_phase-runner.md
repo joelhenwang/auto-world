@@ -1,6 +1,6 @@
 # `S0-ORCH-002` — Deterministic phase runner
 
-**Stage:** 0 | **Workstream:** ORCH | **Status:** IN_PROGRESS | **Priority:** P0  
+**Stage:** 0 | **Workstream:** ORCH | **Status:** IN_REVIEW | **Priority:** P0  
 **Owner:** parent agent | **Branch:** `cursor/s0-orch002-phase-runner-09ce`  
 **Upstream:** `9b3177d` | **Depends:** S0-SIM-002, S0-ORCH-001, S0-CONTENT-001  
 **AGENTS conceptual branch:** `task/S0-ORCH-002-phase-runner`

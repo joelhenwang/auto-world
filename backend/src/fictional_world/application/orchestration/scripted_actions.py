@@ -14,7 +14,12 @@ from fictional_world.domain.effects.commands import (
 )
 
 
-def mira_stage0_effects(*, mira_id: UUID, inn_id: UUID | None) -> tuple[EffectCommand, ...]:
+def mira_stage0_effects(
+    *,
+    mira_id: UUID,
+    inn_id: UUID | None,
+    absolute_phase_index: int = 0,
+) -> tuple[EffectCommand, ...]:
     """Deterministic Stage 0 actions for Mira at the Cinder Lantern Inn."""
     targets = (inn_id,) if inn_id is not None else ()
     return (
@@ -38,10 +43,13 @@ def mira_stage0_effects(*, mira_id: UUID, inn_id: UUID | None) -> tuple[EffectCo
             justification="Stage 0 scripted rest between courier work.",
         ),
         CreateRecentMemoryEffect(
-            effect_key="mira.memory.inn-morning",
+            effect_key=f"mira.memory.inn-phase-{absolute_phase_index}",
             owner_character_id=mira_id,
             memory_kind=MemoryKind.EPISODIC,
-            text="Mira rested briefly in the Cinder Lantern Inn after checking the route board.",
+            text=(
+                "Mira rested briefly in the Cinder Lantern Inn after checking "
+                f"the route board (phase {absolute_phase_index})."
+            ),
             salience=0.4,
             confidence=0.9,
             justification="Stage 0 scripted recent memory from deterministic rest.",
