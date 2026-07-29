@@ -1,0 +1,57 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.basedpyright/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# Environment / secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Editors / OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Node / frontend (when added)
+node_modules/
+frontend/dist/
+*.tsbuildinfo
+
+# Docker / local data
+pgdata/
+*.sql.gz
+docker-data/
+compose.override.yaml
+
+# Generated local artefacts (keep committed generated docs under docs/generated/)
+*.log
+tmp/
+.temp/
+
+# Model / image caches (never commit)
+.model-cache/
+.comfyui/
+*.safetensors
+*.gguf
+
+# uv
+uv-cache/
