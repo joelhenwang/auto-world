@@ -410,7 +410,10 @@ As of this writing the repository contains **only the normative handbook** (`aut
 ### Toolchain
 
 - `uv` is the mandated Python 3.12 package manager (installs to `~/.local/bin`; the startup update script installs it if missing). Python 3.12, Node.js, and `pnpm` are preinstalled on the base image.
-- `docker` is **not** installed on the base image. It is not needed today (no `compose.yaml`), but Stage 0+ dev requires PostgreSQL + pgvector via Docker Compose (see `autonomous_world_build_handbook_v1_0/20_LOCAL_DEVELOPMENT_DOCKER_CI_AND_DEPLOYMENT.md`). Install Docker when a `compose.yaml` exists and you need the database.
+- `docker` (Engine 28.x + Compose v2 plugin) is installed in the saved VM snapshot. Stage 0+ dev needs it for PostgreSQL + pgvector via Docker Compose (see `autonomous_world_build_handbook_v1_0/20_LOCAL_DEVELOPMENT_DOCKER_CI_AND_DEPLOYMENT.md`).
+  - **The daemon does NOT auto-start.** Init is `tini` (no systemd), so start it once per session with `sudo service docker start`, then use `sudo docker ...` (the `ubuntu` user is not in the `docker` group). Verify with `sudo docker info`.
+  - The daemon is configured for this VM with the `fuse-overlayfs` storage driver (`/etc/docker/daemon.json`) and `iptables-legacy`; do not switch it to `overlay2`/nftables — containers will fail to start.
+  - Verified working: `docker compose` brings up `pgvector/pgvector:pg16` healthy and `CREATE EXTENSION vector` succeeds.
 
 ### Verifying the environment today
 
