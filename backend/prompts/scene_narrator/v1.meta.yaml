@@ -1,0 +1,13 @@
+prompt_id: scene_narrator_v1
+role: scene_narrator
+version: 1
+status: active
+compatible_schema: SceneNarration@1.0
+input_sections:
+  - committed_facts
+  - accepted_dialogue
+  - perspective
+  - voice_guides
+  - forbidden_assertions
+  - maximum_words
+sampling_profile: scene_narrator_v1

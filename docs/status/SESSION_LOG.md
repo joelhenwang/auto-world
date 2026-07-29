@@ -157,3 +157,46 @@ Stage 0 hard exit gate evidence, foundation scenario, fault/architecture/securit
 ### Handoff
 
 `docs/handoffs/2026-07-29_S0-QA002.md`
+
+## 2026-07-29T20:14:53Z — Stage 1 remaining vertical slice
+
+**Agent/person:** integration subagent
+**Branch/worktree:** `cursor/s1-integration-5704` / `/workspace`
+**Task IDs:** S1-GRAPH-001/002, S1-SIM-002, S1-ORCH-001, S1-API-001,
+S1-UI-001, S1-QA-001
+**Starting HEAD:** `0e60c89`
+**Tested HEAD:** `8b64197`
+
+### Completed
+
+- bounded character-decision, reaction, and resolver pipelines;
+- atomic idempotent scene commits with observations, memories, narration,
+  outbox, and stream projections;
+- fake-model dawn → morning → evening workflow for Mira and Dain;
+- Stage 1 seed fixture, budget barrier, pause/resume, and restart-safe tasks;
+- REST player/runtime/read routes, replay WebSocket, and generated OpenAPI;
+- minimal generated-type Vue client with watcher/player modes;
+- deterministic scenario, leakage/fault/live-provider checks, and gate evidence.
+
+### Verification
+
+```bash
+uv run python scripts/run_stage1_gate.py
+# PASS: migrations, Ruff, format, basedpyright, 154 offline tests,
+# frontend 5 tests/build, generated contract no-diff
+
+uv run pytest -o addopts='' -m openrouter_live \
+  backend/tests/live/test_stage1_openrouter.py \
+  backend/tests/unit/test_openrouter_errors.py
+# 2 passed
+```
+
+### State left behind
+
+Stage 1 automated gate PASS; branch pushed and ready for parent review/merge.
+Docker PostgreSQL plus the `stage1-ui-demo` API/Vite tmux session remain
+running for follow-up inspection.
+
+### Handoff
+
+`docs/handoffs/2026-07-29_S1-INTEGRATION-001.md`

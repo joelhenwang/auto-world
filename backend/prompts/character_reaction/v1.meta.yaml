@@ -1,0 +1,15 @@
+prompt_id: character_reaction_v1
+role: character_reaction
+version: 1
+status: active
+compatible_schema: ReactionProposal@1.0
+input_sections:
+  - reactor_identity
+  - perceived_attempt
+  - scene_state
+  - capabilities
+  - prepared_actions
+  - relationship_context
+  - remaining_beat_budget
+  - allowed_ids
+sampling_profile: character_reaction_v1

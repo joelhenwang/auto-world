@@ -18,12 +18,14 @@ from fictional_world.domain.common.enums import ResourceKind
 from fictional_world.domain.common.errors import DomainError
 from fictional_world.domain.common.result import ValidationResult
 from fictional_world.domain.effects.commands import (
+    CreateClaimEffect,
     CreateRecentMemoryEffect,
     EffectBase,
     EffectCommand,
     MoveEntityEffect,
     ObserveEffect,
     RestEffect,
+    ScheduleEffect,
     SpendResourceEffect,
     WaitEffect,
 )
@@ -218,6 +220,12 @@ class EventCommitService:
                     location_ids.add(target_id)
             if isinstance(effect, CreateRecentMemoryEffect):
                 character_ids.add(effect.owner_character_id)
+            if isinstance(effect, CreateClaimEffect):
+                character_ids.add(effect.speaker_id)
+                character_ids.update(effect.listener_ids)
+            if isinstance(effect, ScheduleEffect):
+                character_ids.update(effect.target_entity_ids)
+                location_ids.update(effect.target_entity_ids)
             if isinstance(effect, MoveEntityEffect):
                 location_ids.add(effect.from_location_id)
                 location_ids.add(effect.to_location_id)
@@ -411,6 +419,8 @@ def _effect_entity_id(effect: EffectBase) -> UUID | None:
         return effect.observer_id
     if isinstance(effect, CreateRecentMemoryEffect):
         return effect.owner_character_id
+    if isinstance(effect, CreateClaimEffect):
+        return effect.speaker_id
     return None
 
 

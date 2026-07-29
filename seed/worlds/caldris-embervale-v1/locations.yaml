@@ -9,3 +9,23 @@ locations:
       a broad stone hearth, a route board, and windows facing the east bridge.
     capacity: 40
     environment_tags: [inn, courier, hearth]
+  - key: location/veycross/market-square
+    name: Market Square
+    type: plaza
+    region_code: embervale-march
+    parent: null
+    description: >-
+      Veycross's public market and route exchange, where courier notices and
+      bridge advisories are posted in plain view.
+    capacity: 240
+    environment_tags: [market, public, courier]
+  - key: location/veycross/east-bridge
+    name: East Bridge
+    type: bridge
+    region_code: embervale-march
+    parent: null
+    description: >-
+      A stone-and-timber crossing on the east road, watched by probationary
+      wardens during flood season.
+    capacity: 80
+    environment_tags: [bridge, road, warden]

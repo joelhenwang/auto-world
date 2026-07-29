@@ -1,6 +1,29 @@
 {
   "components": {
     "schemas": {
+      "AcquirePlayerControlRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "controller_id": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Controller Id",
+            "type": "string"
+          },
+          "idempotency_key": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Idempotency Key",
+            "type": "string"
+          }
+        },
+        "required": [
+          "controller_id",
+          "idempotency_key"
+        ],
+        "title": "AcquirePlayerControlRequest",
+        "type": "object"
+      },
       "AdvancePhaseResponse": {
         "additionalProperties": false,
         "properties": {
@@ -51,6 +74,86 @@
           "event_ids"
         ],
         "title": "AdvancePhaseResponse",
+        "type": "object"
+      },
+      "CharacterSummaryRead": {
+        "additionalProperties": false,
+        "properties": {
+          "active_activity_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Active Activity Id"
+          },
+          "energy": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Energy",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "life_status": {
+            "title": "Life Status",
+            "type": "string"
+          },
+          "location_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Location Id"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "pain": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Pain",
+            "type": "string"
+          },
+          "stamina": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Stamina",
+            "type": "string"
+          },
+          "state_version": {
+            "title": "State Version",
+            "type": "integer"
+          },
+          "stress": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Stress",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "location_id",
+          "life_status",
+          "stamina",
+          "energy",
+          "pain",
+          "stress",
+          "active_activity_id",
+          "state_version"
+        ],
+        "title": "CharacterSummaryRead",
         "type": "object"
       },
       "ClockRead": {
@@ -265,6 +368,22 @@
         "title": "HealthReadyResponse",
         "type": "object"
       },
+      "PauseWorldRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "mode": {
+            "default": "after_safe_boundary",
+            "enum": [
+              "after_safe_boundary",
+              "immediate"
+            ],
+            "title": "Mode",
+            "type": "string"
+          }
+        },
+        "title": "PauseWorldRequest",
+        "type": "object"
+      },
       "PhaseRead": {
         "additionalProperties": false,
         "properties": {
@@ -345,6 +464,185 @@
         "title": "PhaseRead",
         "type": "object"
       },
+      "PlayerActionRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "action_family": {
+            "maxLength": 50,
+            "minLength": 1,
+            "title": "Action Family",
+            "type": "string"
+          },
+          "controller_id": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Controller Id",
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Description",
+            "type": "string"
+          },
+          "idempotency_key": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Idempotency Key",
+            "type": "string"
+          },
+          "session_id": {
+            "format": "uuid",
+            "title": "Session Id",
+            "type": "string"
+          },
+          "target_entity_ids": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Target Entity Ids",
+            "type": "array"
+          },
+          "target_location_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Location Id"
+          },
+          "utterance": {
+            "anyOf": [
+              {
+                "maxLength": 1000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Utterance"
+          }
+        },
+        "required": [
+          "session_id",
+          "controller_id",
+          "idempotency_key",
+          "action_family",
+          "description"
+        ],
+        "title": "PlayerActionRequest",
+        "type": "object"
+      },
+      "PlayerActionResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "already_existed": {
+            "title": "Already Existed",
+            "type": "boolean"
+          },
+          "command_id": {
+            "format": "uuid",
+            "title": "Command Id",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "command_id",
+          "status",
+          "already_existed"
+        ],
+        "title": "PlayerActionResponse",
+        "type": "object"
+      },
+      "PlayerControlRead": {
+        "additionalProperties": false,
+        "properties": {
+          "acquired_at": {
+            "format": "date-time",
+            "title": "Acquired At",
+            "type": "string"
+          },
+          "character_id": {
+            "format": "uuid",
+            "title": "Character Id",
+            "type": "string"
+          },
+          "controller_id": {
+            "title": "Controller Id",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "phase_run_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phase Run Id"
+          },
+          "released_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Released At"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "version": {
+            "title": "Version",
+            "type": "integer"
+          },
+          "waiting_input": {
+            "title": "Waiting Input",
+            "type": "boolean"
+          },
+          "world_id": {
+            "format": "uuid",
+            "title": "World Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "world_id",
+          "character_id",
+          "controller_id",
+          "status",
+          "acquired_at",
+          "released_at",
+          "waiting_input",
+          "phase_run_id",
+          "version"
+        ],
+        "title": "PlayerControlRead",
+        "type": "object"
+      },
       "ReconcileResponse": {
         "additionalProperties": false,
         "properties": {
@@ -389,6 +687,254 @@
           "notes"
         ],
         "title": "ReconcileResponse",
+        "type": "object"
+      },
+      "ReleasePlayerControlRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "controller_id": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Controller Id",
+            "type": "string"
+          },
+          "session_id": {
+            "format": "uuid",
+            "title": "Session Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "controller_id",
+          "session_id"
+        ],
+        "title": "ReleasePlayerControlRequest",
+        "type": "object"
+      },
+      "RuntimeCommandResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "phase": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AdvancePhaseResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "world_id": {
+            "format": "uuid",
+            "title": "World Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "world_id",
+          "status"
+        ],
+        "title": "RuntimeCommandResponse",
+        "type": "object"
+      },
+      "SceneSummaryRead": {
+        "additionalProperties": false,
+        "properties": {
+          "beat_budget": {
+            "title": "Beat Budget",
+            "type": "integer"
+          },
+          "canonical_summary": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Canonical Summary"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "location_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Location Id"
+          },
+          "narration": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Narration"
+          },
+          "participant_ids": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Participant Ids",
+            "type": "array"
+          },
+          "phase_run_id": {
+            "format": "uuid",
+            "title": "Phase Run Id",
+            "type": "string"
+          },
+          "priority_score": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Priority Score",
+            "type": "string"
+          },
+          "resolution_level": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resolution Level"
+          },
+          "scene_type": {
+            "title": "Scene Type",
+            "type": "string"
+          },
+          "snapshot_id": {
+            "format": "uuid",
+            "title": "Snapshot Id",
+            "type": "string"
+          },
+          "state": {
+            "title": "State",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "phase_run_id",
+          "snapshot_id",
+          "location_id",
+          "scene_type",
+          "state",
+          "priority_score",
+          "beat_budget",
+          "participant_ids"
+        ],
+        "title": "SceneSummaryRead",
+        "type": "object"
+      },
+      "StreamEventRead": {
+        "additionalProperties": false,
+        "properties": {
+          "event_type": {
+            "title": "Event Type",
+            "type": "string"
+          },
+          "fictional_time": {
+            "additionalProperties": true,
+            "title": "Fictional Time",
+            "type": "object"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "occurred_at": {
+            "format": "date-time",
+            "title": "Occurred At",
+            "type": "string"
+          },
+          "payload": {
+            "additionalProperties": true,
+            "title": "Payload",
+            "type": "object"
+          },
+          "perspective_scope": {
+            "title": "Perspective Scope",
+            "type": "string"
+          },
+          "phase_run_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phase Run Id"
+          },
+          "scene_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scene Id"
+          },
+          "schema_version": {
+            "title": "Schema Version",
+            "type": "string"
+          },
+          "sequence": {
+            "title": "Sequence",
+            "type": "integer"
+          },
+          "world_event_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "World Event Id"
+          },
+          "world_id": {
+            "format": "uuid",
+            "title": "World Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "world_id",
+          "sequence",
+          "event_type",
+          "occurred_at",
+          "schema_version",
+          "perspective_scope"
+        ],
+        "title": "StreamEventRead",
         "type": "object"
       },
       "ValidationError": {
@@ -479,6 +1025,531 @@
   },
   "openapi": "3.1.0",
   "paths": {
+    "/api/v1/worlds/{world_id}/advance": {
+      "post": {
+        "operationId": "advance_stage1_world_api_v1_worlds__world_id__advance_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "world_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "World Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdvancePhaseResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Advance Stage1 World",
+        "tags": [
+          "stage1"
+        ]
+      }
+    },
+    "/api/v1/worlds/{world_id}/characters": {
+      "get": {
+        "operationId": "characters_api_v1_worlds__world_id__characters_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "world_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "World Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/CharacterSummaryRead"
+                  },
+                  "title": "Response Characters Api V1 Worlds  World Id  Characters Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Characters",
+        "tags": [
+          "stage1"
+        ]
+      }
+    },
+    "/api/v1/worlds/{world_id}/characters/{character_id}/player/acquire": {
+      "post": {
+        "operationId": "acquire_player_control_api_v1_worlds__world_id__characters__character_id__player_acquire_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "world_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "World Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "character_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Character Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcquirePlayerControlRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayerControlRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Acquire Player Control",
+        "tags": [
+          "stage1"
+        ]
+      }
+    },
+    "/api/v1/worlds/{world_id}/characters/{character_id}/player/action": {
+      "post": {
+        "operationId": "submit_player_action_api_v1_worlds__world_id__characters__character_id__player_action_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "world_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "World Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "character_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Character Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlayerActionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayerActionResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Submit Player Action",
+        "tags": [
+          "stage1"
+        ]
+      }
+    },
+    "/api/v1/worlds/{world_id}/characters/{character_id}/player/release": {
+      "post": {
+        "operationId": "release_player_control_api_v1_worlds__world_id__characters__character_id__player_release_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "world_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "World Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "character_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Character Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReleasePlayerControlRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayerControlRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Release Player Control",
+        "tags": [
+          "stage1"
+        ]
+      }
+    },
+    "/api/v1/worlds/{world_id}/pause": {
+      "post": {
+        "operationId": "pause_stage1_world_api_v1_worlds__world_id__pause_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "world_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "World Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PauseWorldRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RuntimeCommandResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Pause Stage1 World",
+        "tags": [
+          "stage1"
+        ]
+      }
+    },
+    "/api/v1/worlds/{world_id}/resume": {
+      "post": {
+        "operationId": "resume_stage1_world_api_v1_worlds__world_id__resume_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "world_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "World Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RuntimeCommandResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Resume Stage1 World",
+        "tags": [
+          "stage1"
+        ]
+      }
+    },
+    "/api/v1/worlds/{world_id}/scenes": {
+      "get": {
+        "operationId": "scenes_api_v1_worlds__world_id__scenes_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "world_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "World Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "phase_run_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Phase Run Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SceneSummaryRead"
+                  },
+                  "title": "Response Scenes Api V1 Worlds  World Id  Scenes Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Scenes",
+        "tags": [
+          "stage1"
+        ]
+      }
+    },
+    "/api/v1/worlds/{world_id}/timeline": {
+      "get": {
+        "operationId": "timeline_api_v1_worlds__world_id__timeline_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "world_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "World Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "after_sequence",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "After Sequence"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "maximum": 500,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "observer_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Observer Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/StreamEventRead"
+                  },
+                  "title": "Response Timeline Api V1 Worlds  World Id  Timeline Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Timeline",
+        "tags": [
+          "stage1"
+        ]
+      }
+    },
     "/health/live": {
       "get": {
         "operationId": "health_live_health_live_get",

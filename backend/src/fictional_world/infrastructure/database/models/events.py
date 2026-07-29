@@ -57,7 +57,11 @@ class WorldEventRow(Base):
         ForeignKey(f"{WORLDSIM_SCHEMA}.phase_run.id"),
         nullable=True,
     )
-    scene_id: Mapped[uuid.UUID | None] = mapped_column(Uuid(as_uuid=True), nullable=True)
+    scene_id: Mapped[uuid.UUID | None] = mapped_column(
+        Uuid(as_uuid=True),
+        ForeignKey(f"{WORLDSIM_SCHEMA}.scene.id", use_alter=True),
+        nullable=True,
+    )
     event_type: Mapped[str] = mapped_column(Text, nullable=False)
     initiator_entity_id: Mapped[uuid.UUID | None] = mapped_column(
         Uuid(as_uuid=True),

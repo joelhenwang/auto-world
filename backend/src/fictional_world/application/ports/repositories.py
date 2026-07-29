@@ -23,6 +23,16 @@ from fictional_world.domain.phases.records import (
     PhaseRunRecord,
     PhaseSnapshotRecord,
 )
+from fictional_world.domain.scenes.persistence import (
+    ActionProposalRecord,
+    NarrationRecord,
+    PlayerControlSessionRecord,
+    ReactionProposalRecord,
+    SceneRecord,
+    SceneResolutionRecord,
+    SceneRunRecord,
+    StreamEventRecord,
+)
 from fictional_world.domain.seed.records import (
     CharacterCardVersionRecord,
     LocationRecord,
@@ -30,6 +40,7 @@ from fictional_world.domain.seed.records import (
 )
 from fictional_world.domain.tasks.budget import RequestBudgetRecord
 from fictional_world.domain.tasks.task_run import TaskRun
+from fictional_world.domain.tasks.user_command import UserCommandRecord
 from fictional_world.domain.world.records import (
     AggregateVersionRecord,
     WorldClockRecord,
@@ -309,6 +320,117 @@ class PhaseSnapshotRepository(Protocol):
     async def insert(self, snapshot: PhaseSnapshotRecord) -> PhaseSnapshotRecord: ...
 
 
+class ActionProposalRepository(Protocol):
+    async def get(self, proposal_id: UUID) -> ActionProposalRecord | None: ...
+
+    async def find_by_idempotency_key(self, key: str) -> ActionProposalRecord | None: ...
+
+    async def list_for_phase(self, phase_run_id: UUID) -> Sequence[ActionProposalRecord]: ...
+
+    async def insert(self, proposal: ActionProposalRecord) -> ActionProposalRecord: ...
+
+
+class SceneRepository(Protocol):
+    async def get(self, scene_id: UUID) -> SceneRecord | None: ...
+
+    async def find_by_idempotency_key(self, key: str) -> SceneRecord | None: ...
+
+    async def list_for_phase(self, phase_run_id: UUID) -> Sequence[SceneRecord]: ...
+
+    async def insert(self, scene: SceneRecord) -> SceneRecord: ...
+
+    async def save(self, scene: SceneRecord, *, expected_version: int) -> SceneRecord: ...
+
+
+class ReactionProposalRepository(Protocol):
+    async def get(self, reaction_id: UUID) -> ReactionProposalRecord | None: ...
+
+    async def find_by_idempotency_key(self, key: str) -> ReactionProposalRecord | None: ...
+
+    async def list_for_scene(self, scene_id: UUID) -> Sequence[ReactionProposalRecord]: ...
+
+    async def insert(self, reaction: ReactionProposalRecord) -> ReactionProposalRecord: ...
+
+
+class SceneResolutionRepository(Protocol):
+    async def get(self, resolution_id: UUID) -> SceneResolutionRecord | None: ...
+
+    async def get_for_scene(self, scene_id: UUID) -> SceneResolutionRecord | None: ...
+
+    async def find_by_idempotency_key(self, key: str) -> SceneResolutionRecord | None: ...
+
+    async def insert(self, resolution: SceneResolutionRecord) -> SceneResolutionRecord: ...
+
+
+class SceneRunRepository(Protocol):
+    async def get(self, run_id: UUID) -> SceneRunRecord | None: ...
+
+    async def get_for_scene(self, scene_id: UUID) -> SceneRunRecord | None: ...
+
+    async def find_by_idempotency_key(self, key: str) -> SceneRunRecord | None: ...
+
+    async def insert(self, run: SceneRunRecord) -> SceneRunRecord: ...
+
+
+class NarrationRepository(Protocol):
+    async def get(self, narration_id: UUID) -> NarrationRecord | None: ...
+
+    async def find_by_idempotency_key(self, key: str) -> NarrationRecord | None: ...
+
+    async def list_for_scene(self, scene_id: UUID) -> Sequence[NarrationRecord]: ...
+
+    async def insert(self, narration: NarrationRecord) -> NarrationRecord: ...
+
+
+class StreamEventRepository(Protocol):
+    async def get(self, event_id: UUID) -> StreamEventRecord | None: ...
+
+    async def find_by_idempotency_key(self, key: str) -> StreamEventRecord | None: ...
+
+    async def list_after(
+        self,
+        world_id: UUID,
+        *,
+        after_sequence: int | None = None,
+        limit: int = 100,
+    ) -> Sequence[StreamEventRecord]: ...
+
+    async def next_sequence(self, world_id: UUID) -> int: ...
+
+    async def insert(self, event: StreamEventRecord) -> StreamEventRecord: ...
+
+
+class PlayerControlRepository(Protocol):
+    async def get(self, session_id: UUID) -> PlayerControlSessionRecord | None: ...
+
+    async def find_active_for_character(
+        self, character_id: UUID
+    ) -> PlayerControlSessionRecord | None: ...
+
+    async def find_by_idempotency_key(self, key: str) -> PlayerControlSessionRecord | None: ...
+
+    async def insert(self, session: PlayerControlSessionRecord) -> PlayerControlSessionRecord: ...
+
+    async def save(
+        self, session: PlayerControlSessionRecord, *, expected_version: int
+    ) -> PlayerControlSessionRecord: ...
+
+
+class UserCommandRepository(Protocol):
+    async def get(self, command_id: UUID) -> UserCommandRecord | None: ...
+
+    async def find_by_idempotency_key(self, key: str) -> UserCommandRecord | None: ...
+
+    async def list_pending_for_world(
+        self,
+        world_id: UUID,
+        *,
+        limit: int = 100,
+    ) -> Sequence[UserCommandRecord]: ...
+
+    async def insert(self, command: UserCommandRecord) -> UserCommandRecord: ...
+
+
 class UnitOfWork(Protocol):
     worlds: WorldRepository
     characters: CharacterRepository
@@ -321,6 +443,15 @@ class UnitOfWork(Protocol):
     outbox: OutboxRepository
     tasks: TaskRepository
     budgets: BudgetRepository
+    action_proposals: ActionProposalRepository
+    scenes: SceneRepository
+    reactions: ReactionProposalRepository
+    scene_resolutions: SceneResolutionRepository
+    scene_runs: SceneRunRepository
+    narrations: NarrationRepository
+    stream_events: StreamEventRepository
+    player_controls: PlayerControlRepository
+    user_commands: UserCommandRepository
 
     async def __aenter__(self) -> UnitOfWork: ...
 

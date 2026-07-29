@@ -1,0 +1,17 @@
+prompt_id: character_decision_v1
+role: character_decision
+version: 1
+status: active
+compatible_schema: ActionProposal@1.0
+input_sections:
+  - phase_label
+  - stable_identity
+  - current_state
+  - current_perception
+  - goals_and_plans
+  - relationships
+  - recent_memory
+  - capabilities
+  - known_lore
+  - allowed_ids
+sampling_profile: character_decision_v1

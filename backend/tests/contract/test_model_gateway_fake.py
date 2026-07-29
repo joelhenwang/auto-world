@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
 from pydantic import BaseModel, Field
 
@@ -13,23 +15,31 @@ from fictional_world.application.models.messages import (
     SamplingOptions,
     TextGenerationRequest,
 )
+from fictional_world.domain.scenes.proposals import ActionProposal
 from fictional_world.infrastructure.model_gateway.fake import (
     FakeModelGatewayAdapter,
     FakeScriptKind,
 )
+
+STAGE1_CORPUS = Path(__file__).resolve().parents[1] / "fixtures" / "model_corpus" / "stage1"
 
 
 class OkSchema(BaseModel):
     ok: bool = Field(...)
 
 
-def _text_request(*, request_id: str, role: str = "character_decision") -> TextGenerationRequest:
+def _text_request(
+    *,
+    request_id: str,
+    role: str = "character_decision",
+    output_schema: type[BaseModel] = OkSchema,
+) -> TextGenerationRequest:
     return TextGenerationRequest(
         request_id=request_id,
         role=role,
         model_profile_id="stage0-character-decision-v1",
         messages=(ModelMessage(role="user", content="hello"),),
-        output_schema=OkSchema,
+        output_schema=output_schema,
         sampling=SamplingOptions(temperature=0.2, top_p=0.9, max_output_tokens=100),
         routing=ProviderRoutingOptions(),
         metadata={},
@@ -93,3 +103,45 @@ async def test_fake_embed_dimension_mismatch() -> None:
             )
         )
     assert err.value.code is ModelGatewayErrorCode.EMBEDDING_DIMENSION_ERROR
+
+
+@pytest.mark.contract
+@pytest.mark.model_fake
+@pytest.mark.asyncio
+async def test_fake_routes_corpus_by_request_id_then_role() -> None:
+    gateway = FakeModelGatewayAdapter(
+        corpus_dir=STAGE1_CORPUS,
+        corpus_scripts={
+            "character_decision": "quiet_dain_rest.json",
+            "mira-request": "quiet_mira_wait.json",
+        },
+    )
+
+    mira = await gateway.generate(
+        _text_request(request_id="mira-request", output_schema=ActionProposal)
+    )
+    dain = await gateway.generate(
+        _text_request(request_id="other-request", output_schema=ActionProposal)
+    )
+
+    assert isinstance(mira.parsed, ActionProposal)
+    assert mira.parsed.action_family == "wait"
+    assert isinstance(dain.parsed, ActionProposal)
+    assert dain.parsed.action_family == "rest"
+
+
+@pytest.mark.contract
+@pytest.mark.model_fake
+@pytest.mark.asyncio
+async def test_fake_classifies_malformed_corpus() -> None:
+    gateway = FakeModelGatewayAdapter(
+        corpus_dir=STAGE1_CORPUS,
+        corpus_scripts={"malformed-request": "malformed.json"},
+    )
+
+    with pytest.raises(ModelGatewayError) as error:
+        await gateway.generate(
+            _text_request(request_id="malformed-request", output_schema=ActionProposal)
+        )
+
+    assert error.value.code is ModelGatewayErrorCode.MALFORMED_RESPONSE

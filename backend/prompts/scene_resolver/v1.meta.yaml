@@ -1,0 +1,15 @@
+prompt_id: scene_resolver_v1
+role: resolver
+version: 1
+status: active
+compatible_schema: SceneResolution@1.0
+input_sections:
+  - scene_snapshot
+  - accepted_attempts
+  - deterministic_results
+  - feasible_outcome_envelope
+  - allowed_effect_commands
+  - random_values
+  - observation_candidates
+  - impact_class
+sampling_profile: scene_resolver_v1
