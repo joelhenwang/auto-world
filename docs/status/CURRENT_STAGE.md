@@ -1,11 +1,11 @@
 # Current Stage
 
-**Updated:** 2026-07-29T11:35:57Z
+**Updated:** 2026-07-29T12:50:00Z
 **Updated by:** parent coding agent
 **Repository:** autonomous-fictional-world (`/workspace`)
-**Current branch:** `cursor/s0-eng-001-repository-bootstrap-09ce`
-**HEAD:** `0866d3743ef51874f42f7f817ba1ea6b4fa24d82`
-**Working tree:** clean after S0-ENG-001 handoff commit
+**Current branch:** `cursor/s0-eng002-dom001-qa001-09ce`
+**HEAD:** pending commit tip
+**Working tree:** dirty during S0-ENG-002 / S0-DOM-001 / S0-QA-001
 
 ## Stage
 
@@ -19,83 +19,52 @@
 
 ## Current objective
 
-`S0-ENG-001` repository bootstrap is complete on the feature branch and ready to merge. Next: open parallel Stage 0 packets `S0-ENG-002`, `S0-DOM-001`, and `S0-QA-001` after merge.
+Land parallel Stage 0 foundation tasks S0-ENG-002 (config/static quality), S0-DOM-001 (domain contracts), and S0-QA-001 (test harness/fakes) on one integrated branch due to shared `pyproject.toml`.
 
 ## Frozen contract versions
 
 | Contract | Version/hash | Source path | Status | Owner |
 |---|---|---|---|---|
-| Domain schemas | — | — | DRAFT (not started) | S0-DOM-001 |
-| Database schema/Alembic head | — | — | DRAFT (not started) | S0-DB-001 |
-| Effect-command union | — | — | DRAFT (not started) | S0-DOM-001 / S0-SIM-001 |
-| API/OpenAPI | — | — | DRAFT (not started) | S0-API-001 |
-| Prompt catalog | — | — | DRAFT (not started) | later |
-| Model capability snapshot | — | — | DRAFT (not started) | S0-MODEL-001 |
-| Seed manifest | — | `seed/` assets only | DRAFT | S0-CONTENT-001 |
-| Monorepo layout | handbook v1.0 + S0-ENG-001 | `19` §2 / `backend/` | DRAFT→ready for consumers | S0-ENG-001 |
-
-## Runtime profile
-
-| Item | Current value |
-|---|---|
-| Python/uv lock hash | `uv.lock` committed on branch (`0866d37`) |
-| Node/package lock hash | N/A (no frontend yet) |
-| PostgreSQL version | Compose skeleton `pgvector/pgvector:pg16` |
-| pgvector version | via `pgvector/pgvector:pg16` image |
-| Orchestrator adapter | not started |
-| Text provider/model | not started |
-| Embedding provider/model | not started |
-| Feature flags | not started (`S0-ENG-002`) |
-| Migration head | none |
-| Seed version | none (map asset only under `seed/assets/`) |
+| Domain schemas | Stage 0 draft | `docs/generated/domain-schemas/` | DRAFT (S0-DOM-001) | DOM |
+| Database schema/Alembic head | — | — | not started | S0-DB-001 |
+| Effect-command union | ASSUMP-S0-001 | `domain/effects/commands.py` | DRAFT | DOM |
+| Monorepo layout | handbook v1.0 | `19` §2 | ready | ENG |
 
 ## Active tasks
 
-| Task ID | Owner | Branch/worktree | Status | Dependencies | Next integration point |
+| Task ID | Owner | Branch | Status | Dependencies | Next integration |
 |---|---|---|---|---|---|
-| S0-ENG-001 | parent agent | `cursor/s0-eng-001-repository-bootstrap-09ce` | IN_REVIEW / COMPLETE pending merge | none | merge to `main` |
-| MAP-INGEST-001 | prior session | merged prototype on `main` | prototype complete | ADR-0001 | future MAP-INGEST-002 |
+| S0-ENG-001 | parent | merged on `main` | VERIFIED | none | done |
+| S0-ENG-002 | parent | `cursor/s0-eng002-dom001-qa001-09ce` | IN_PROGRESS | S0-ENG-001 | merge with DOM/QA |
+| S0-DOM-001 | parent | same | IN_PROGRESS | S0-ENG-001 | merge with ENG/QA |
+| S0-QA-001 | parent | same | IN_PROGRESS | S0-ENG-001 | merge with ENG/DOM |
 
 ## Blocked tasks
 
-| Task ID | Blocker ID | Evidence | Owner | Required decision/action |
-|---|---|---|---|---|
-| S0-ENG-002 | waits on S0-ENG-001 merge | `25` §4 graph | ENG | merge bootstrap |
-| S0-DOM-001 | waits on S0-ENG-001 merge | `25` §4 graph | DOM | merge bootstrap |
-| S0-QA-001 | waits on S0-ENG-001 merge | `25` §4 graph | QA | merge bootstrap |
+| Task ID | Blocker | Required action |
+|---|---|---|
+| S0-DB-001 | S0-DOM-001 merge | merge this PR |
+| S0-SIM-001 | S0-DOM-001 merge | merge this PR |
+| S0-MODEL-001 | S0-DOM-001 + S0-ENG-002 | merge this PR |
 
 ## Latest verified baseline
 
 ```bash
 uv sync
-uv run python -c "import fictional_world"
-docker compose config -q
 uv run ruff format --check .
 uv run ruff check .
 uv run basedpyright
+uv run pytest
+uv run python scripts/generate_json_schemas.py
 ```
-
-**Result timestamp:** 2026-07-29T11:35:57Z
-**Evidence path:** `docs/handoffs/2026-07-29_S0-ENG-001_repository-bootstrap.md`
-**Known excluded tests:** no behavioural application suite yet; strict basedpyright/pre-commit deferred to S0-ENG-002
-
-## Current integration risks
-
-- `pyproject.toml` / `uv.lock` will next be extended by `S0-ENG-002` — serialize ENG tooling changes.
-- `backend/tests/conftest.py` placeholder will be owned by `S0-QA-001` after merge.
 
 ## Next exact actions
 
-1. Merge S0-ENG-001 to `main`.
-2. Create parallel task packets for `S0-ENG-002`, `S0-DOM-001`, `S0-QA-001`.
-3. Do not start `S0-DB-*` until `S0-DOM-001` contracts exist.
+1. Merge S0-ENG-002 / S0-DOM-001 / S0-QA-001 PR to `main`.
+2. Start `S0-DB-001` (Alembic baseline) and optionally `S0-SIM-001` / `S0-MODEL-001` in parallel after DOM.
+3. Do not let two agents own overlapping migrations.
 
 ## Latest handoffs
 
 - `docs/handoffs/2026-07-29_S0-ENG-001_repository-bootstrap.md`
-
-## Notes that a fresh session must know
-
-- `fictional_world` imports cleanly from `backend/src/` via root uv project.
-- Docker daemon may need `sudo service docker start` on this VM; use `sudo docker` if needed.
-- Deep domain package trees are intentionally absent until owning tasks.
+- `docs/handoffs/2026-07-29_S0-ENG002-DOM001-QA001.md` (this session)
