@@ -218,14 +218,22 @@ class DayRunPersistenceRecord(StrictContract):
     version: int = Field(default=0, ge=0)
 
 
-class NarrativeMetricPersistenceRecord(StrictContract):
-    """Append-only pacing / Director trigger metric sample."""
+class SummarySourcePersistenceRecord(StrictContract):
+    """Provenance link from a summary to an observation/memory/event source."""
+
+    summary_id: UUID
+    ordinal: int = Field(ge=0)
+    source_kind: str = Field(min_length=1, max_length=50)
+    source_id: UUID
+
+
+class DailyAuditPersistenceRecord(StrictContract):
+    """End-of-day memory audit attached to one day_run."""
 
     id: UUID
+    day_run_id: UUID
     world_id: UUID
-    metric_key: str = Field(min_length=1, max_length=200)
-    metric_value: Decimal
-    window_start_phase: int = Field(ge=0)
-    window_end_phase: int = Field(ge=0)
-    payload: JsonObject = Field(default_factory=dict)
-    recorded_at: datetime | None = None
+    hard_violation_count: int = Field(default=0, ge=0)
+    soft_violation_count: int = Field(default=0, ge=0)
+    findings: list[Any] = Field(default_factory=list)
+    created_at: datetime | None = None

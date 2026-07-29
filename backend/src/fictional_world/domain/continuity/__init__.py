@@ -16,6 +16,7 @@ from fictional_world.domain.continuity.goals import (
 from fictional_world.domain.continuity.persistence import (
     ActivityPersistenceRecord,
     CommitmentPersistenceRecord,
+    DailyAuditPersistenceRecord,
     DayRunPersistenceRecord,
     DiaryEntryPersistenceRecord,
     GoalPersistenceRecord,
@@ -28,6 +29,26 @@ from fictional_world.domain.continuity.persistence import (
     RelationshipEdgePersistenceRecord,
     RoutePersistenceRecord,
     SummaryPersistenceRecord,
+    SummarySourcePersistenceRecord,
+)
+from fictional_world.domain.continuity.plans import (
+    create_primary_plan,
+    demote_conflicting_primary_plans,
+    invalidate_plan_for_failed_prerequisites,
+    revise_plan,
+    update_plan_step_status,
+)
+from fictional_world.domain.continuity.relationships import apply_relationship_evidence
+from fictional_world.domain.continuity.relevance import (
+    commitments_for_reminder,
+    goal_relevance_score,
+    rank_goals_for_context,
+)
+from fictional_world.domain.continuity.statuses import (
+    CommitmentStatus,
+    GoalStatus,
+    PlanStatus,
+    PlanStepStatus,
 )
 from fictional_world.domain.continuity.plans import (
     create_primary_plan,
