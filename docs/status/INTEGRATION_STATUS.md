@@ -45,4 +45,4 @@ S2-DB-001 → S2-CONTENT-001 → (CHAR ‖ KNOW ‖ MEM ‖ WORLD*) → SIM → 
 
 ## Current failures
 
-None. S2-CONTENT-001 seed import tests green (`test_seed_import` 5 passed; full suite green).
+None. S2-CHAR-001 unit/domain tests green; full suite green on CHAR branch.

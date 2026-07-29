@@ -2,10 +2,10 @@
 
 **Stage:** 2  
 **Workstream:** CHAR  
-**Status:** READY  
+**Status:** COMPLETE  
 **Priority:** P0  
 **Owner:** parent coding agent  
-**Branch/worktree:** TBD `cursor/s2-char-001-*-085f`  
+**Branch/worktree:** `cursor/s2-char-001-goals-085f`  
 **Upstream:** after S2-DB-001 (`0004`)  
 **Depends:** S2-DB-001  
 **AGENTS conceptual branch:** `task/S2-CHAR-001-goals-plans-relationships`
@@ -44,8 +44,8 @@ relationship movement without models writing aggregates directly.
 
 ## 4. Acceptance
 
-- [ ] Model proposes evidence only; resolver applies bounded deltas
-- [ ] Trust cannot jump beyond configured normal-scene delta
-- [ ] Attraction not inferred from generic kindness
-- [ ] Personality/values unchanged in Stage 2
-- [ ] Tests green; handoff written
+- [x] Model proposes evidence only; resolver applies bounded deltas
+- [x] Trust cannot jump beyond configured normal-scene delta
+- [x] Attraction not inferred from generic kindness
+- [x] Personality/values unchanged in Stage 2
+- [x] Tests green; handoff written
