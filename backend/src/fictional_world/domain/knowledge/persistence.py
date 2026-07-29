@@ -4,13 +4,14 @@ from __future__ import annotations
 
 from datetime import datetime
 from decimal import Decimal
+from typing import Any
 from uuid import UUID
 
 from pydantic import Field
 
 from fictional_world.domain.common.base import StrictContract
 
-JsonObject = dict[str, str | int | float | bool | list[str] | dict[str, str] | None]
+JsonObject = dict[str, Any]
 
 
 class ObservationPersistenceRecord(StrictContract):
