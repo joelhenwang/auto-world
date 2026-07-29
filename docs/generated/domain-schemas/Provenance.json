@@ -1,0 +1,94 @@
+{
+  "$defs": {
+    "SourceKind": {
+      "enum": [
+        "engine",
+        "model",
+        "user",
+        "migration"
+      ],
+      "title": "SourceKind",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "model_slug": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Model Slug"
+    },
+    "prompt_version": {
+      "anyOf": [
+        {
+          "maxLength": 100,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Prompt Version"
+    },
+    "provider": {
+      "anyOf": [
+        {
+          "maxLength": 100,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Provider"
+    },
+    "schema_version": {
+      "default": "1.0",
+      "maxLength": 30,
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "seed": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Seed"
+    },
+    "source_id": {
+      "format": "uuid",
+      "title": "Source Id",
+      "type": "string"
+    },
+    "source_kind": {
+      "$ref": "#/$defs/SourceKind"
+    }
+  },
+  "required": [
+    "source_kind",
+    "source_id",
+    "created_at"
+  ],
+  "title": "Provenance",
+  "type": "object"
+}

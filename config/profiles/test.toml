@@ -1,0 +1,49 @@
+# Automated test profile.
+
+environment = "test"
+profile = "test"
+
+[api]
+bind_host = "127.0.0.1"
+bind_port = 8000
+
+[database]
+host = "127.0.0.1"
+port = 5432
+name = "fictional_world_test"
+user = "fictional_world"
+password = "change-me-local"
+
+[auth]
+enabled = false
+local_admin_password = ""
+allow_insecure_public_bind = false
+
+[model_gateway]
+provider_mode = "fake"
+embeddings_enabled = false
+expected_embedding_dimensions = 2048
+
+[openrouter]
+api_key = ""
+base_url = "https://openrouter.ai/api/v1"
+text_model = "nvidia/nemotron-3-super-120b-a12b:free"
+embedding_model = "nvidia/nemotron-3-embed-1b:free"
+live_test_max_requests = 0
+
+[memory]
+embedding_dimensions = 2048
+long_term_enabled = false
+
+[features]
+director = false
+long_term_memory = false
+magic = false
+combat = false
+images = false
+temporal = false
+macro_simulation = false
+
+[observability]
+log_level = "WARNING"
+otel_enabled = false

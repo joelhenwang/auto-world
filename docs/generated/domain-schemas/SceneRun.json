@@ -1,0 +1,147 @@
+{
+  "$defs": {
+    "RunStatus": {
+      "enum": [
+        "pending",
+        "running",
+        "waiting",
+        "pause_requested",
+        "paused",
+        "retrying",
+        "failed",
+        "completed"
+      ],
+      "title": "RunStatus",
+      "type": "string"
+    },
+    "SceneStage": {
+      "enum": [
+        "drafted",
+        "validate_actions",
+        "order_initiative",
+        "collect_reactions",
+        "resolve",
+        "validate_effects",
+        "commit",
+        "write_observations",
+        "enqueue_images",
+        "complete",
+        "invalidated"
+      ],
+      "title": "SceneStage",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "action_proposal_ids": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Action Proposal Ids",
+      "type": "array"
+    },
+    "attempt_count": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Attempt Count",
+      "type": "integer"
+    },
+    "beat_budget": {
+      "maximum": 12,
+      "minimum": 1,
+      "title": "Beat Budget",
+      "type": "integer"
+    },
+    "beat_count": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Beat Count",
+      "type": "integer"
+    },
+    "committed_event_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Committed Event Id"
+    },
+    "high_impact": {
+      "default": false,
+      "title": "High Impact",
+      "type": "boolean"
+    },
+    "participant_ids": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Participant Ids",
+      "type": "array"
+    },
+    "phase_id": {
+      "format": "uuid",
+      "title": "Phase Id",
+      "type": "string"
+    },
+    "reaction_proposal_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Reaction Proposal Ids",
+      "type": "array"
+    },
+    "resolution_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Resolution Id"
+    },
+    "scene_id": {
+      "format": "uuid",
+      "title": "Scene Id",
+      "type": "string"
+    },
+    "stage": {
+      "$ref": "#/$defs/SceneStage"
+    },
+    "status": {
+      "$ref": "#/$defs/RunStatus"
+    },
+    "version": {
+      "minimum": 0,
+      "title": "Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "scene_id",
+    "phase_id",
+    "status",
+    "stage",
+    "participant_ids",
+    "action_proposal_ids",
+    "beat_budget",
+    "version"
+  ],
+  "title": "SceneRun",
+  "type": "object"
+}

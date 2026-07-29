@@ -1,0 +1,198 @@
+{
+  "$defs": {
+    "DayPhase": {
+      "enum": [
+        "dawn",
+        "sunrise",
+        "morning",
+        "noon",
+        "afternoon",
+        "sunset",
+        "dusk",
+        "evening",
+        "night",
+        "midnight"
+      ],
+      "title": "DayPhase",
+      "type": "string"
+    },
+    "FictionalTime": {
+      "additionalProperties": false,
+      "properties": {
+        "absolute_phase_index": {
+          "minimum": 0,
+          "title": "Absolute Phase Index",
+          "type": "integer"
+        },
+        "calendar_label": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Calendar Label"
+        },
+        "generation_index": {
+          "maximum": 3,
+          "minimum": 1,
+          "title": "Generation Index",
+          "type": "integer"
+        },
+        "phase": {
+          "$ref": "#/$defs/DayPhase"
+        },
+        "world_day_index": {
+          "minimum": 1,
+          "title": "World Day Index",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "generation_index",
+        "world_day_index",
+        "phase",
+        "absolute_phase_index"
+      ],
+      "title": "FictionalTime",
+      "type": "object"
+    },
+    "PhaseStage": {
+      "enum": [
+        "accept_commands",
+        "advance_clock",
+        "apply_world_tick",
+        "director_review",
+        "commit_world_event",
+        "build_snapshot",
+        "generate_intents",
+        "assemble_scenes",
+        "resolve_scenes",
+        "write_memories",
+        "enqueue_images",
+        "finalize"
+      ],
+      "title": "PhaseStage",
+      "type": "string"
+    },
+    "RunStatus": {
+      "enum": [
+        "pending",
+        "running",
+        "waiting",
+        "pause_requested",
+        "paused",
+        "retrying",
+        "failed",
+        "completed"
+      ],
+      "title": "RunStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "action_proposal_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Action Proposal Ids",
+      "type": "array"
+    },
+    "attempt_count": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Attempt Count",
+      "type": "integer"
+    },
+    "completed_scene_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Completed Scene Ids",
+      "type": "array"
+    },
+    "expected_character_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Expected Character Ids",
+      "type": "array"
+    },
+    "fictional_time": {
+      "$ref": "#/$defs/FictionalTime"
+    },
+    "image_outbox_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Image Outbox Ids",
+      "type": "array"
+    },
+    "phase_id": {
+      "format": "uuid",
+      "title": "Phase Id",
+      "type": "string"
+    },
+    "scene_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Scene Ids",
+      "type": "array"
+    },
+    "snapshot_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Snapshot Id"
+    },
+    "stage": {
+      "$ref": "#/$defs/PhaseStage"
+    },
+    "status": {
+      "$ref": "#/$defs/RunStatus"
+    },
+    "version": {
+      "minimum": 0,
+      "title": "Version",
+      "type": "integer"
+    },
+    "world_id": {
+      "format": "uuid",
+      "title": "World Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "phase_id",
+    "world_id",
+    "fictional_time",
+    "status",
+    "stage",
+    "version"
+  ],
+  "title": "PhaseRun",
+  "type": "object"
+}

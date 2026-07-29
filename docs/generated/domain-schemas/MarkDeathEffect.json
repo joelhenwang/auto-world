@@ -1,0 +1,51 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "cause": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Cause",
+      "type": "string"
+    },
+    "effect_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Effect Key",
+      "type": "string"
+    },
+    "entity_id": {
+      "format": "uuid",
+      "title": "Entity Id",
+      "type": "string"
+    },
+    "justification": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Justification",
+      "type": "string"
+    },
+    "kind": {
+      "const": "mark_death",
+      "default": "mark_death",
+      "title": "Kind",
+      "type": "string"
+    },
+    "source_attempt_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Attempt Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "effect_key",
+    "justification",
+    "entity_id",
+    "cause"
+  ],
+  "title": "MarkDeathEffect",
+  "type": "object"
+}

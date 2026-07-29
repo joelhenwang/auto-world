@@ -1,0 +1,56 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "effect_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Effect Key",
+      "type": "string"
+    },
+    "entity_id": {
+      "format": "uuid",
+      "title": "Entity Id",
+      "type": "string"
+    },
+    "from_location_id": {
+      "format": "uuid",
+      "title": "From Location Id",
+      "type": "string"
+    },
+    "justification": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Justification",
+      "type": "string"
+    },
+    "kind": {
+      "const": "move_entity",
+      "default": "move_entity",
+      "title": "Kind",
+      "type": "string"
+    },
+    "source_attempt_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Attempt Ids",
+      "type": "array"
+    },
+    "to_location_id": {
+      "format": "uuid",
+      "title": "To Location Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "effect_key",
+    "justification",
+    "entity_id",
+    "from_location_id",
+    "to_location_id"
+  ],
+  "title": "MoveEntityEffect",
+  "type": "object"
+}

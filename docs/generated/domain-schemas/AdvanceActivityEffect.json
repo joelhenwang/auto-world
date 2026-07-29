@@ -1,0 +1,56 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "activity_id": {
+      "format": "uuid",
+      "title": "Activity Id",
+      "type": "string"
+    },
+    "completed": {
+      "default": false,
+      "title": "Completed",
+      "type": "boolean"
+    },
+    "effect_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Effect Key",
+      "type": "string"
+    },
+    "justification": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Justification",
+      "type": "string"
+    },
+    "kind": {
+      "const": "advance_activity",
+      "default": "advance_activity",
+      "title": "Kind",
+      "type": "string"
+    },
+    "progress_delta": {
+      "exclusiveMinimum": 0,
+      "maximum": 1,
+      "title": "Progress Delta",
+      "type": "number"
+    },
+    "source_attempt_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Attempt Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "effect_key",
+    "justification",
+    "activity_id",
+    "progress_delta"
+  ],
+  "title": "AdvanceActivityEffect",
+  "type": "object"
+}

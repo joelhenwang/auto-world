@@ -1,0 +1,70 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "effect_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Effect Key",
+      "type": "string"
+    },
+    "justification": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Justification",
+      "type": "string"
+    },
+    "kind": {
+      "const": "create_claim",
+      "default": "create_claim",
+      "title": "Kind",
+      "type": "string"
+    },
+    "listener_ids": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Listener Ids",
+      "type": "array"
+    },
+    "proposition": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Proposition",
+      "type": "string"
+    },
+    "referenced_entity_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Referenced Entity Ids",
+      "type": "array"
+    },
+    "source_attempt_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Attempt Ids",
+      "type": "array"
+    },
+    "speaker_id": {
+      "format": "uuid",
+      "title": "Speaker Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "effect_key",
+    "justification",
+    "speaker_id",
+    "listener_ids",
+    "proposition"
+  ],
+  "title": "CreateClaimEffect",
+  "type": "object"
+}

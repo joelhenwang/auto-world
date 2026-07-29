@@ -1,0 +1,1308 @@
+{
+  "$defs": {
+    "AdvanceActivityEffect": {
+      "additionalProperties": false,
+      "properties": {
+        "activity_id": {
+          "format": "uuid",
+          "title": "Activity Id",
+          "type": "string"
+        },
+        "completed": {
+          "default": false,
+          "title": "Completed",
+          "type": "boolean"
+        },
+        "effect_key": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Effect Key",
+          "type": "string"
+        },
+        "justification": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Justification",
+          "type": "string"
+        },
+        "kind": {
+          "const": "advance_activity",
+          "default": "advance_activity",
+          "title": "Kind",
+          "type": "string"
+        },
+        "progress_delta": {
+          "exclusiveMinimum": 0,
+          "maximum": 1,
+          "title": "Progress Delta",
+          "type": "number"
+        },
+        "source_attempt_ids": {
+          "default": [],
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Source Attempt Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "effect_key",
+        "justification",
+        "activity_id",
+        "progress_delta"
+      ],
+      "title": "AdvanceActivityEffect",
+      "type": "object"
+    },
+    "ApplyConditionEffect": {
+      "additionalProperties": false,
+      "properties": {
+        "condition_type": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Condition Type",
+          "type": "string"
+        },
+        "duration_phases": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duration Phases"
+        },
+        "effect_key": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Effect Key",
+          "type": "string"
+        },
+        "entity_id": {
+          "format": "uuid",
+          "title": "Entity Id",
+          "type": "string"
+        },
+        "intensity": {
+          "maximum": 5,
+          "minimum": 1,
+          "title": "Intensity",
+          "type": "integer"
+        },
+        "justification": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Justification",
+          "type": "string"
+        },
+        "kind": {
+          "const": "apply_condition",
+          "default": "apply_condition",
+          "title": "Kind",
+          "type": "string"
+        },
+        "source_attempt_ids": {
+          "default": [],
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Source Attempt Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "effect_key",
+        "justification",
+        "entity_id",
+        "condition_type",
+        "intensity"
+      ],
+      "title": "ApplyConditionEffect",
+      "type": "object"
+    },
+    "ApplyInjuryEffect": {
+      "additionalProperties": false,
+      "properties": {
+        "bleeding": {
+          "default": 0,
+          "maximum": 5,
+          "minimum": 0,
+          "title": "Bleeding",
+          "type": "integer"
+        },
+        "body_region": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Body Region",
+          "type": "string"
+        },
+        "consciousness_impact": {
+          "default": 0,
+          "maximum": 5,
+          "minimum": 0,
+          "title": "Consciousness Impact",
+          "type": "integer"
+        },
+        "effect_key": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Effect Key",
+          "type": "string"
+        },
+        "entity_id": {
+          "format": "uuid",
+          "title": "Entity Id",
+          "type": "string"
+        },
+        "injury_type": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Injury Type",
+          "type": "string"
+        },
+        "justification": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Justification",
+          "type": "string"
+        },
+        "kind": {
+          "const": "apply_injury",
+          "default": "apply_injury",
+          "title": "Kind",
+          "type": "string"
+        },
+        "mobility_impact": {
+          "default": 0,
+          "maximum": 5,
+          "minimum": 0,
+          "title": "Mobility Impact",
+          "type": "integer"
+        },
+        "pain": {
+          "default": 0,
+          "maximum": 5,
+          "minimum": 0,
+          "title": "Pain",
+          "type": "integer"
+        },
+        "potentially_permanent": {
+          "default": false,
+          "title": "Potentially Permanent",
+          "type": "boolean"
+        },
+        "severity": {
+          "maximum": 5,
+          "minimum": 1,
+          "title": "Severity",
+          "type": "integer"
+        },
+        "source_attempt_ids": {
+          "default": [],
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Source Attempt Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "effect_key",
+        "justification",
+        "entity_id",
+        "body_region",
+        "injury_type",
+        "severity"
+      ],
+      "title": "ApplyInjuryEffect",
+      "type": "object"
+    },
+    "CreateClaimEffect": {
+      "additionalProperties": false,
+      "properties": {
+        "effect_key": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Effect Key",
+          "type": "string"
+        },
+        "justification": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Justification",
+          "type": "string"
+        },
+        "kind": {
+          "const": "create_claim",
+          "default": "create_claim",
+          "title": "Kind",
+          "type": "string"
+        },
+        "listener_ids": {
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Listener Ids",
+          "type": "array"
+        },
+        "proposition": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Proposition",
+          "type": "string"
+        },
+        "referenced_entity_ids": {
+          "default": [],
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Referenced Entity Ids",
+          "type": "array"
+        },
+        "source_attempt_ids": {
+          "default": [],
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Source Attempt Ids",
+          "type": "array"
+        },
+        "speaker_id": {
+          "format": "uuid",
+          "title": "Speaker Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "effect_key",
+        "justification",
+        "speaker_id",
+        "listener_ids",
+        "proposition"
+      ],
+      "title": "CreateClaimEffect",
+      "type": "object"
+    },
+    "CreateRecentMemoryEffect": {
+      "additionalProperties": false,
+      "properties": {
+        "confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "effect_key": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Effect Key",
+          "type": "string"
+        },
+        "justification": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Justification",
+          "type": "string"
+        },
+        "kind": {
+          "const": "create_recent_memory",
+          "default": "create_recent_memory",
+          "title": "Kind",
+          "type": "string"
+        },
+        "memory_kind": {
+          "$ref": "#/$defs/MemoryKind"
+        },
+        "owner_character_id": {
+          "format": "uuid",
+          "title": "Owner Character Id",
+          "type": "string"
+        },
+        "salience": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Salience",
+          "type": "number"
+        },
+        "source_attempt_ids": {
+          "default": [],
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Source Attempt Ids",
+          "type": "array"
+        },
+        "source_event_ids": {
+          "default": [],
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Source Event Ids",
+          "type": "array"
+        },
+        "source_observation_ids": {
+          "default": [],
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Source Observation Ids",
+          "type": "array"
+        },
+        "text": {
+          "maxLength": 4000,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "effect_key",
+        "justification",
+        "owner_character_id",
+        "memory_kind",
+        "text",
+        "salience",
+        "confidence"
+      ],
+      "title": "CreateRecentMemoryEffect",
+      "type": "object"
+    },
+    "MarkDeathEffect": {
+      "additionalProperties": false,
+      "properties": {
+        "cause": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Cause",
+          "type": "string"
+        },
+        "effect_key": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Effect Key",
+          "type": "string"
+        },
+        "entity_id": {
+          "format": "uuid",
+          "title": "Entity Id",
+          "type": "string"
+        },
+        "justification": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Justification",
+          "type": "string"
+        },
+        "kind": {
+          "const": "mark_death",
+          "default": "mark_death",
+          "title": "Kind",
+          "type": "string"
+        },
+        "source_attempt_ids": {
+          "default": [],
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Source Attempt Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "effect_key",
+        "justification",
+        "entity_id",
+        "cause"
+      ],
+      "title": "MarkDeathEffect",
+      "type": "object"
+    },
+    "MemoryKind": {
+      "enum": [
+        "episodic",
+        "semantic",
+        "relational",
+        "emotional",
+        "autobiographical",
+        "procedural",
+        "commitment",
+        "plan",
+        "unresolved_question",
+        "secret",
+        "claim"
+      ],
+      "title": "MemoryKind",
+      "type": "string"
+    },
+    "MoveEntityEffect": {
+      "additionalProperties": false,
+      "properties": {
+        "effect_key": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Effect Key",
+          "type": "string"
+        },
+        "entity_id": {
+          "format": "uuid",
+          "title": "Entity Id",
+          "type": "string"
+        },
+        "from_location_id": {
+          "format": "uuid",
+          "title": "From Location Id",
+          "type": "string"
+        },
+        "justification": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Justification",
+          "type": "string"
+        },
+        "kind": {
+          "const": "move_entity",
+          "default": "move_entity",
+          "title": "Kind",
+          "type": "string"
+        },
+        "source_attempt_ids": {
+          "default": [],
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Source Attempt Ids",
+          "type": "array"
+        },
+        "to_location_id": {
+          "format": "uuid",
+          "title": "To Location Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "effect_key",
+        "justification",
+        "entity_id",
+        "from_location_id",
+        "to_location_id"
+      ],
+      "title": "MoveEntityEffect",
+      "type": "object"
+    },
+    "NarrationConstraints": {
+      "additionalProperties": false,
+      "properties": {
+        "forbidden_assertions": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Forbidden Assertions",
+          "type": "array"
+        },
+        "maximum_words": {
+          "default": 700,
+          "maximum": 2500,
+          "minimum": 50,
+          "title": "Maximum Words",
+          "type": "integer"
+        },
+        "perspective": {
+          "default": "omniscient_limited",
+          "maxLength": 100,
+          "title": "Perspective",
+          "type": "string"
+        },
+        "required_facts": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Required Facts",
+          "type": "array"
+        },
+        "tone_tags": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Tone Tags",
+          "type": "array"
+        }
+      },
+      "title": "NarrationConstraints",
+      "type": "object"
+    },
+    "ObservationChannel": {
+      "enum": [
+        "sight",
+        "hearing",
+        "touch",
+        "smell",
+        "magic",
+        "communication",
+        "inference"
+      ],
+      "title": "ObservationChannel",
+      "type": "string"
+    },
+    "ObserveEffect": {
+      "additionalProperties": false,
+      "properties": {
+        "channels": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ObservationChannel"
+          },
+          "title": "Channels",
+          "type": "array"
+        },
+        "effect_key": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Effect Key",
+          "type": "string"
+        },
+        "justification": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Justification",
+          "type": "string"
+        },
+        "kind": {
+          "const": "observe",
+          "default": "observe",
+          "title": "Kind",
+          "type": "string"
+        },
+        "observer_id": {
+          "format": "uuid",
+          "title": "Observer Id",
+          "type": "string"
+        },
+        "source_attempt_ids": {
+          "default": [],
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Source Attempt Ids",
+          "type": "array"
+        },
+        "target_entity_ids": {
+          "default": [],
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Target Entity Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "effect_key",
+        "justification",
+        "observer_id"
+      ],
+      "title": "ObserveEffect",
+      "type": "object"
+    },
+    "RegisterNpcEffect": {
+      "additionalProperties": false,
+      "properties": {
+        "effect_key": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Effect Key",
+          "type": "string"
+        },
+        "justification": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Justification",
+          "type": "string"
+        },
+        "kind": {
+          "const": "register_npc",
+          "default": "register_npc",
+          "title": "Kind",
+          "type": "string"
+        },
+        "location_id": {
+          "format": "uuid",
+          "title": "Location Id",
+          "type": "string"
+        },
+        "narrative_purpose": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Narrative Purpose",
+          "type": "string"
+        },
+        "persistence_horizon_days": {
+          "maximum": 120,
+          "minimum": 1,
+          "title": "Persistence Horizon Days",
+          "type": "integer"
+        },
+        "proposed_name": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Proposed Name",
+          "type": "string"
+        },
+        "source_attempt_ids": {
+          "default": [],
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Source Attempt Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "effect_key",
+        "justification",
+        "proposed_name",
+        "location_id",
+        "narrative_purpose",
+        "persistence_horizon_days"
+      ],
+      "title": "RegisterNpcEffect",
+      "type": "object"
+    },
+    "RelationshipDimension": {
+      "enum": [
+        "familiarity",
+        "trust",
+        "affection",
+        "attraction",
+        "respect",
+        "fear",
+        "resentment",
+        "dependency",
+        "loyalty"
+      ],
+      "title": "RelationshipDimension",
+      "type": "string"
+    },
+    "RelationshipEvidenceEffect": {
+      "additionalProperties": false,
+      "properties": {
+        "dimension": {
+          "$ref": "#/$defs/RelationshipDimension"
+        },
+        "effect_key": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Effect Key",
+          "type": "string"
+        },
+        "evidence_strength": {
+          "maximum": 1,
+          "minimum": -1,
+          "title": "Evidence Strength",
+          "type": "number"
+        },
+        "justification": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Justification",
+          "type": "string"
+        },
+        "kind": {
+          "const": "relationship_evidence",
+          "default": "relationship_evidence",
+          "title": "Kind",
+          "type": "string"
+        },
+        "perceived_by_source": {
+          "default": true,
+          "title": "Perceived By Source",
+          "type": "boolean"
+        },
+        "source_attempt_ids": {
+          "default": [],
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Source Attempt Ids",
+          "type": "array"
+        },
+        "source_character_id": {
+          "format": "uuid",
+          "title": "Source Character Id",
+          "type": "string"
+        },
+        "target_character_id": {
+          "format": "uuid",
+          "title": "Target Character Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "effect_key",
+        "justification",
+        "source_character_id",
+        "target_character_id",
+        "dimension",
+        "evidence_strength"
+      ],
+      "title": "RelationshipEvidenceEffect",
+      "type": "object"
+    },
+    "ResolutionLevel": {
+      "enum": [
+        "success",
+        "partial_success",
+        "failure",
+        "interrupted",
+        "invalidated"
+      ],
+      "title": "ResolutionLevel",
+      "type": "string"
+    },
+    "ResourceKind": {
+      "enum": [
+        "stamina",
+        "mana",
+        "money"
+      ],
+      "title": "ResourceKind",
+      "type": "string"
+    },
+    "RestEffect": {
+      "additionalProperties": false,
+      "properties": {
+        "effect_key": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Effect Key",
+          "type": "string"
+        },
+        "entity_id": {
+          "format": "uuid",
+          "title": "Entity Id",
+          "type": "string"
+        },
+        "justification": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Justification",
+          "type": "string"
+        },
+        "kind": {
+          "const": "rest",
+          "default": "rest",
+          "title": "Kind",
+          "type": "string"
+        },
+        "source_attempt_ids": {
+          "default": [],
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Source Attempt Ids",
+          "type": "array"
+        },
+        "stamina_recovery": {
+          "default": 0.0,
+          "minimum": 0,
+          "title": "Stamina Recovery",
+          "type": "number"
+        }
+      },
+      "required": [
+        "effect_key",
+        "justification",
+        "entity_id"
+      ],
+      "title": "RestEffect",
+      "type": "object"
+    },
+    "ScheduleEffect": {
+      "additionalProperties": false,
+      "properties": {
+        "due_absolute_phase_index": {
+          "minimum": 0,
+          "title": "Due Absolute Phase Index",
+          "type": "integer"
+        },
+        "effect_key": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Effect Key",
+          "type": "string"
+        },
+        "effect_type": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Effect Type",
+          "type": "string"
+        },
+        "justification": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Justification",
+          "type": "string"
+        },
+        "kind": {
+          "const": "schedule_effect",
+          "default": "schedule_effect",
+          "title": "Kind",
+          "type": "string"
+        },
+        "payload": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Payload",
+          "type": "object"
+        },
+        "source_attempt_ids": {
+          "default": [],
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Source Attempt Ids",
+          "type": "array"
+        },
+        "target_entity_ids": {
+          "default": [],
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Target Entity Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "effect_key",
+        "justification",
+        "due_absolute_phase_index",
+        "effect_type",
+        "payload"
+      ],
+      "title": "ScheduleEffect",
+      "type": "object"
+    },
+    "SkillProgressEvidenceEffect": {
+      "additionalProperties": false,
+      "properties": {
+        "character_id": {
+          "format": "uuid",
+          "title": "Character Id",
+          "type": "string"
+        },
+        "difficulty": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Difficulty",
+          "type": "number"
+        },
+        "effect_key": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Effect Key",
+          "type": "string"
+        },
+        "evidence_strength": {
+          "exclusiveMinimum": 0,
+          "maximum": 1,
+          "title": "Evidence Strength",
+          "type": "number"
+        },
+        "justification": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Justification",
+          "type": "string"
+        },
+        "kind": {
+          "const": "skill_progress_evidence",
+          "default": "skill_progress_evidence",
+          "title": "Kind",
+          "type": "string"
+        },
+        "skill_id": {
+          "format": "uuid",
+          "title": "Skill Id",
+          "type": "string"
+        },
+        "source_attempt_ids": {
+          "default": [],
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Source Attempt Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "effect_key",
+        "justification",
+        "character_id",
+        "skill_id",
+        "evidence_strength",
+        "difficulty"
+      ],
+      "title": "SkillProgressEvidenceEffect",
+      "type": "object"
+    },
+    "SpendResourceEffect": {
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "exclusiveMinimum": 0,
+          "title": "Amount",
+          "type": "number"
+        },
+        "effect_key": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Effect Key",
+          "type": "string"
+        },
+        "entity_id": {
+          "format": "uuid",
+          "title": "Entity Id",
+          "type": "string"
+        },
+        "justification": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Justification",
+          "type": "string"
+        },
+        "kind": {
+          "const": "spend_resource",
+          "default": "spend_resource",
+          "title": "Kind",
+          "type": "string"
+        },
+        "resource": {
+          "$ref": "#/$defs/ResourceKind"
+        },
+        "source_attempt_ids": {
+          "default": [],
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Source Attempt Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "effect_key",
+        "justification",
+        "entity_id",
+        "resource",
+        "amount"
+      ],
+      "title": "SpendResourceEffect",
+      "type": "object"
+    },
+    "TransferItemEffect": {
+      "additionalProperties": false,
+      "properties": {
+        "effect_key": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Effect Key",
+          "type": "string"
+        },
+        "from_owner_id": {
+          "format": "uuid",
+          "title": "From Owner Id",
+          "type": "string"
+        },
+        "item_id": {
+          "format": "uuid",
+          "title": "Item Id",
+          "type": "string"
+        },
+        "justification": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Justification",
+          "type": "string"
+        },
+        "kind": {
+          "const": "transfer_item",
+          "default": "transfer_item",
+          "title": "Kind",
+          "type": "string"
+        },
+        "quantity": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Quantity",
+          "type": "integer"
+        },
+        "source_attempt_ids": {
+          "default": [],
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Source Attempt Ids",
+          "type": "array"
+        },
+        "to_owner_id": {
+          "format": "uuid",
+          "title": "To Owner Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "effect_key",
+        "justification",
+        "item_id",
+        "from_owner_id",
+        "to_owner_id"
+      ],
+      "title": "TransferItemEffect",
+      "type": "object"
+    },
+    "WaitEffect": {
+      "additionalProperties": false,
+      "properties": {
+        "effect_key": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Effect Key",
+          "type": "string"
+        },
+        "entity_id": {
+          "format": "uuid",
+          "title": "Entity Id",
+          "type": "string"
+        },
+        "justification": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Justification",
+          "type": "string"
+        },
+        "kind": {
+          "const": "wait",
+          "default": "wait",
+          "title": "Kind",
+          "type": "string"
+        },
+        "phases": {
+          "default": 1,
+          "maximum": 240,
+          "minimum": 1,
+          "title": "Phases",
+          "type": "integer"
+        },
+        "source_attempt_ids": {
+          "default": [],
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Source Attempt Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "effect_key",
+        "justification",
+        "entity_id"
+      ],
+      "title": "WaitEffect",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "accepted_attempt_ids": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Accepted Attempt Ids",
+      "type": "array"
+    },
+    "canonical_summary": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Canonical Summary",
+      "type": "string"
+    },
+    "confidence": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "effects": {
+      "default": [],
+      "items": {
+        "discriminator": {
+          "mapping": {
+            "advance_activity": "#/$defs/AdvanceActivityEffect",
+            "apply_condition": "#/$defs/ApplyConditionEffect",
+            "apply_injury": "#/$defs/ApplyInjuryEffect",
+            "create_claim": "#/$defs/CreateClaimEffect",
+            "create_recent_memory": "#/$defs/CreateRecentMemoryEffect",
+            "mark_death": "#/$defs/MarkDeathEffect",
+            "move_entity": "#/$defs/MoveEntityEffect",
+            "observe": "#/$defs/ObserveEffect",
+            "register_npc": "#/$defs/RegisterNpcEffect",
+            "relationship_evidence": "#/$defs/RelationshipEvidenceEffect",
+            "rest": "#/$defs/RestEffect",
+            "schedule_effect": "#/$defs/ScheduleEffect",
+            "skill_progress_evidence": "#/$defs/SkillProgressEvidenceEffect",
+            "spend_resource": "#/$defs/SpendResourceEffect",
+            "transfer_item": "#/$defs/TransferItemEffect",
+            "wait": "#/$defs/WaitEffect"
+          },
+          "propertyName": "kind"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/WaitEffect"
+          },
+          {
+            "$ref": "#/$defs/ObserveEffect"
+          },
+          {
+            "$ref": "#/$defs/RestEffect"
+          },
+          {
+            "$ref": "#/$defs/CreateRecentMemoryEffect"
+          },
+          {
+            "$ref": "#/$defs/MoveEntityEffect"
+          },
+          {
+            "$ref": "#/$defs/SpendResourceEffect"
+          },
+          {
+            "$ref": "#/$defs/ApplyInjuryEffect"
+          },
+          {
+            "$ref": "#/$defs/ApplyConditionEffect"
+          },
+          {
+            "$ref": "#/$defs/TransferItemEffect"
+          },
+          {
+            "$ref": "#/$defs/RelationshipEvidenceEffect"
+          },
+          {
+            "$ref": "#/$defs/CreateClaimEffect"
+          },
+          {
+            "$ref": "#/$defs/AdvanceActivityEffect"
+          },
+          {
+            "$ref": "#/$defs/SkillProgressEvidenceEffect"
+          },
+          {
+            "$ref": "#/$defs/ScheduleEffect"
+          },
+          {
+            "$ref": "#/$defs/RegisterNpcEffect"
+          },
+          {
+            "$ref": "#/$defs/MarkDeathEffect"
+          }
+        ]
+      },
+      "title": "Effects",
+      "type": "array"
+    },
+    "level": {
+      "$ref": "#/$defs/ResolutionLevel"
+    },
+    "narration_constraints": {
+      "$ref": "#/$defs/NarrationConstraints"
+    },
+    "rejected_assumptions": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Rejected Assumptions",
+      "type": "array"
+    },
+    "resolution_request_id": {
+      "format": "uuid",
+      "title": "Resolution Request Id",
+      "type": "string"
+    },
+    "scene_id": {
+      "format": "uuid",
+      "title": "Scene Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "visual_significance": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Visual Significance",
+      "type": "number"
+    }
+  },
+  "required": [
+    "resolution_request_id",
+    "scene_id",
+    "level",
+    "accepted_attempt_ids",
+    "canonical_summary",
+    "narration_constraints",
+    "visual_significance",
+    "confidence"
+  ],
+  "title": "SceneResolution",
+  "type": "object"
+}

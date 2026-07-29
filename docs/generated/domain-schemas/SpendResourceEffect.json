@@ -1,0 +1,65 @@
+{
+  "$defs": {
+    "ResourceKind": {
+      "enum": [
+        "stamina",
+        "mana",
+        "money"
+      ],
+      "title": "ResourceKind",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "amount": {
+      "exclusiveMinimum": 0,
+      "title": "Amount",
+      "type": "number"
+    },
+    "effect_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Effect Key",
+      "type": "string"
+    },
+    "entity_id": {
+      "format": "uuid",
+      "title": "Entity Id",
+      "type": "string"
+    },
+    "justification": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Justification",
+      "type": "string"
+    },
+    "kind": {
+      "const": "spend_resource",
+      "default": "spend_resource",
+      "title": "Kind",
+      "type": "string"
+    },
+    "resource": {
+      "$ref": "#/$defs/ResourceKind"
+    },
+    "source_attempt_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Attempt Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "effect_key",
+    "justification",
+    "entity_id",
+    "resource",
+    "amount"
+  ],
+  "title": "SpendResourceEffect",
+  "type": "object"
+}

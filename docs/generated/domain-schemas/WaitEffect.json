@@ -1,0 +1,51 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "effect_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Effect Key",
+      "type": "string"
+    },
+    "entity_id": {
+      "format": "uuid",
+      "title": "Entity Id",
+      "type": "string"
+    },
+    "justification": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Justification",
+      "type": "string"
+    },
+    "kind": {
+      "const": "wait",
+      "default": "wait",
+      "title": "Kind",
+      "type": "string"
+    },
+    "phases": {
+      "default": 1,
+      "maximum": 240,
+      "minimum": 1,
+      "title": "Phases",
+      "type": "integer"
+    },
+    "source_attempt_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Attempt Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "effect_key",
+    "justification",
+    "entity_id"
+  ],
+  "title": "WaitEffect",
+  "type": "object"
+}

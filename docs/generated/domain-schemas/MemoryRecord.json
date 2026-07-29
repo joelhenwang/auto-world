@@ -1,0 +1,145 @@
+{
+  "$defs": {
+    "MemoryKind": {
+      "enum": [
+        "episodic",
+        "semantic",
+        "relational",
+        "emotional",
+        "autobiographical",
+        "procedural",
+        "commitment",
+        "plan",
+        "unresolved_question",
+        "secret",
+        "claim"
+      ],
+      "title": "MemoryKind",
+      "type": "string"
+    },
+    "Visibility": {
+      "enum": [
+        "public",
+        "observable",
+        "covert",
+        "private"
+      ],
+      "title": "Visibility",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "active": {
+      "default": true,
+      "title": "Active",
+      "type": "boolean"
+    },
+    "confidence": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "created_absolute_phase_index": {
+      "minimum": 0,
+      "title": "Created Absolute Phase Index",
+      "type": "integer"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "kind": {
+      "$ref": "#/$defs/MemoryKind"
+    },
+    "last_recalled_absolute_phase_index": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Last Recalled Absolute Phase Index"
+    },
+    "memory_id": {
+      "format": "uuid",
+      "title": "Memory Id",
+      "type": "string"
+    },
+    "owner_character_id": {
+      "format": "uuid",
+      "title": "Owner Character Id",
+      "type": "string"
+    },
+    "referenced_entity_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Referenced Entity Ids",
+      "type": "array"
+    },
+    "salience": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Salience",
+      "type": "number"
+    },
+    "source_claim_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Claim Ids",
+      "type": "array"
+    },
+    "source_event_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Event Ids",
+      "type": "array"
+    },
+    "source_observation_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Observation Ids",
+      "type": "array"
+    },
+    "text": {
+      "maxLength": 4000,
+      "minLength": 1,
+      "title": "Text",
+      "type": "string"
+    },
+    "visibility": {
+      "$ref": "#/$defs/Visibility",
+      "default": "private"
+    }
+  },
+  "required": [
+    "memory_id",
+    "owner_character_id",
+    "kind",
+    "text",
+    "salience",
+    "confidence",
+    "created_absolute_phase_index",
+    "created_at"
+  ],
+  "title": "MemoryRecord",
+  "type": "object"
+}

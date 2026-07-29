@@ -1,0 +1,65 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "effect_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Effect Key",
+      "type": "string"
+    },
+    "justification": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Justification",
+      "type": "string"
+    },
+    "kind": {
+      "const": "register_npc",
+      "default": "register_npc",
+      "title": "Kind",
+      "type": "string"
+    },
+    "location_id": {
+      "format": "uuid",
+      "title": "Location Id",
+      "type": "string"
+    },
+    "narrative_purpose": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Narrative Purpose",
+      "type": "string"
+    },
+    "persistence_horizon_days": {
+      "maximum": 120,
+      "minimum": 1,
+      "title": "Persistence Horizon Days",
+      "type": "integer"
+    },
+    "proposed_name": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Proposed Name",
+      "type": "string"
+    },
+    "source_attempt_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Attempt Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "effect_key",
+    "justification",
+    "proposed_name",
+    "location_id",
+    "narrative_purpose",
+    "persistence_horizon_days"
+  ],
+  "title": "RegisterNpcEffect",
+  "type": "object"
+}

@@ -41,3 +41,39 @@ Use `cursor/s0-eng-001-repository-bootstrap-09ce` for this run; document the AGE
 ### Follow-up changes
 
 Optional later ADR if dual naming becomes confusing; no ADR required for Stage 0 bootstrap.
+
+---
+
+## DEC-2026-002 — Stage 0 effect kinds missing from handbook §7 union
+
+**Status:** ACCEPTED
+**Opened:** 2026-07-29T12:37:28Z
+**Owner:** parent coding agent
+**Affected tasks/contracts:** S0-DOM-001 EffectCommand; S0-SIM-001
+**Blocking:** no
+
+### Question
+
+`25` §2 requires typed effects for WAIT/OBSERVE/REST/MOVE/resource/recent-memory, but `05` §7 EffectCommand omits wait/observe/rest/create_recent_memory.
+
+### Decision
+
+**ASSUMP-S0-001:** Add `wait`, `observe`, `rest`, and `create_recent_memory` kinds to the discriminated union while retaining all handbook §7 variants.
+
+### Follow-up
+
+S0-SIM-001 implements validators/projectors for these kinds.
+
+---
+
+## DEC-2026-003 — StrictContract `strict=True` vs JSON UUID coercion
+
+**Status:** ACCEPTED
+**Opened:** 2026-07-29T12:37:28Z
+**Owner:** parent coding agent
+**Affected tasks/contracts:** S0-DOM-001 StrictContract
+**Blocking:** no
+
+### Decision
+
+Use `extra=forbid` + `frozen=True` (handbook `05`) without global `strict=True`, so JSON string→UUID/datetime coercion works at boundaries. Callers may still `model_validate(..., strict=True)` for model-output paths.

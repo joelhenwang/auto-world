@@ -1,0 +1,16 @@
+# Pre-commit hooks for Stage 0 static quality (S0-ENG-002).
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.12.0
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+  - repo: local
+    hooks:
+      - id: basedpyright
+        name: basedpyright
+        entry: uv run basedpyright
+        language: system
+        pass_filenames: false
+        types: [python]
