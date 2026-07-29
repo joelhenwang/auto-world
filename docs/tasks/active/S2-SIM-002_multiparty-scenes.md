@@ -2,7 +2,7 @@
 
 **Stage:** 2  
 **Workstream:** SIM  
-**Status:** READY  
+**Status:** COMPLETE  
 **Priority:** P0  
 **Depends:** S2-SIM-001  
 **AGENTS conceptual branch:** `task/S2-SIM-002-multiparty-scenes`
