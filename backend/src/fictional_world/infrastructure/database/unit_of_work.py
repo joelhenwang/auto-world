@@ -35,6 +35,9 @@ from fictional_world.infrastructure.database.repositories.support import (
     SqlAlchemyRecentMemoryRepository,
 )
 from fictional_world.infrastructure.database.repositories.tasks import SqlAlchemyTaskRepository
+from fictional_world.infrastructure.database.repositories.user_commands import (
+    SqlAlchemyUserCommandRepository,
+)
 from fictional_world.infrastructure.database.repositories.worlds import SqlAlchemyWorldRepository
 
 
@@ -63,6 +66,7 @@ class SqlAlchemyUnitOfWork:
         self.narrations = cast(SqlAlchemyNarrationRepository, None)
         self.stream_events = cast(SqlAlchemyStreamEventRepository, None)
         self.player_controls = cast(SqlAlchemyPlayerControlRepository, None)
+        self.user_commands = cast(SqlAlchemyUserCommandRepository, None)
 
     async def __aenter__(self) -> SqlAlchemyUnitOfWork:
         self.session = self._session_factory()
@@ -85,6 +89,7 @@ class SqlAlchemyUnitOfWork:
         self.narrations = SqlAlchemyNarrationRepository(self.session)
         self.stream_events = SqlAlchemyStreamEventRepository(self.session)
         self.player_controls = SqlAlchemyPlayerControlRepository(self.session)
+        self.user_commands = SqlAlchemyUserCommandRepository(self.session)
         return self
 
     async def __aexit__(

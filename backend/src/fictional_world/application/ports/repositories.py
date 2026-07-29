@@ -40,6 +40,7 @@ from fictional_world.domain.seed.records import (
 )
 from fictional_world.domain.tasks.budget import RequestBudgetRecord
 from fictional_world.domain.tasks.task_run import TaskRun
+from fictional_world.domain.tasks.user_command import UserCommandRecord
 from fictional_world.domain.world.records import (
     AggregateVersionRecord,
     WorldClockRecord,
@@ -415,6 +416,21 @@ class PlayerControlRepository(Protocol):
     ) -> PlayerControlSessionRecord: ...
 
 
+class UserCommandRepository(Protocol):
+    async def get(self, command_id: UUID) -> UserCommandRecord | None: ...
+
+    async def find_by_idempotency_key(self, key: str) -> UserCommandRecord | None: ...
+
+    async def list_pending_for_world(
+        self,
+        world_id: UUID,
+        *,
+        limit: int = 100,
+    ) -> Sequence[UserCommandRecord]: ...
+
+    async def insert(self, command: UserCommandRecord) -> UserCommandRecord: ...
+
+
 class UnitOfWork(Protocol):
     worlds: WorldRepository
     characters: CharacterRepository
@@ -435,6 +451,7 @@ class UnitOfWork(Protocol):
     narrations: NarrationRepository
     stream_events: StreamEventRepository
     player_controls: PlayerControlRepository
+    user_commands: UserCommandRepository
 
     async def __aenter__(self) -> UnitOfWork: ...
 
