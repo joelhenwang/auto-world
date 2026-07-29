@@ -398,3 +398,26 @@ A good implementation is:
 - incrementally extensible through the stage plan.
 
 A clever shortcut that obscures causality, state ownership, or retries is not an improvement.
+
+---
+
+## Cursor Cloud specific instructions
+
+### Repository status: pre-implementation
+
+As of this writing the repository contains **only the normative handbook** (`autonomous_world_build_handbook_v1_0/**`, plus root `README.md` and this `AGENTS.md`). None of the application described in the handbook exists yet: there is no `pyproject.toml`, no `uv.lock`, no `src/`/`backend/`, no `frontend/`/`apps/web/`, no `compose.yaml`, no Alembic migrations, and no tests. The first implementation task is Stage 0 `S0-ENG-001` (repository bootstrap), which creates `pyproject.toml` and the baseline package. Until that lands, there is no application to lint/test/build/run.
+
+### Toolchain
+
+- `uv` is the mandated Python 3.12 package manager (installs to `~/.local/bin`; the startup update script installs it if missing). Python 3.12, Node.js, and `pnpm` are preinstalled on the base image.
+- `docker` is **not** installed on the base image. It is not needed today (no `compose.yaml`), but Stage 0+ dev requires PostgreSQL + pgvector via Docker Compose (see `autonomous_world_build_handbook_v1_0/20_LOCAL_DEVELOPMENT_DOCKER_CI_AND_DEPLOYMENT.md`). Install Docker when a `compose.yaml` exists and you need the database.
+
+### Verifying the environment today
+
+The only runnable artifact is the handbook integrity check. From `autonomous_world_build_handbook_v1_0/` run `sha256sum -c CHECKSUMS.sha256`. All 40 documents and `manifest.json` should report `OK`. The two entries `00_README.md` and `01_AGENTS.md` intentionally fail-to-open because they were relocated to the repo root as `README.md` and `AGENTS.md` per handbook §5; this is expected, not corruption.
+
+### Once code exists (bootstrap already covers these via the update script)
+
+- Python deps: `uv sync --all-groups` (auto-run by the startup script when `pyproject.toml` is present).
+- Frontend deps: `pnpm --dir frontend install` (auto-run by the startup script when `frontend/package.json` is present).
+- Canonical dev/run/test commands are specified in `autonomous_world_build_handbook_v1_0/20_LOCAL_DEVELOPMENT_DOCKER_CI_AND_DEPLOYMENT.md` (§3, §7) and `21_TESTING_EVALUATION_AND_QUALITY_GATES.md`; do not duplicate them here — follow those and the project `Makefile`/`pyproject.toml` scripts once created. Note: default test suites must make no external model calls; live OpenRouter tests are opt-in and gated behind markers.
