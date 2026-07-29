@@ -2,10 +2,22 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 
 import {
+  ApiError,
   worldApi,
+  type BeliefRead,
   type CharacterSummaryRead,
   type ClockRead,
+  type CommitmentRead,
+  type DiaryEntryRead,
+  type DirectorPanelRead,
+  type GoalRead,
+  type MapStateRead,
+  type NpcLifecycleRead,
+  type PlanRead,
+  type RelationshipRead,
+  type RunProgressRead,
   type StreamEventRead,
+  type SummaryRead,
   type WorldRead,
 } from './api/client'
 import {
@@ -14,6 +26,11 @@ import {
   type WorldStreamHandle,
 } from './api/websocket'
 import CharacterPanel from './features/runtime/CharacterPanel.vue'
+import DayStrip from './features/runtime/DayStrip.vue'
+import DiaryPanel from './features/runtime/DiaryPanel.vue'
+import DirectorMetricsPanel from './features/runtime/DirectorMetricsPanel.vue'
+import MapPanel from './features/runtime/MapPanel.vue'
+import NpcLifecyclePanel from './features/runtime/NpcLifecyclePanel.vue'
 import PlayerComposer from './features/runtime/PlayerComposer.vue'
 import RuntimeHeader from './features/runtime/RuntimeHeader.vue'
 import TimelinePanel from './features/runtime/TimelinePanel.vue'
@@ -24,8 +41,22 @@ const worldSlug = import.meta.env.VITE_WORLD_SLUG ?? 'caldris'
 const session = useSessionStore()
 const world = ref<WorldRead>()
 const clock = ref<ClockRead>()
+const progress = ref<RunProgressRead | null>(null)
 const characters = ref<CharacterSummaryRead[]>([])
 const events = ref<StreamEventRead[]>([])
+const goals = ref<GoalRead[]>([])
+const plans = ref<PlanRead[]>([])
+const commitments = ref<CommitmentRead[]>([])
+const relationships = ref<RelationshipRead[]>([])
+const beliefs = ref<BeliefRead[]>([])
+const beliefsAuthorized = ref(true)
+const diaries = ref<DiaryEntryRead[]>([])
+const summaries = ref<SummaryRead[]>([])
+const mapState = ref<MapStateRead>({ locations: [], routes: [], travel: [] })
+const npcs = ref<NpcLifecycleRead[]>([])
+const directorPanel = ref<DirectorPanelRead | null>(null)
+const focusCharacterId = ref<string>()
+const timelineFilters = ref<{ characterId?: string; locationId?: string }>({})
 const loading = ref(true)
 const busy = ref(false)
 const error = ref('')
@@ -36,6 +67,21 @@ let stream: WorldStreamHandle | undefined
 
 const selectedCharacter = computed(() =>
   characters.value.find((character) => character.id === session.selectedCharacterId),
+)
+
+const focusedCharacter = computed(() =>
+  characters.value.find((character) => character.id === focusCharacterId.value),
+)
+
+const characterNames = computed(() =>
+  Object.fromEntries(characters.value.map((character) => [character.id, character.name])),
+)
+
+const locationOptions = computed(() =>
+  mapState.value.locations.map((location) => ({
+    id: location.id,
+    name: location.name,
+  })),
 )
 
 function lastSequence(): number {
@@ -68,30 +114,137 @@ function connect(): void {
   })
 }
 
+async function refreshCharacterDetail(characterId: string | undefined): Promise<void> {
+  if (!world.value || !characterId) {
+    goals.value = []
+    plans.value = []
+    commitments.value = []
+    relationships.value = []
+    beliefs.value = []
+    beliefsAuthorized.value = true
+    diaries.value = []
+    summaries.value = []
+    return
+  }
+
+  const [nextGoals, nextPlans, nextCommitments, nextRelationships, nextDiaries, nextSummaries] =
+    await Promise.all([
+      worldApi.getGoals(world.value.id, characterId),
+      worldApi.getPlans(world.value.id, characterId),
+      worldApi.getCommitments(world.value.id, characterId),
+      worldApi.getRelationships(world.value.id, characterId),
+      worldApi.getDiary(world.value.id, characterId),
+      worldApi.getSummaries(world.value.id, characterId),
+    ])
+  goals.value = nextGoals
+  plans.value = nextPlans
+  commitments.value = nextCommitments
+  relationships.value = nextRelationships
+  diaries.value = nextDiaries
+  summaries.value = nextSummaries
+
+  // Player may only load beliefs for the controlled character; other views are unauthorized.
+  const playerUnauthorized =
+    session.mode === 'player' && characterId !== session.selectedCharacterId
+  if (playerUnauthorized) {
+    beliefs.value = []
+    beliefsAuthorized.value = false
+    return
+  }
+
+  try {
+    beliefs.value = await worldApi.getBeliefs(
+      world.value.id,
+      characterId,
+      session.observerId,
+    )
+    beliefsAuthorized.value = true
+  } catch (cause) {
+    if (cause instanceof ApiError && (cause.status === 403 || cause.status === 401)) {
+      beliefs.value = []
+      beliefsAuthorized.value = false
+      return
+    }
+    throw cause
+  }
+}
+
 async function refreshProjections(): Promise<void> {
   if (!world.value) {
     return
   }
-  const [nextClock, nextCharacters] = await Promise.all([
+  const [nextClock, nextCharacters, nextProgress, nextMap, nextNpcs] = await Promise.all([
     worldApi.getClock(world.value.id),
     worldApi.getCharacters(world.value.id),
+    worldApi.getRunProgress(world.value.id),
+    worldApi.getMap(world.value.id, session.observerId),
+    worldApi.getNpcs(world.value.id),
   ])
   clock.value = nextClock
   characters.value = nextCharacters
+  progress.value = nextProgress
+  mapState.value = nextMap
+  npcs.value = nextNpcs
+
+  if (session.canViewDirector) {
+    try {
+      directorPanel.value = await worldApi.getDirectorPanel(world.value.id)
+    } catch (cause) {
+      if (cause instanceof ApiError && cause.status === 403) {
+        directorPanel.value = null
+      } else {
+        throw cause
+      }
+    }
+  } else {
+    directorPanel.value = null
+  }
+
+  await refreshCharacterDetail(focusCharacterId.value)
 }
 
 async function refreshAll(): Promise<void> {
   if (!world.value) {
     return
   }
-  const [nextClock, nextCharacters, nextEvents] = await Promise.all([
-    worldApi.getClock(world.value.id),
-    worldApi.getCharacters(world.value.id),
-    worldApi.getTimeline(world.value.id, session.observerId),
-  ])
+  const [nextClock, nextCharacters, nextEvents, nextProgress, nextMap, nextNpcs] =
+    await Promise.all([
+      worldApi.getClock(world.value.id),
+      worldApi.getCharacters(world.value.id),
+      worldApi.getTimeline(
+        world.value.id,
+        session.observerId,
+        timelineFilters.value,
+      ),
+      worldApi.getRunProgress(world.value.id),
+      worldApi.getMap(world.value.id, session.observerId),
+      worldApi.getNpcs(world.value.id),
+    ])
   clock.value = nextClock
   characters.value = nextCharacters
   events.value = nextEvents
+  progress.value = nextProgress
+  mapState.value = nextMap
+  npcs.value = nextNpcs
+
+  if (session.canViewDirector) {
+    try {
+      directorPanel.value = await worldApi.getDirectorPanel(world.value.id)
+    } catch (cause) {
+      if (cause instanceof ApiError && cause.status === 403) {
+        directorPanel.value = null
+      } else {
+        throw cause
+      }
+    }
+  } else {
+    directorPanel.value = null
+  }
+
+  if (!focusCharacterId.value && characters.value[0]) {
+    focusCharacterId.value = session.selectedCharacterId ?? characters.value[0].id
+  }
+  await refreshCharacterDetail(focusCharacterId.value)
 }
 
 async function load(): Promise<void> {
@@ -172,6 +325,7 @@ async function selectPlayer(characterId: string): Promise<void> {
       session.controllerId,
     )
     session.enterPlayer(characterId, control)
+    focusCharacterId.value = characterId
     events.value = []
     await refreshAll()
     connect()
@@ -196,6 +350,47 @@ async function selectWatcher(): Promise<void> {
     connect()
     commandStatus.value = 'Watcher perspective active'
   })
+}
+
+async function selectDirector(): Promise<void> {
+  if (!world.value) return
+  await runCommand(async () => {
+    if (session.control && session.selectedCharacterId) {
+      await worldApi.releaseControl(
+        world.value!.id,
+        session.selectedCharacterId,
+        session.control.id,
+        session.controllerId,
+      )
+    }
+    session.enterDirector()
+    events.value = []
+    await refreshAll()
+    connect()
+    commandStatus.value = 'Director perspective active'
+  })
+}
+
+async function onFocusCharacter(characterId: string): Promise<void> {
+  focusCharacterId.value = characterId
+  await refreshCharacterDetail(characterId)
+}
+
+async function onTimelineFilter(filters: {
+  characterId?: string
+  locationId?: string
+}): Promise<void> {
+  timelineFilters.value = filters
+  if (!world.value) return
+  try {
+    events.value = await worldApi.getTimeline(
+      world.value.id,
+      session.observerId,
+      filters,
+    )
+  } catch {
+    // Client-side filter in TimelinePanel still applies if server ignores params.
+  }
 }
 
 async function submitAction(draft: ActionDraft): Promise<void> {
@@ -237,6 +432,8 @@ onUnmounted(() => stream?.close())
       @resume="resume"
     />
 
+    <DayStrip :clock="clock" :progress="progress" />
+
     <p v-if="error" class="error-banner" role="alert">
       <strong>Runtime unavailable.</strong> Existing story content remains readable.
       {{ error }}
@@ -246,16 +443,45 @@ onUnmounted(() => stream?.close())
     </p>
 
     <main id="main-content" class="runtime-grid">
-      <TimelinePanel :events="events" :loading="loading" />
+      <TimelinePanel
+        :events="events"
+        :characters="characters"
+        :locations="locationOptions"
+        :loading="loading"
+        @filter-change="onTimelineFilter"
+      />
       <CharacterPanel
         :characters="characters"
         :mode="session.mode"
         :selected-character-id="session.selectedCharacterId"
+        :focus-character-id="focusCharacterId"
         :busy="busy"
+        :goals="goals"
+        :plans="plans"
+        :commitments="commitments"
+        :relationships="relationships"
+        :beliefs="beliefs"
+        :beliefs-authorized="beliefsAuthorized"
         @select-player="selectPlayer"
         @select-watcher="selectWatcher"
+        @select-director="selectDirector"
+        @focus-character="onFocusCharacter"
       />
     </main>
+
+    <div class="secondary-grid">
+      <DiaryPanel
+        :character-name="focusedCharacter?.name"
+        :diaries="diaries"
+        :summaries="summaries"
+      />
+      <MapPanel :map="mapState" :character-names="characterNames" />
+      <NpcLifecyclePanel :npcs="npcs" />
+      <DirectorMetricsPanel
+        v-if="session.canViewDirector && directorPanel"
+        :panel="directorPanel"
+      />
+    </div>
 
     <PlayerComposer
       v-if="session.mode === 'player' && selectedCharacter"
