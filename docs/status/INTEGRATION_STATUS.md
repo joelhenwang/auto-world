@@ -1,9 +1,9 @@
 # Integration Status
 
-**Updated:** 2026-07-29T11:32:18Z
+**Updated:** 2026-07-29T11:35:57Z
 **Integration owner:** parent coding agent
 **Integration branch/worktree:** `main` (task branch `cursor/s0-eng-001-repository-bootstrap-09ce`)
-**Integration HEAD:** `89960fb38dadc1e9026af6392d6b4a1519539854`
+**Integration HEAD:** `3a46f01e5724aac4f9751d6f88c66f6e7d300e60` (task branch; awaiting merge to main)
 **Target stage:** 0
 
 ## Contract baseline
@@ -17,7 +17,7 @@
 
 | Task ID | Branch | Owner | Status | Required predecessors | Files/contracts touched | Tests/evidence | Merge order |
 |---|---|---|---|---|---|---|---:|
-| S0-ENG-001 | `cursor/s0-eng-001-repository-bootstrap-09ce` | parent | IN_PROGRESS | none | root bootstrap, `backend/**`, docs/status | uv sync / import / compose config | 1 |
+| S0-ENG-001 | `cursor/s0-eng-001-repository-bootstrap-09ce` | parent | IN_REVIEW | none | root bootstrap, `backend/**`, docs/status | uv sync / import / compose / ruff / basedpyright | 1 |
 | S0-ENG-002 | — | — | BLOCKED | S0-ENG-001 | config/static quality | — | 2+ |
 | S0-DOM-001 | — | — | BLOCKED | S0-ENG-001 | domain contracts | — | 2+ |
 | S0-QA-001 | — | — | BLOCKED | S0-ENG-001 | test harness | — | 2+ |

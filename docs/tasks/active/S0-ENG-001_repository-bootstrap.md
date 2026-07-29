@@ -2,7 +2,7 @@
 
 **Stage:** `0`  
 **Workstream:** `ENG`  
-**Status:** `IN_PROGRESS`  
+**Status:** `IN_REVIEW`  
 **Priority:** `P0`  
 **Owner:** parent coding agent  
 **Reviewer(s):** parent/integration agent  
@@ -212,14 +212,14 @@ uv run ruff check .
 
 ## 13. Acceptance criteria
 
-- [ ] `uv sync` completes and `uv.lock` is committed.
-- [ ] `uv run python -c "import fictional_world"` succeeds.
-- [ ] `docker compose config` validates Compose skeleton.
-- [ ] Top-level empty packages from `19` §2 exist under `backend/src/fictional_world/`.
-- [ ] Test folders from `19` §2 exist with `conftest.py` placeholder.
-- [ ] `.env.example` matches `20` §4 shape with no secrets.
-- [ ] No domain/ORM/migration/agent code added.
-- [ ] Task packet, status docs, and session handoff present.
+- [x] `uv sync` completes and `uv.lock` is committed.
+- [x] `uv run python -c "import fictional_world"` succeeds.
+- [x] `docker compose config` validates Compose skeleton.
+- [x] Top-level empty packages from `19` §2 exist under `backend/src/fictional_world/`.
+- [x] Test folders from `19` §2 exist with `conftest.py` placeholder.
+- [x] `.env.example` matches `20` §4 shape with no secrets.
+- [x] No domain/ORM/migration/agent code added.
+- [x] Task packet, status docs, and session handoff present.
 - [ ] No Critical/High reviewer finding remains.
 
 ## 14. Deliverables
