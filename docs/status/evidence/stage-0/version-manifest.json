@@ -2,7 +2,7 @@
   "alembic_head": "0002_core_stage0_tables",
   "collected_at": "20260729T174502Z",
   "gate_script_exit_nonzero_count": 0,
-  "git_commit": "6b54e4771fc3668e3e288eef99ca31ee514165af",
+  "git_commit": "03f22f6ec81b3d0ecdf617bb3032bd83b3e285f4",
   "hashes": {
     "database-schema.sql": "5f8b48b8c892d4af439128444a95d2abe70bb8be173018c96b9cc6a03365a4a1",
     "openapi.json": "9b2ae479a4c60a9adf4e4f0d7c82af99250dcb2e34e3e2efb316ab32dbbe2641",
