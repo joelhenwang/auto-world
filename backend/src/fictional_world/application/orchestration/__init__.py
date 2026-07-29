@@ -15,9 +15,11 @@ from fictional_world.application.orchestration.phase_runner import (
     PhaseRunnerError,
 )
 from fictional_world.application.orchestration.protocol import (
+    DayAdvanceResult,
     PauseMode,
     PhaseAdvanceResult,
     ReconciliationReport,
+    SevenDayRunResult,
     WorldOrchestrator,
 )
 from fictional_world.application.orchestration.scripted_actions import mira_stage0_effects
@@ -32,6 +34,7 @@ __all__ = [
     "BudgetService",
     "CreateTaskCommand",
     "CreateTaskResult",
+    "DayAdvanceResult",
     "DeterministicPhaseRunner",
     "DispatchResult",
     "OutboxDispatcher",
@@ -41,6 +44,7 @@ __all__ = [
     "ReconciliationReport",
     "ReserveBudgetCommand",
     "ReserveBudgetResult",
+    "SevenDayRunResult",
     "TaskQueueError",
     "TaskQueueService",
     "WorldOrchestrator",

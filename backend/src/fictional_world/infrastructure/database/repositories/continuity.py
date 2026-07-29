@@ -11,6 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fictional_world.domain.continuity.persistence import (
     ActivityPersistenceRecord,
     CommitmentPersistenceRecord,
+    DailyAuditPersistenceRecord,
     DayRunPersistenceRecord,
     DiaryEntryPersistenceRecord,
     GoalPersistenceRecord,
@@ -23,6 +24,7 @@ from fictional_world.domain.continuity.persistence import (
     RelationshipEdgePersistenceRecord,
     RoutePersistenceRecord,
     SummaryPersistenceRecord,
+    SummarySourcePersistenceRecord,
 )
 from fictional_world.domain.knowledge.persistence import (
     BeliefPersistenceRecord,
@@ -34,6 +36,7 @@ from fictional_world.infrastructure.database.mappings.continuity_records import 
     belief_to_record,
     claim_to_record,
     commitment_to_record,
+    daily_audit_to_record,
     day_run_to_record,
     diary_entry_to_record,
     goal_to_record,
@@ -51,6 +54,7 @@ from fictional_world.infrastructure.database.mappings.continuity_records import 
 from fictional_world.infrastructure.database.models.continuity import (
     ActivityRow,
     CommitmentRow,
+    DailyAuditRow,
     DayRunRow,
     DiaryEntryRow,
     GoalRow,
@@ -63,6 +67,7 @@ from fictional_world.infrastructure.database.models.continuity import (
     RelationshipEdgeRow,
     RouteRow,
     SummaryRow,
+    SummarySourceRow,
 )
 from fictional_world.infrastructure.database.models.knowledge import (
     BeliefRow,
@@ -634,6 +639,21 @@ class SqlAlchemySummaryRepository:
         await self._session.flush()
         return summary_to_record(row)
 
+    async def insert_sources(
+        self, sources: Sequence[SummarySourcePersistenceRecord]
+    ) -> Sequence[SummarySourcePersistenceRecord]:
+        for source in sources:
+            self._session.add(
+                SummarySourceRow(
+                    summary_id=source.summary_id,
+                    ordinal=source.ordinal,
+                    source_kind=source.source_kind,
+                    source_id=source.source_id,
+                )
+            )
+        await self._session.flush()
+        return sources
+
     async def list_for_owner(
         self, owner_character_id: UUID, *, world_id: UUID, limit: int = 50
     ) -> Sequence[SummaryPersistenceRecord]:
@@ -718,6 +738,31 @@ class SqlAlchemyDayRunRepository:
         await self._session.flush()
         return day_run_to_record(row)
 
+    async def save(
+        self,
+        day_run: DayRunPersistenceRecord,
+        *,
+        expected_version: int,
+    ) -> DayRunPersistenceRecord:
+        row = await self._session.get(DayRunRow, day_run.id)
+        if row is None:
+            msg = f"day_run not found: {day_run.id}"
+            raise LookupError(msg)
+        if int(row.version) != expected_version:
+            msg = (
+                f"day_run version conflict for {day_run.id}: "
+                f"expected {expected_version}, got {row.version}"
+            )
+            raise LookupError(msg)
+        row.status = day_run.status
+        if day_run.started_at is not None:
+            row.started_at = day_run.started_at
+        row.completed_at = day_run.completed_at
+        row.recovery_snapshot_id = day_run.recovery_snapshot_id
+        row.version = expected_version + 1
+        await self._session.flush()
+        return day_run_to_record(row)
+
     async def list_for_world(self, world_id: UUID) -> Sequence[DayRunPersistenceRecord]:
         result = await self._session.execute(
             select(DayRunRow)
@@ -725,3 +770,28 @@ class SqlAlchemyDayRunRepository:
             .order_by(DayRunRow.day_index.asc())
         )
         return [day_run_to_record(row) for row in result.scalars().all()]
+
+
+class SqlAlchemyDailyAuditRepository:
+    def __init__(self, session: AsyncSession) -> None:
+        self._session = session
+
+    async def get_by_day_run(self, day_run_id: UUID) -> DailyAuditPersistenceRecord | None:
+        result = await self._session.execute(
+            select(DailyAuditRow).where(DailyAuditRow.day_run_id == day_run_id)
+        )
+        row = result.scalar_one_or_none()
+        return daily_audit_to_record(row) if row is not None else None
+
+    async def insert(self, audit: DailyAuditPersistenceRecord) -> DailyAuditPersistenceRecord:
+        row = DailyAuditRow(
+            id=audit.id,
+            day_run_id=audit.day_run_id,
+            world_id=audit.world_id,
+            hard_violation_count=audit.hard_violation_count,
+            soft_violation_count=audit.soft_violation_count,
+            findings=list(audit.findings),
+        )
+        self._session.add(row)
+        await self._session.flush()
+        return daily_audit_to_record(row)

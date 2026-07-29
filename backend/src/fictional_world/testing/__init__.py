@@ -13,6 +13,7 @@ from fictional_world.testing.fake_model import (
 from fictional_world.testing.network import block_network
 from fictional_world.testing.seeded_random import SeededRandom
 from fictional_world.testing.stage1_model import Stage1FakeModelGateway
+from fictional_world.testing.stage2_model import Stage2FakeModelGateway
 
 __all__ = [
     "FakeClock",
@@ -25,5 +26,6 @@ __all__ = [
     "ModelGatewayPort",
     "SeededRandom",
     "Stage1FakeModelGateway",
+    "Stage2FakeModelGateway",
     "block_network",
 ]

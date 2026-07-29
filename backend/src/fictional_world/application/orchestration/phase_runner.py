@@ -27,6 +27,7 @@ from fictional_world.application.orchestration.protocol import (
     ReconciliationReport,
 )
 from fictional_world.application.orchestration.scripted_actions import mira_stage0_effects
+from fictional_world.application.orchestration.stage2_ops import Stage2PhaseOps
 from fictional_world.application.orchestration.task_queue import CreateTaskCommand, TaskQueueService
 from fictional_world.application.ports.repositories import UnitOfWork
 from fictional_world.application.simulation.activation import ActivationResult
@@ -107,7 +108,7 @@ def _manifest_hash(manifest: dict[str, Any]) -> str:
     return hashlib.sha256(raw).hexdigest()
 
 
-class DeterministicPhaseRunner:
+class DeterministicPhaseRunner(Stage2PhaseOps):
     """Postgres-backed Stage 0 runner with additive Stage 1 / Stage 2 profiles."""
 
     def __init__(
@@ -265,6 +266,13 @@ class DeterministicPhaseRunner:
     ) -> PhaseAdvanceResult:
         if self._stage1:
             return await self._run_stage1_phase(
+                world_id,
+                target_clock,
+                existing=existing,
+                stop_after_snapshot=stop_after_snapshot,
+            )
+        if self._stage2:
+            return await self._run_stage2_phase(
                 world_id,
                 target_clock,
                 existing=existing,
@@ -788,7 +796,9 @@ class DeterministicPhaseRunner:
     async def _ensure_phase_tasks(self, world_id: UUID, phase: PhaseRunRecord) -> int:
         created = 0
         character_task = (
-            "GENERATE_CHARACTER_INTENTS" if self._stage1 else "SCRIPTED_CHARACTER_ACTION"
+            "GENERATE_CHARACTER_INTENTS"
+            if self._stage1 or self._stage2
+            else "SCRIPTED_CHARACTER_ACTION"
         )
         task_types = (
             "APPLY_USER_COMMANDS",

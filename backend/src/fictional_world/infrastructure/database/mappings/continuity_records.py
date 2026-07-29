@@ -8,6 +8,7 @@ from uuid import UUID
 from fictional_world.domain.continuity.persistence import (
     ActivityPersistenceRecord,
     CommitmentPersistenceRecord,
+    DailyAuditPersistenceRecord,
     DayRunPersistenceRecord,
     DiaryEntryPersistenceRecord,
     GoalPersistenceRecord,
@@ -29,6 +30,7 @@ from fictional_world.domain.knowledge.persistence import (
 from fictional_world.infrastructure.database.models.continuity import (
     ActivityRow,
     CommitmentRow,
+    DailyAuditRow,
     DayRunRow,
     DiaryEntryRow,
     GoalRow,
@@ -319,6 +321,20 @@ def day_run_to_record(row: DayRunRow) -> DayRunPersistenceRecord:
         recovery_snapshot_id=row.recovery_snapshot_id,
         idempotency_key=row.idempotency_key,
         version=int(row.version),
+    )
+
+
+def daily_audit_to_record(row: DailyAuditRow) -> DailyAuditPersistenceRecord:
+    raw_findings: object = row.findings
+    findings: list[Any] = cast(list[Any], raw_findings) if isinstance(raw_findings, list) else []
+    return DailyAuditPersistenceRecord(
+        id=row.id,
+        day_run_id=row.day_run_id,
+        world_id=row.world_id,
+        hard_violation_count=int(row.hard_violation_count),
+        soft_violation_count=int(row.soft_violation_count),
+        findings=findings,
+        created_at=row.created_at,
     )
 
 

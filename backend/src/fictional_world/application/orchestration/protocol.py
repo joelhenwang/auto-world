@@ -32,6 +32,23 @@ class PhaseAdvanceResult:
     event_ids: tuple[UUID, ...]
 
 
+@dataclass(frozen=True, slots=True)
+class DayAdvanceResult:
+    world_id: UUID
+    day_index: int
+    phase_results: tuple[PhaseAdvanceResult, ...]
+    day_run_id: UUID | None
+    recovery_snapshot_id: UUID | None
+    already_finalized: bool
+    hard_audit_violations: int = 0
+
+
+@dataclass(frozen=True, slots=True)
+class SevenDayRunResult:
+    world_id: UUID
+    day_results: tuple[DayAdvanceResult, ...]
+
+
 class WorldOrchestrator(Protocol):
     async def start_world(self, world_id: UUID) -> None: ...
 

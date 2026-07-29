@@ -18,6 +18,7 @@ from fictional_world.infrastructure.database.repositories.continuity import (
     SqlAlchemyBeliefRepository,
     SqlAlchemyClaimRepository,
     SqlAlchemyCommitmentRepository,
+    SqlAlchemyDailyAuditRepository,
     SqlAlchemyDayRunRepository,
     SqlAlchemyDiaryEntryRepository,
     SqlAlchemyGoalRepository,
@@ -99,6 +100,7 @@ class SqlAlchemyUnitOfWork:
         self.summaries = cast(SqlAlchemySummaryRepository, None)
         self.diary_entries = cast(SqlAlchemyDiaryEntryRepository, None)
         self.day_runs = cast(SqlAlchemyDayRunRepository, None)
+        self.daily_audits = cast(SqlAlchemyDailyAuditRepository, None)
 
     async def __aenter__(self) -> SqlAlchemyUnitOfWork:
         self.session = self._session_factory()
@@ -137,6 +139,7 @@ class SqlAlchemyUnitOfWork:
         self.summaries = SqlAlchemySummaryRepository(self.session)
         self.diary_entries = SqlAlchemyDiaryEntryRepository(self.session)
         self.day_runs = SqlAlchemyDayRunRepository(self.session)
+        self.daily_audits = SqlAlchemyDailyAuditRepository(self.session)
         return self
 
     async def __aexit__(
