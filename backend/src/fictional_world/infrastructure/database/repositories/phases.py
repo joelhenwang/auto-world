@@ -28,6 +28,28 @@ class SqlAlchemyPhaseRepository:
         row = result.scalar_one_or_none()
         return phase_to_record(row) if row is not None else None
 
+    async def find_by_world_and_index(
+        self, world_id: UUID, absolute_phase_index: int
+    ) -> PhaseRunRecord | None:
+        result = await self._session.execute(
+            select(PhaseRunRow).where(
+                PhaseRunRow.world_id == world_id,
+                PhaseRunRow.absolute_phase_index == absolute_phase_index,
+            )
+        )
+        row = result.scalar_one_or_none()
+        return phase_to_record(row) if row is not None else None
+
+    async def find_active_for_world(self, world_id: UUID) -> PhaseRunRecord | None:
+        result = await self._session.execute(
+            select(PhaseRunRow).where(
+                PhaseRunRow.world_id == world_id,
+                PhaseRunRow.state.notin_(("completed", "failed", "cancelled")),
+            )
+        )
+        row = result.scalar_one_or_none()
+        return phase_to_record(row) if row is not None else None
+
     async def insert(self, phase: PhaseRunRecord) -> PhaseRunRecord:
         row = PhaseRunRow(id=phase.id)
         apply_phase(row, phase)

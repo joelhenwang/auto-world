@@ -15,6 +15,9 @@ from fictional_world.infrastructure.database.repositories.characters import (
 )
 from fictional_world.infrastructure.database.repositories.events import SqlAlchemyEventRepository
 from fictional_world.infrastructure.database.repositories.phases import SqlAlchemyPhaseRepository
+from fictional_world.infrastructure.database.repositories.snapshots import (
+    SqlAlchemyPhaseSnapshotRepository,
+)
 from fictional_world.infrastructure.database.repositories.support import (
     SqlAlchemyAggregateVersionRepository,
     SqlAlchemyObservationRepository,
@@ -34,6 +37,7 @@ class SqlAlchemyUnitOfWork:
         self.worlds = cast(SqlAlchemyWorldRepository, None)
         self.characters = cast(SqlAlchemyCharacterRepository, None)
         self.phases = cast(SqlAlchemyPhaseRepository, None)
+        self.snapshots = cast(SqlAlchemyPhaseSnapshotRepository, None)
         self.events = cast(SqlAlchemyEventRepository, None)
         self.observations = cast(SqlAlchemyObservationRepository, None)
         self.recent_memories = cast(SqlAlchemyRecentMemoryRepository, None)
@@ -47,6 +51,7 @@ class SqlAlchemyUnitOfWork:
         self.worlds = SqlAlchemyWorldRepository(self.session)
         self.characters = SqlAlchemyCharacterRepository(self.session)
         self.phases = SqlAlchemyPhaseRepository(self.session)
+        self.snapshots = SqlAlchemyPhaseSnapshotRepository(self.session)
         self.events = SqlAlchemyEventRepository(self.session)
         self.observations = SqlAlchemyObservationRepository(self.session)
         self.recent_memories = SqlAlchemyRecentMemoryRepository(self.session)

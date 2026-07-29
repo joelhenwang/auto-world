@@ -212,7 +212,10 @@ class EventCommitService:
                 character_ids.add(effect.entity_id)
             if isinstance(effect, ObserveEffect):
                 character_ids.add(effect.observer_id)
-                character_ids.update(effect.target_entity_ids)
+                # Observe targets may be characters or locations.
+                for target_id in effect.target_entity_ids:
+                    character_ids.add(target_id)
+                    location_ids.add(target_id)
             if isinstance(effect, CreateRecentMemoryEffect):
                 character_ids.add(effect.owner_character_id)
             if isinstance(effect, MoveEntityEffect):

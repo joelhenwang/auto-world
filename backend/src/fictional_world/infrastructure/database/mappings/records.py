@@ -19,7 +19,11 @@ from fictional_world.domain.events.persistence import (
 )
 from fictional_world.domain.knowledge.persistence import ObservationPersistenceRecord
 from fictional_world.domain.memory.persistence import RecentMemoryRecord
-from fictional_world.domain.phases.records import PhaseRunRecord
+from fictional_world.domain.phases.records import (
+    PhaseRunRecord,
+    PhaseSnapshotCharacterRecord,
+    PhaseSnapshotRecord,
+)
 from fictional_world.domain.seed.records import (
     CharacterCardVersionRecord,
     LocationRecord,
@@ -43,6 +47,8 @@ from fictional_world.infrastructure.database.models import (
     ObservationRow,
     OutboxMessageRow,
     PhaseRunRow,
+    PhaseSnapshotCharacterRow,
+    PhaseSnapshotRow,
     RecentMemoryRow,
     RequestBudgetLedgerRow,
     TaskRunRow,
@@ -455,6 +461,38 @@ def budget_to_record(row: RequestBudgetLedgerRow) -> RequestBudgetRecord:
         reserved_at=row.reserved_at,
         expires_at=row.expires_at,
         consumed_at=row.consumed_at,
+    )
+
+
+def snapshot_to_record(
+    row: PhaseSnapshotRow,
+    characters: list[PhaseSnapshotCharacterRow],
+) -> PhaseSnapshotRecord:
+    char_records = tuple(
+        PhaseSnapshotCharacterRecord(
+            snapshot_id=char.snapshot_id,
+            character_id=char.character_id,
+            character_state_version=int(char.character_state_version),
+            card_version_id=char.card_version_id,
+            location_id=char.location_id,
+            active_activity_id=char.active_activity_id,
+            context_source_hash=char.context_source_hash,
+            eligibility_status=char.eligibility_status,
+            eligibility_reason=char.eligibility_reason,
+        )
+        for char in characters
+    )
+    return PhaseSnapshotRecord(
+        id=row.id,
+        phase_run_id=row.phase_run_id,
+        world_id=row.world_id,
+        source_event_sequence=int(row.source_event_sequence),
+        world_clock_version=int(row.world_clock_version),
+        state_manifest=_json_obj(row.state_manifest),
+        state_hash=row.state_hash,
+        sealed_at=row.sealed_at,
+        created_at=row.created_at,
+        characters=char_records,
     )
 
 
