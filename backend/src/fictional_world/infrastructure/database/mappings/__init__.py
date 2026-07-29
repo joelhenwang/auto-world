@@ -20,6 +20,7 @@ from fictional_world.infrastructure.database.mappings.records import (
     outbox_to_record,
     parse_aggregate_key,
     phase_to_record,
+    snapshot_to_record,
     task_to_record,
     world_to_record,
 )
@@ -44,6 +45,7 @@ __all__ = [
     "outbox_to_record",
     "parse_aggregate_key",
     "phase_to_record",
+    "snapshot_to_record",
     "task_to_record",
     "world_to_record",
 ]

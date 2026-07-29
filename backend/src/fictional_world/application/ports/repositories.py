@@ -19,7 +19,10 @@ from fictional_world.domain.events.persistence import (
 )
 from fictional_world.domain.knowledge.persistence import ObservationPersistenceRecord
 from fictional_world.domain.memory.persistence import RecentMemoryRecord
-from fictional_world.domain.phases.records import PhaseRunRecord
+from fictional_world.domain.phases.records import (
+    PhaseRunRecord,
+    PhaseSnapshotRecord,
+)
 from fictional_world.domain.seed.records import (
     CharacterCardVersionRecord,
     LocationRecord,
@@ -106,11 +109,19 @@ class CharacterRepository(Protocol):
         self, entity_id: UUID, *, created_event_id: UUID
     ) -> EntityRecord: ...
 
+    async def list_character_ids_for_world(self, world_id: UUID) -> Sequence[UUID]: ...
+
 
 class PhaseRepository(Protocol):
     async def get(self, phase_run_id: UUID) -> PhaseRunRecord | None: ...
 
     async def find_by_idempotency_key(self, key: str) -> PhaseRunRecord | None: ...
+
+    async def find_by_world_and_index(
+        self, world_id: UUID, absolute_phase_index: int
+    ) -> PhaseRunRecord | None: ...
+
+    async def find_active_for_world(self, world_id: UUID) -> PhaseRunRecord | None: ...
 
     async def insert(self, phase: PhaseRunRecord) -> PhaseRunRecord: ...
 
@@ -290,10 +301,19 @@ class BudgetRepository(Protocol):
     ) -> Sequence[RequestBudgetRecord]: ...
 
 
+class PhaseSnapshotRepository(Protocol):
+    async def get(self, snapshot_id: UUID) -> PhaseSnapshotRecord | None: ...
+
+    async def get_for_phase(self, phase_run_id: UUID) -> PhaseSnapshotRecord | None: ...
+
+    async def insert(self, snapshot: PhaseSnapshotRecord) -> PhaseSnapshotRecord: ...
+
+
 class UnitOfWork(Protocol):
     worlds: WorldRepository
     characters: CharacterRepository
     phases: PhaseRepository
+    snapshots: PhaseSnapshotRepository
     events: EventRepository
     observations: ObservationRepository
     recent_memories: RecentMemoryRepository

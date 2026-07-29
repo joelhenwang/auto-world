@@ -1,13 +1,16 @@
-"""Phase-run persistence record aligned to ``phase_run`` table."""
+"""Phase-run and snapshot persistence records."""
 
 from __future__ import annotations
 
 from datetime import datetime
+from typing import Any
 from uuid import UUID
 
 from pydantic import Field
 
 from fictional_world.domain.common.base import StrictContract
+
+JsonObject = dict[str, Any]
 
 
 class PhaseRunRecord(StrictContract):
@@ -28,3 +31,28 @@ class PhaseRunRecord(StrictContract):
     started_at: datetime | None = None
     completed_at: datetime | None = None
     version: int = Field(default=0, ge=0)
+
+
+class PhaseSnapshotCharacterRecord(StrictContract):
+    snapshot_id: UUID
+    character_id: UUID
+    character_state_version: int = Field(ge=0)
+    card_version_id: UUID
+    location_id: UUID | None = None
+    active_activity_id: UUID | None = None
+    context_source_hash: str = Field(min_length=1, max_length=128)
+    eligibility_status: str = Field(min_length=1, max_length=50)
+    eligibility_reason: str | None = Field(default=None, max_length=500)
+
+
+class PhaseSnapshotRecord(StrictContract):
+    id: UUID
+    phase_run_id: UUID
+    world_id: UUID
+    source_event_sequence: int = Field(ge=0)
+    world_clock_version: int = Field(ge=0)
+    state_manifest: JsonObject = Field(default_factory=dict)
+    state_hash: str = Field(min_length=1, max_length=128)
+    sealed_at: datetime
+    created_at: datetime | None = None
+    characters: tuple[PhaseSnapshotCharacterRecord, ...] = ()

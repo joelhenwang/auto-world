@@ -101,8 +101,14 @@ def _validate_observe(effect: ObserveEffect, ctx: EffectValidationContext) -> Va
         issues.append(
             ValidationIssue(code="unknown_observer", message="observer unknown", path="observer_id")
         )
+    catalog_active = bool(ctx.entities or ctx.known_character_ids or ctx.known_location_ids)
     for target in effect.target_entity_ids:
-        if ctx.entities and target not in ctx.entities and target not in ctx.known_character_ids:
+        known = (
+            target in ctx.entities
+            or target in ctx.known_character_ids
+            or target in ctx.known_location_ids
+        )
+        if catalog_active and not known:
             issues.append(
                 ValidationIssue(
                     code="unknown_observe_target",

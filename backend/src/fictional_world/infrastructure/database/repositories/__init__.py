@@ -8,6 +8,9 @@ from fictional_world.infrastructure.database.repositories.characters import (
 )
 from fictional_world.infrastructure.database.repositories.events import SqlAlchemyEventRepository
 from fictional_world.infrastructure.database.repositories.phases import SqlAlchemyPhaseRepository
+from fictional_world.infrastructure.database.repositories.snapshots import (
+    SqlAlchemyPhaseSnapshotRepository,
+)
 from fictional_world.infrastructure.database.repositories.support import (
     SqlAlchemyAggregateVersionRepository,
     SqlAlchemyObservationRepository,
@@ -25,6 +28,7 @@ __all__ = [
     "SqlAlchemyObservationRepository",
     "SqlAlchemyOutboxRepository",
     "SqlAlchemyPhaseRepository",
+    "SqlAlchemyPhaseSnapshotRepository",
     "SqlAlchemyRecentMemoryRepository",
     "SqlAlchemyTaskRepository",
     "SqlAlchemyWorldRepository",

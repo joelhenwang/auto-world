@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from uuid import UUID
 
 from sqlalchemy import select
@@ -181,3 +182,12 @@ class SqlAlchemyCharacterRepository:
         row.created_event_id = created_event_id
         await self._session.flush()
         return entity_to_record(row)
+
+    async def list_character_ids_for_world(self, world_id: UUID) -> Sequence[UUID]:
+        result = await self._session.execute(
+            select(CharacterRow.entity_id)
+            .join(EntityRow, EntityRow.id == CharacterRow.entity_id)
+            .where(EntityRow.world_id == world_id)
+            .order_by(CharacterRow.entity_id.asc())
+        )
+        return list(result.scalars().all())
