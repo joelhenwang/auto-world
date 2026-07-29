@@ -1,6 +1,6 @@
 # `S0-API-001` + `S0-OPS-001` — Minimal API/CLI and observability baseline
 
-**Stage:** 0 | **Workstream:** API + OPS | **Status:** IN_PROGRESS | **Priority:** P0  
+**Stage:** 0 | **Workstream:** API + OPS | **Status:** IN_REVIEW | **Priority:** P0  
 **Owner:** parent agent | **Branch:** `cursor/s0-api001-ops001-09ce`  
 **Upstream:** `7350ce5` | **Depends:** S0-ORCH-002, S0-ENG-002  
 **AGENTS conceptual branch:** `task/S0-API-001-ops-001`
