@@ -15,6 +15,9 @@ from fictional_world.config.settings import DatabaseSettings
 from fictional_world.infrastructure.database.base import Base
 from fictional_world.infrastructure.database.session import database_url
 
+# Register Stage 0 ORM tables on Base.metadata for autogenerate / check.
+import fictional_world.infrastructure.database.models  # noqa: F401
+
 config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)

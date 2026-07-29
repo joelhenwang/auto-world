@@ -1,11 +1,11 @@
 # Thin aliases — underlying commands remain the source of truth (handbook 20 §7).
 
-.PHONY: help bootstrap sync test lint format typecheck check compose-config compose-up compose-down migrate seed export-schemas pre-commit verify-migrations
+.PHONY: help bootstrap sync test lint format typecheck check compose-config compose-up compose-down migrate seed export-schemas export-db-schema pre-commit verify-migrations
 
 help:
 	@echo "Stage 0 aliases:"
 	@echo "  make sync / test / lint / format / typecheck / check"
-	@echo "  make export-schemas / verify-migrations / migrate"
+	@echo "  make export-schemas / export-db-schema / verify-migrations / migrate"
 	@echo "  make compose-up / compose-down / bootstrap"
 
 sync:
@@ -30,6 +30,9 @@ check: format lint typecheck
 
 export-schemas:
 	uv run python scripts/generate_json_schemas.py
+
+export-db-schema:
+	uv run python scripts/export_database_schema.py
 
 verify-migrations:
 	uv run python scripts/verify_migrations.py
