@@ -2,10 +2,10 @@
 
 **Stage:** 2  
 **Workstream:** WORLD  
-**Status:** READY  
+**Status:** COMPLETE  
 **Priority:** P0  
 **Owner:** parent coding agent  
-**Branch/worktree:** TBD `cursor/s2-world-001-*-085f`  
+**Branch/worktree:** `cursor/s2-world-001-director-085f`  
 **Depends:** S2-DB-001  
 **AGENTS conceptual branch:** `task/S2-WORLD-001-director-v1`
 

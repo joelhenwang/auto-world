@@ -19,6 +19,7 @@ from fictional_world.domain.continuity.persistence import (
     DiaryEntryPersistenceRecord,
     GoalPersistenceRecord,
     HookPersistenceRecord,
+    NarrativeMetricPersistenceRecord,
     NpcLifecyclePersistenceRecord,
     NpcProfilePersistenceRecord,
     PlanPersistenceRecord,
@@ -550,11 +551,29 @@ class RouteRepository(Protocol):
 class HookRepository(Protocol):
     async def get(self, hook_id: UUID) -> HookPersistenceRecord | None: ...
 
+    async def get_by_key(self, world_id: UUID, hook_key: str) -> HookPersistenceRecord | None: ...
+
     async def insert(self, hook: HookPersistenceRecord) -> HookPersistenceRecord: ...
+
+    async def update(self, hook: HookPersistenceRecord) -> HookPersistenceRecord: ...
 
     async def list_for_world(
         self, world_id: UUID, *, status: str | None = None
     ) -> Sequence[HookPersistenceRecord]: ...
+
+
+class NarrativeMetricRepository(Protocol):
+    async def insert(
+        self, metric: NarrativeMetricPersistenceRecord
+    ) -> NarrativeMetricPersistenceRecord: ...
+
+    async def list_for_world(
+        self,
+        world_id: UUID,
+        *,
+        metric_key: str | None = None,
+        limit: int = 50,
+    ) -> Sequence[NarrativeMetricPersistenceRecord]: ...
 
 
 class NpcRepository(Protocol):
@@ -632,6 +651,7 @@ class UnitOfWork(Protocol):
     activities: ActivityRepository
     routes: RouteRepository
     hooks: HookRepository
+    narrative_metrics: NarrativeMetricRepository
     npcs: NpcRepository
     summaries: SummaryRepository
     diary_entries: DiaryEntryRepository
