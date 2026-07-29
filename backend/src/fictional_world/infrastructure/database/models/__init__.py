@@ -23,6 +23,19 @@ from fictional_world.infrastructure.database.models.phase import (
     PhaseSnapshotCharacterRow,
     PhaseSnapshotRow,
 )
+from fictional_world.infrastructure.database.models.scene import (
+    ActionProposalRow,
+    ActionTargetRow,
+    NarrationRow,
+    PlayerControlSessionRow,
+    ReactionProposalRow,
+    SceneActionRow,
+    SceneParticipantRow,
+    SceneResolutionRow,
+    SceneRow,
+    SceneRunRow,
+    StreamEventRow,
+)
 from fictional_world.infrastructure.database.models.world import (
     WorldClockRow,
     WorldConfigRow,
@@ -30,6 +43,8 @@ from fictional_world.infrastructure.database.models.world import (
 )
 
 __all__ = [
+    "ActionProposalRow",
+    "ActionTargetRow",
     "AggregateVersionRow",
     "CharacterCardVersionRow",
     "CharacterRow",
@@ -39,13 +54,22 @@ __all__ = [
     "LocationRow",
     "ModelCallRow",
     "ModelProfileRow",
+    "NarrationRow",
     "ObservationRow",
     "OutboxMessageRow",
     "PhaseRunRow",
     "PhaseSnapshotCharacterRow",
     "PhaseSnapshotRow",
+    "PlayerControlSessionRow",
+    "ReactionProposalRow",
     "RecentMemoryRow",
     "RequestBudgetLedgerRow",
+    "SceneActionRow",
+    "SceneParticipantRow",
+    "SceneResolutionRow",
+    "SceneRow",
+    "SceneRunRow",
+    "StreamEventRow",
     "TaskDependencyRow",
     "TaskRunRow",
     "UserCommandRow",

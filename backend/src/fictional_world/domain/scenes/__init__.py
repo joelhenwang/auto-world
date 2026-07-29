@@ -1,3 +1,16 @@
+from fictional_world.domain.scenes.persistence import (
+    ActionProposalRecord,
+    ActionTargetRecord,
+    NarrationRecord,
+    PlayerControlSessionRecord,
+    ReactionProposalRecord,
+    SceneActionRecord,
+    SceneParticipantRecord,
+    SceneRecord,
+    SceneResolutionRecord,
+    SceneRunRecord,
+    StreamEventRecord,
+)
 from fictional_world.domain.scenes.proposals import (
     ActionProposal,
     DesiredOutcome,
@@ -13,14 +26,25 @@ from fictional_world.domain.scenes.runs import PhaseRun, SceneRun
 
 __all__ = [
     "ActionProposal",
+    "ActionProposalRecord",
+    "ActionTargetRecord",
     "DesiredOutcome",
     "FallbackAction",
     "NarrationConstraints",
+    "NarrationRecord",
     "PhaseRun",
+    "PlayerControlSessionRecord",
     "PriorityBreakdown",
     "ReactionProposal",
+    "ReactionProposalRecord",
     "ResourceIntention",
+    "SceneActionRecord",
     "SceneDraft",
+    "SceneParticipantRecord",
+    "SceneRecord",
     "SceneResolution",
+    "SceneResolutionRecord",
     "SceneRun",
+    "SceneRunRecord",
+    "StreamEventRecord",
 ]

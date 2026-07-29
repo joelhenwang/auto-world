@@ -1,32 +1,48 @@
 # Current Stage
 
-**Updated:** 2026-07-29T17:45:02Z  
+**Updated:** 2026-07-29T18:30:00Z  
 **Updated by:** parent coding agent  
 **Repository:** autonomous-fictional-world  
-**Current branch:** `cursor/s0-qa002-stage-gate-09ce`  
-**Stage:** 0 — Foundation | **Status:** GATE_PASS (pending merge)
+**Current branch:** `cursor/s1-db-001-5704`  
+**Stage:** 1 — First Complete Three-Phase Day | **Status:** IN_PROGRESS
 
 ## Current objective
 
-Land **S0-QA-002** Stage 0 gate evidence and freeze contracts for Stage 1.
+Deliver Stage 1 (`26_STAGE_1_FIRST_COMPLETE_DAY.md`) ending in **S1-QA-001** gate PASS with evidence under `docs/status/evidence/stage-1/`.
+
+Active characters: Mira Talren + Dain Arcen. Enabled phases: dawn → morning → evening.
 
 ## Active tasks
 
 | Task ID | Status | Notes |
 |---|---|---|
-| through S0-API/OPS-001 | VERIFIED on main | done |
-| S0-QA-002 | IN_REVIEW | this PR — gate PASS |
+| S0-QA-002 | VERIFIED on main | Stage 0 GATE_PASS; contracts FROZEN |
+| S1-DB-001 | IN_PROGRESS | action/scene/reaction/stream schema + repos |
+| S1-KNOW-001 | READY | after/overlaps DB contracts |
+| S1-MODEL-001 | READY | prompts/schemas/fake corpus |
+| S1-GRAPH-001 | BLOCKED | needs KNOW + MODEL |
+| S1-SIM-001 | READY | pure activation/scene assembly |
+| S1-GRAPH-002 | BLOCKED | needs GRAPH-001 |
+| S1-SIM-002 | BLOCKED | needs DB + graph outputs |
+| S1-ORCH-001 | BLOCKED | needs SIM-002 |
+| S1-API-001 | BLOCKED | after projections stable |
+| S1-UI-001 | BLOCKED | after API |
+| S1-QA-001 | BLOCKED | gate last |
 
-## Next after merge
+## Stage 0 freeze (do not break)
 
-1. Tag/promote Stage 0 foundation on main  
-2. Kick off **Stage 1** (`26_STAGE_1_FIRST_COMPLETE_DAY.md`) — character graphs / day loop  
+- Canon = PostgreSQL + committed `world_event`; models propose only
+- Idempotency on all externally retried ops
+- No DB transaction across remote model calls
+- Character knowledge isolation
+- Default tests: no live OpenRouter (`openrouter_live` opt-in)
+- Additive contract changes only; new Alembic revisions
 
-## Latest verified baseline
+## Latest verified baseline (pre Stage 1)
 
 ```bash
-uv run python scripts/run_stage0_gate.py
-# 99 passed, 1 deselected; migrations OK; gate_script_exit_nonzero_count=0
+uv sync && uv run ruff check backend scripts tools && uv run basedpyright && uv run pytest
+# static green; unit/contract suites green; integration needs Docker
 ```
 
-Evidence: `docs/status/evidence/stage-0/`
+Evidence Stage 0: `docs/status/evidence/stage-0/`

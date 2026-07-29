@@ -15,6 +15,16 @@ from fictional_world.infrastructure.database.repositories.characters import (
 )
 from fictional_world.infrastructure.database.repositories.events import SqlAlchemyEventRepository
 from fictional_world.infrastructure.database.repositories.phases import SqlAlchemyPhaseRepository
+from fictional_world.infrastructure.database.repositories.scenes import (
+    SqlAlchemyActionProposalRepository,
+    SqlAlchemyNarrationRepository,
+    SqlAlchemyPlayerControlRepository,
+    SqlAlchemyReactionProposalRepository,
+    SqlAlchemySceneRepository,
+    SqlAlchemySceneResolutionRepository,
+    SqlAlchemySceneRunRepository,
+    SqlAlchemyStreamEventRepository,
+)
 from fictional_world.infrastructure.database.repositories.snapshots import (
     SqlAlchemyPhaseSnapshotRepository,
 )
@@ -45,6 +55,14 @@ class SqlAlchemyUnitOfWork:
         self.outbox = cast(SqlAlchemyOutboxRepository, None)
         self.tasks = cast(SqlAlchemyTaskRepository, None)
         self.budgets = cast(SqlAlchemyBudgetRepository, None)
+        self.action_proposals = cast(SqlAlchemyActionProposalRepository, None)
+        self.scenes = cast(SqlAlchemySceneRepository, None)
+        self.reactions = cast(SqlAlchemyReactionProposalRepository, None)
+        self.scene_resolutions = cast(SqlAlchemySceneResolutionRepository, None)
+        self.scene_runs = cast(SqlAlchemySceneRunRepository, None)
+        self.narrations = cast(SqlAlchemyNarrationRepository, None)
+        self.stream_events = cast(SqlAlchemyStreamEventRepository, None)
+        self.player_controls = cast(SqlAlchemyPlayerControlRepository, None)
 
     async def __aenter__(self) -> SqlAlchemyUnitOfWork:
         self.session = self._session_factory()
@@ -59,6 +77,14 @@ class SqlAlchemyUnitOfWork:
         self.outbox = SqlAlchemyOutboxRepository(self.session)
         self.tasks = SqlAlchemyTaskRepository(self.session)
         self.budgets = SqlAlchemyBudgetRepository(self.session)
+        self.action_proposals = SqlAlchemyActionProposalRepository(self.session)
+        self.scenes = SqlAlchemySceneRepository(self.session)
+        self.reactions = SqlAlchemyReactionProposalRepository(self.session)
+        self.scene_resolutions = SqlAlchemySceneResolutionRepository(self.session)
+        self.scene_runs = SqlAlchemySceneRunRepository(self.session)
+        self.narrations = SqlAlchemyNarrationRepository(self.session)
+        self.stream_events = SqlAlchemyStreamEventRepository(self.session)
+        self.player_controls = SqlAlchemyPlayerControlRepository(self.session)
         return self
 
     async def __aexit__(

@@ -55,4 +55,4 @@ uv run python scripts/run_stage0_gate.py
 
 | Date | Change/CR | Old hash | New hash | Affected tasks | Approved by |
 |---|---|---|---|---|---|
-| — | — | — | — | — | — |
+| 2026-07-29 | S1-DB-001 additive migration `0003_stage1_action_scene_tables` + scene repos (no Stage 0 reinterpretation) | `0002_core_stage0_tables` | `0003_stage1_action_scene_tables` | S1-* | pending review |
