@@ -60,6 +60,30 @@ STAGE1_PRIVATE_BELIEFS: tuple[dict[str, Any], ...] = (
     },
 )
 
+# Stage 2 additive private beliefs (seed initial-beliefs.yaml). Stage 1 tests
+# only assert Mira/Dain isolation and remain unaffected.
+STAGE2_PRIVATE_BELIEFS: tuple[dict[str, Any], ...] = (
+    {
+        "owner": "character/iri-voss",
+        "proposition": (
+            "The current marker anomalies resemble deliberate interference more than natural drift."
+        ),
+        "confidence": 0.36,
+        "objective_status": "unresolved",
+    },
+    {
+        "owner": "character/torren-kest",
+        "proposition": ("The cracked route compass contains a nonstandard internal pattern."),
+        "confidence": 0.63,
+        "objective_status": "true_but_incomplete",
+    },
+)
+
+ALL_PRIVATE_BELIEFS: tuple[dict[str, Any], ...] = (
+    *STAGE1_PRIVATE_BELIEFS,
+    *STAGE2_PRIVATE_BELIEFS,
+)
+
 DIRECTOR_ONLY_FACTS: tuple[str, ...] = (
     "the old beacon contains an Ashfall-era pattern recorder, not a weapon",
     "Mira's father hook is not required to connect to the first month's event",
@@ -123,7 +147,7 @@ def relationship_edges_for(observer_seed_key: str) -> list[dict[str, Any]]:
 
 
 def private_beliefs_for(owner_seed_key: str) -> list[dict[str, Any]]:
-    return [dict(b) for b in STAGE1_PRIVATE_BELIEFS if b["owner"] == owner_seed_key]
+    return [dict(b) for b in ALL_PRIVATE_BELIEFS if b["owner"] == owner_seed_key]
 
 
 def goals_for(owner_seed_key: str) -> list[dict[str, Any]]:
@@ -134,5 +158,7 @@ def seed_key_for_character_id(character_id: UUID) -> str | None:
     mapping: dict[UUID, str] = {
         seed_uuid("character/mira-talren"): "character/mira-talren",
         seed_uuid("character/dain-arcen"): "character/dain-arcen",
+        seed_uuid("character/iri-voss"): "character/iri-voss",
+        seed_uuid("character/torren-kest"): "character/torren-kest",
     }
     return mapping.get(character_id)
