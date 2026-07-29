@@ -2,7 +2,7 @@
   "alembic_head": "0003_stage1_action_scene_tables",
   "collected_at": "20260729T202040Z",
   "gate_script_exit_nonzero_count": 0,
-  "git_commit": "418cf268b4b36e1b23da0da1e0b7e5799d014820",
+  "git_commit": "657432be72bf239a65427976be91222888a5e38e",
   "hashes": {
     "database-schema.sql": "d5affce1e9813c3d609a26c7e6a5d3f86858eaf3dcf498948ee277309b037fae",
     "frontend/pnpm-lock.yaml": "22002950d79c21ad580902db44355d4e0f817b76e7a4ed2d4b8c3ed0520c32ac",
