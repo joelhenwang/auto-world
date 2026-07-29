@@ -1,5 +1,4 @@
-# Stage 1 directional relationships (handbook 23 §19 subset).
-# Context assembler exposes only outgoing edges for the observing character.
+# Directional relationships (handbook 23 §19). Unlisted dimensions default to 0.0.
 relationships:
   - source: character/mira-talren
     target: character/dain-arcen
@@ -28,3 +27,59 @@ relationships:
     loyalty: 0.03
     perceived_reciprocity: 0.04
     basis: He considers her observant and unnecessarily willing to travel alone.
+
+  - source: character/mira-talren
+    target: character/iri-voss
+    familiarity: 0.18
+    trust: 0.11
+    affection: 0.00
+    attraction: 0.00
+    respect: 0.27
+    fear: 0.00
+    resentment: 0.00
+    dependency: 0.00
+    loyalty: 0.00
+    perceived_reciprocity: 0.00
+    basis: Iri once checked an Echo reading on Mira's damaged marker.
+
+  - source: character/iri-voss
+    target: character/mira-talren
+    familiarity: 0.20
+    trust: 0.15
+    affection: 0.00
+    attraction: 0.00
+    respect: 0.23
+    fear: 0.00
+    resentment: 0.00
+    dependency: 0.00
+    loyalty: 0.00
+    perceived_reciprocity: 0.00
+    basis: Mira brought complete notes instead of asking Iri to infer missing data.
+
+  - source: character/iri-voss
+    target: character/torren-kest
+    familiarity: 0.31
+    trust: 0.10
+    affection: 0.00
+    attraction: 0.00
+    respect: 0.34
+    fear: 0.00
+    resentment: 0.05
+    dependency: 0.00
+    loyalty: 0.00
+    perceived_reciprocity: 0.00
+    basis: Competent collaboration complicated by Torren's contempt for careless scholars.
+
+  - source: character/torren-kest
+    target: character/iri-voss
+    familiarity: 0.29
+    trust: 0.14
+    affection: 0.00
+    attraction: 0.00
+    respect: 0.38
+    fear: 0.00
+    resentment: 0.00
+    dependency: 0.00
+    loyalty: 0.00
+    perceived_reciprocity: 0.00
+    basis: Torren trusts Iri's measurements more than most Collegium work.

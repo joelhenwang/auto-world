@@ -36,6 +36,7 @@ from fictional_world.domain.knowledge.persistence import (
     BeliefPersistenceRecord,
     ClaimPersistenceRecord,
     ObservationPersistenceRecord,
+    SecretAccessPersistenceRecord,
 )
 from fictional_world.domain.memory.persistence import RecentMemoryRecord
 from fictional_world.domain.phases.records import (
@@ -516,6 +517,18 @@ class BeliefRepository(Protocol):
     ) -> Sequence[BeliefPersistenceRecord]: ...
 
 
+class SecretAccessRepository(Protocol):
+    async def get(self, secret_access_id: UUID) -> SecretAccessPersistenceRecord | None: ...
+
+    async def insert(
+        self, access: SecretAccessPersistenceRecord
+    ) -> SecretAccessPersistenceRecord: ...
+
+    async def list_for_holder(
+        self, holder_character_id: UUID, *, world_id: UUID
+    ) -> Sequence[SecretAccessPersistenceRecord]: ...
+
+
 class ActivityRepository(Protocol):
     async def get(self, activity_id: UUID) -> ActivityPersistenceRecord | None: ...
 
@@ -615,6 +628,7 @@ class UnitOfWork(Protocol):
     relationship_edges: RelationshipEdgeRepository
     claims: ClaimRepository
     beliefs: BeliefRepository
+    secret_access: SecretAccessRepository
     activities: ActivityRepository
     routes: RouteRepository
     hooks: HookRepository

@@ -1,8 +1,8 @@
 # Integration Status
 
-**Updated:** 2026-07-29T21:45:00Z  
+**Updated:** 2026-07-29T21:50:00Z  
 **Integration owner:** Stage 2 parent coding agent  
-**Integration branch/worktree:** `cursor/s2-db-001-persistence-085f`  
+**Integration branch/worktree:** `cursor/s2-content-001-seed-085f`  
 **Target stage:** 2 (IN_PROGRESS)  
 **Main tip at kickoff:** `5c9299e` (PR #20 freeze docs; Stage 1 code from PR #19 @ `7727c7f`)
 
@@ -13,6 +13,7 @@
 | Stage 0 | FROZEN | additive only |
 | Stage 1 | FROZEN @ `7727c7f` | see `CONTRACT_FREEZE.md` |
 | Stage 2 schema | COMPLETE locally | S2-DB-001 → `0004_stage2_continuity_tables` |
+| Stage 2 seed | COMPLETE locally | S2-CONTENT-001 → `content_version` 2 + stage2 fixture |
 
 ## Task matrix
 
@@ -21,7 +22,7 @@
 | S1-* | VERIFIED on main | PR #19 |
 | S2 kickoff/freeze docs | MERGED | PR #20 |
 | S2-DB-001 | COMPLETE (awaiting merge) | `cursor/s2-db-001-persistence-085f` |
-| S2-CONTENT-001 | READY | packet drafted; after/with DB |
+| S2-CONTENT-001 | COMPLETE (awaiting merge) | `cursor/s2-content-001-seed-085f` |
 | S2-CHAR-001 | NOT STARTED | after DB |
 | S2-KNOW-001 | NOT STARTED | after DB |
 | S2-MEM-001 | NOT STARTED | after KNOW |
@@ -43,4 +44,4 @@ S2-DB-001 → S2-CONTENT-001 → (CHAR ‖ KNOW ‖ MEM ‖ WORLD*) → SIM → 
 
 ## Current failures
 
-None. S2-DB-001 integration tests green (`test_stage2_schema` + `test_migrations_baseline`).
+None. S2-CONTENT-001 seed import tests green (`test_seed_import` 5 passed; full suite green).

@@ -26,6 +26,7 @@ from fictional_world.infrastructure.database.repositories.continuity import (
     SqlAlchemyPlanRepository,
     SqlAlchemyRelationshipEdgeRepository,
     SqlAlchemyRouteRepository,
+    SqlAlchemySecretAccessRepository,
     SqlAlchemySummaryRepository,
 )
 from fictional_world.infrastructure.database.repositories.events import SqlAlchemyEventRepository
@@ -88,6 +89,7 @@ class SqlAlchemyUnitOfWork:
         self.relationship_edges = cast(SqlAlchemyRelationshipEdgeRepository, None)
         self.claims = cast(SqlAlchemyClaimRepository, None)
         self.beliefs = cast(SqlAlchemyBeliefRepository, None)
+        self.secret_access = cast(SqlAlchemySecretAccessRepository, None)
         self.activities = cast(SqlAlchemyActivityRepository, None)
         self.routes = cast(SqlAlchemyRouteRepository, None)
         self.hooks = cast(SqlAlchemyHookRepository, None)
@@ -124,6 +126,7 @@ class SqlAlchemyUnitOfWork:
         self.relationship_edges = SqlAlchemyRelationshipEdgeRepository(self.session)
         self.claims = SqlAlchemyClaimRepository(self.session)
         self.beliefs = SqlAlchemyBeliefRepository(self.session)
+        self.secret_access = SqlAlchemySecretAccessRepository(self.session)
         self.activities = SqlAlchemyActivityRepository(self.session)
         self.routes = SqlAlchemyRouteRepository(self.session)
         self.hooks = SqlAlchemyHookRepository(self.session)

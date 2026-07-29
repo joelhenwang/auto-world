@@ -1,0 +1,21 @@
+fixture: stage2
+description: Stage 2 seven-day world — four focus characters, full ten phases.
+active_locations:
+  - location/veycross/cinder-lantern-inn
+  - location/veycross/market-square
+  - location/veycross/east-bridge
+  - location/veycross/lantern-annex
+  - location/veycross/river-forge
+  - location/veycross/wardens-yard
+  - location/veycross/lantern-ward
+  - location/north-road/corridor
+  - location/north-road/old-beacon
+  - location/west-road/ash-orchard
+active_characters:
+  - character/mira-talren
+  - character/dain-arcen
+  - character/iri-voss
+  - character/torren-kest
+enabled_phases: [dawn, sunrise, morning, noon, afternoon, sunset, dusk, evening, night, midnight]
+phase_count: 70  # 7 days * 10
+model_calls: fake_only

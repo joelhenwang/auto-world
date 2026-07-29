@@ -26,6 +26,7 @@ from fictional_world.domain.continuity.persistence import (
 from fictional_world.domain.knowledge.persistence import (
     BeliefPersistenceRecord,
     ClaimPersistenceRecord,
+    SecretAccessPersistenceRecord,
 )
 from fictional_world.infrastructure.database.mappings.continuity_records import (
     activity_to_record,
@@ -42,6 +43,7 @@ from fictional_world.infrastructure.database.mappings.continuity_records import 
     plan_to_record,
     relationship_edge_to_record,
     route_to_record,
+    secret_access_to_record,
     summary_to_record,
 )
 from fictional_world.infrastructure.database.models.continuity import (
@@ -63,6 +65,7 @@ from fictional_world.infrastructure.database.models.knowledge import (
     BeliefRow,
     ClaimListenerRow,
     ClaimRow,
+    SecretAccessRow,
 )
 
 
@@ -337,6 +340,41 @@ class SqlAlchemyBeliefRepository:
             .limit(limit)
         )
         return [belief_to_record(row) for row in result.scalars().all()]
+
+
+class SqlAlchemySecretAccessRepository:
+    def __init__(self, session: AsyncSession) -> None:
+        self._session = session
+
+    async def get(self, secret_access_id: UUID) -> SecretAccessPersistenceRecord | None:
+        row = await self._session.get(SecretAccessRow, secret_access_id)
+        return secret_access_to_record(row) if row is not None else None
+
+    async def insert(self, access: SecretAccessPersistenceRecord) -> SecretAccessPersistenceRecord:
+        row = SecretAccessRow(
+            id=access.id,
+            world_id=access.world_id,
+            secret_key=access.secret_key,
+            owner_character_id=access.owner_character_id,
+            holder_character_id=access.holder_character_id,
+            access_level=access.access_level,
+            granted_event_id=access.granted_event_id,
+            revoked_event_id=access.revoked_event_id,
+        )
+        self._session.add(row)
+        await self._session.flush()
+        return secret_access_to_record(row)
+
+    async def list_for_holder(
+        self, holder_character_id: UUID, *, world_id: UUID
+    ) -> Sequence[SecretAccessPersistenceRecord]:
+        result = await self._session.execute(
+            select(SecretAccessRow).where(
+                SecretAccessRow.holder_character_id == holder_character_id,
+                SecretAccessRow.world_id == world_id,
+            )
+        )
+        return [secret_access_to_record(row) for row in result.scalars().all()]
 
 
 class SqlAlchemyActivityRepository:

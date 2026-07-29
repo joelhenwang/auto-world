@@ -1,0 +1,42 @@
+# Handbook 23 §20 — initial goals (priority 0–100 ints; importer scales to 0–1).
+goals:
+  - owner: character/mira-talren
+    title: Complete the east-bridge route annotation contract
+    horizon: short
+    priority: 72
+    success: Deliver verified marker notes to the Compact by sunset.
+
+  - owner: character/mira-talren
+    title: Qualify as an independent route surveyor
+    horizon: long
+    priority: 80
+
+  - owner: character/dain-arcen
+    title: Finish the probationary bridge patrol without avoidable incident
+    horizon: short
+    priority: 68
+
+  - owner: character/dain-arcen
+    title: Earn full Warden standing on merit
+    horizon: long
+    priority: 78
+
+  - owner: character/iri-voss
+    title: Reconcile three contradictory marker readings
+    horizon: short
+    priority: 74
+
+  - owner: character/iri-voss
+    title: Establish a consent-based field archive agreement with the Reed Council
+    horizon: long
+    priority: 76
+
+  - owner: character/torren-kest
+    title: Finish repair of the Compact's cracked route compass
+    horizon: short
+    priority: 69
+
+  - owner: character/torren-kest
+    title: Build a stable portable ashglass compass
+    horizon: long
+    priority: 75

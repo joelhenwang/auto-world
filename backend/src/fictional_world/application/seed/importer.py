@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from dataclasses import dataclass
 from decimal import Decimal
 from pathlib import Path
@@ -23,6 +24,15 @@ from fictional_world.domain.characters.records import (
     EntityRecord,
 )
 from fictional_world.domain.common.errors import DomainError
+from fictional_world.domain.continuity.persistence import (
+    GoalPersistenceRecord,
+    RelationshipEdgePersistenceRecord,
+    RoutePersistenceRecord,
+)
+from fictional_world.domain.knowledge.persistence import (
+    BeliefPersistenceRecord,
+    SecretAccessPersistenceRecord,
+)
 from fictional_world.domain.seed.ids import seed_uuid
 from fictional_world.domain.seed.records import (
     CharacterCardVersionRecord,
@@ -37,6 +47,8 @@ from fictional_world.domain.world.records import (
 
 DEFAULT_SEED_ROOT = Path("seed/worlds/caldris-embervale-v1")
 WORLD_SEEDED = "WORLD_SEEDED"
+
+_SLUG_RE = re.compile(r"[^a-z0-9]+")
 
 
 class SeedImportError(DomainError):
@@ -72,6 +84,26 @@ def manifest_hash(pack: SeedPack) -> str:
 def _card_hash(payload: dict[str, Any]) -> str:
     raw = json.dumps(payload, sort_keys=True, default=str, separators=(",", ":")).encode()
     return hashlib.sha256(raw).hexdigest()
+
+
+def _slugify(text: str, *, max_len: int = 80) -> str:
+    slug = _SLUG_RE.sub("-", text.casefold()).strip("-")
+    if not slug:
+        slug = hashlib.sha256(text.encode()).hexdigest()[:16]
+    return slug[:max_len]
+
+
+def _proposition_key(proposition: str) -> str:
+    """Stable short key for a belief proposition (hash + slug prefix)."""
+    digest = hashlib.sha256(proposition.encode()).hexdigest()[:12]
+    prefix = _slugify(proposition, max_len=40)
+    return f"{prefix}-{digest}"
+
+
+def _decimal_field(raw: object, default: str = "0") -> Decimal:
+    if raw is None:
+        return Decimal(default)
+    return Decimal(str(raw))
 
 
 class SeedImporter:
@@ -383,6 +415,16 @@ class SeedImporter:
                 expected_version=clock.version,
             )
 
+        await self._seed_continuity(
+            pack,
+            world_id=world.id,
+            character_ids=character_ids,
+            location_ids=location_ids,
+            created_event_id=commit.event_id,
+            namespace=pack.manifest.namespace_uuid,
+            seed_keys=seed_keys,
+        )
+
         await self._uow.worlds.update_status(world.id, status="active", expected_version=1)
 
         return SeedImportResult(
@@ -395,6 +437,150 @@ class SeedImporter:
             seed_keys=seed_keys,
             validation=report,
         )
+
+    async def _seed_continuity(
+        self,
+        pack: SeedPack,
+        *,
+        world_id: UUID,
+        character_ids: dict[str, UUID],
+        location_ids: dict[str, UUID],
+        created_event_id: UUID,
+        namespace: UUID,
+        seed_keys: dict[str, str],
+    ) -> None:
+        """Insert relationships, goals, beliefs, secret access, and routes for active entities."""
+
+        for edge in pack.relationships:
+            source_key = str(edge["source"])
+            target_key = str(edge["target"])
+            if source_key not in character_ids or target_key not in character_ids:
+                continue
+            await self._uow.relationship_edges.insert(
+                RelationshipEdgePersistenceRecord(
+                    source_character_id=character_ids[source_key],
+                    target_character_id=character_ids[target_key],
+                    world_id=world_id,
+                    familiarity=_decimal_field(edge.get("familiarity")),
+                    trust=_decimal_field(edge.get("trust")),
+                    affection=_decimal_field(edge.get("affection")),
+                    attraction=_decimal_field(edge.get("attraction")),
+                    respect=_decimal_field(edge.get("respect")),
+                    fear=_decimal_field(edge.get("fear")),
+                    resentment=_decimal_field(edge.get("resentment")),
+                    dependency=_decimal_field(edge.get("dependency")),
+                    loyalty=_decimal_field(edge.get("loyalty")),
+                    perceived_reciprocity=_decimal_field(edge.get("perceived_reciprocity")),
+                    last_source_event_id=created_event_id,
+                    version=0,
+                )
+            )
+
+        for goal in pack.goals:
+            owner_key = str(goal["owner"])
+            if owner_key not in character_ids:
+                continue
+            title = str(goal["title"])
+            slug = _slugify(title)
+            goal_id = seed_uuid(f"goal/{owner_key}/{slug}", namespace=namespace)
+            seed_keys[f"goal/{owner_key}/{slug}"] = str(goal_id)
+            priority_raw = goal.get("priority", 50)
+            priority = Decimal(str(priority_raw)) / Decimal("100")
+            success_conditions: dict[str, Any] = {}
+            if "success" in goal and goal["success"] is not None:
+                success_conditions["success"] = str(goal["success"])
+            horizon = str(goal["horizon"]) if goal.get("horizon") is not None else None
+            category = str(goal.get("category") or horizon or "personal")
+            await self._uow.goals.insert(
+                GoalPersistenceRecord(
+                    id=goal_id,
+                    world_id=world_id,
+                    owner_character_id=character_ids[owner_key],
+                    description=title,
+                    category=category,
+                    priority=priority,
+                    status="active",
+                    horizon=horizon,
+                    success_conditions=success_conditions,
+                    source_event_id=created_event_id,
+                    version=0,
+                )
+            )
+
+        for belief in pack.beliefs.get("private_beliefs", []):
+            owner_key = str(belief["owner"])
+            if owner_key not in character_ids:
+                continue
+            proposition = str(belief["proposition"])
+            prop_key = _proposition_key(proposition)
+            belief_id = seed_uuid(f"belief/{owner_key}/{prop_key}", namespace=namespace)
+            seed_keys[f"belief/{owner_key}/{prop_key}"] = str(belief_id)
+            owner_id = character_ids[owner_key]
+            evidence: dict[str, Any] = {}
+            if "objective_status" in belief:
+                evidence["objective_status"] = str(belief["objective_status"])
+            await self._uow.beliefs.insert(
+                BeliefPersistenceRecord(
+                    id=belief_id,
+                    world_id=world_id,
+                    character_id=owner_id,
+                    proposition_key=prop_key,
+                    belief_text=proposition,
+                    confidence=_decimal_field(belief.get("confidence"), "0.5"),
+                    status="active",
+                    last_source_event_id=created_event_id,
+                    evidence_summary=evidence,
+                    version=0,
+                )
+            )
+            secret_id = seed_uuid(f"secret/{owner_key}/{prop_key}", namespace=namespace)
+            seed_keys[f"secret/{owner_key}/{prop_key}"] = str(secret_id)
+            await self._uow.secret_access.insert(
+                SecretAccessPersistenceRecord(
+                    id=secret_id,
+                    world_id=world_id,
+                    secret_key=prop_key,
+                    owner_character_id=owner_id,
+                    holder_character_id=owner_id,
+                    access_level="owner",
+                    granted_event_id=created_event_id,
+                )
+            )
+
+        for route in pack.routes:
+            origin_key = str(route["origin"])
+            dest_key = str(route["destination"])
+            if origin_key not in location_ids or dest_key not in location_ids:
+                continue
+            route_key = str(route.get("key") or f"route/{origin_key}->{dest_key}")
+            route_id = seed_uuid(route_key, namespace=namespace)
+            seed_keys[route_key] = str(route_id)
+            duration = int(route.get("base_duration_phases", 1))
+            if duration < 1:
+                duration = 1
+            danger = route.get("danger_level", route.get("danger", 0))
+            raw_terrain: object = route.get("terrain_tags") or []
+            terrain = (
+                tuple(str(tag) for tag in cast(list[object], raw_terrain))
+                if isinstance(raw_terrain, list)
+                else ()
+            )
+            await self._uow.routes.insert(
+                RoutePersistenceRecord(
+                    id=route_id,
+                    world_id=world_id,
+                    origin_location_id=location_ids[origin_key],
+                    destination_location_id=location_ids[dest_key],
+                    is_bidirectional=bool(route.get("is_bidirectional", True)),
+                    distance_units=_decimal_field(route.get("distance_units"), "0.1"),
+                    base_duration_phases=duration,
+                    terrain_tags=terrain,
+                    danger_level=_decimal_field(danger),
+                    status=str(route.get("status", "active")),
+                    created_event_id=created_event_id,
+                    version=0,
+                )
+            )
 
 
 async def import_caldris_stage0(
@@ -418,4 +604,18 @@ async def import_caldris_stage1(
         uow,
         root=root,
         fixture_name="stage1",
+    )
+
+
+async def import_caldris_stage2(
+    uow: UnitOfWork,
+    *,
+    root: Path | None = None,
+) -> SeedImportResult:
+    """Import the four-character Stage 2 fixture with full geography."""
+
+    return await import_caldris_stage0(
+        uow,
+        root=root,
+        fixture_name="stage2",
     )

@@ -1,4 +1,4 @@
-"""Integration tests for S0-CONTENT-001 seed import."""
+"""Integration tests for S0-CONTENT-001 / S2-CONTENT-001 seed import."""
 
 from __future__ import annotations
 
@@ -14,6 +14,8 @@ from fictional_world.application.seed import (
     SeedImporter,
     SeedImportError,
     import_caldris_stage0,
+    import_caldris_stage1,
+    import_caldris_stage2,
     load_seed_pack,
 )
 from fictional_world.domain.seed.ids import seed_uuid
@@ -138,3 +140,96 @@ async def test_secret_separation_fixture(
     assert "director_only" not in facts_blob
     assert state is not None
     assert state.location_id == seed_uuid("location/veycross/cinder-lantern-inn")
+
+
+@pytest.mark.integration
+@pytest.mark.requires_docker
+@pytest.mark.asyncio
+async def test_import_caldris_stage1_two_characters(
+    uow_factory: async_sessionmaker[AsyncSession],
+) -> None:
+    async with SqlAlchemyUnitOfWork(uow_factory) as uow:
+        result = await import_caldris_stage1(uow, root=PACK)
+        await uow.commit()
+        char_keys = [k for k in result.seed_keys if k.startswith("character/")]
+        edges = await uow.relationship_edges.list_for_source(
+            seed_uuid("character/mira-talren"), world_id=result.world_id
+        )
+        routes = await uow.routes.list_for_world(result.world_id)
+
+    assert set(char_keys) == {"character/mira-talren", "character/dain-arcen"}
+    assert len(edges) == 1
+    assert edges[0].target_character_id == seed_uuid("character/dain-arcen")
+    # Stage 1 activates inn/market/bridge — only routes among those endpoints.
+    assert len(routes) >= 1
+    assert "character/iri-voss" not in result.seed_keys
+    assert "character/torren-kest" not in result.seed_keys
+
+
+@pytest.mark.integration
+@pytest.mark.requires_docker
+@pytest.mark.asyncio
+async def test_import_caldris_stage2_four_characters(
+    uow_factory: async_sessionmaker[AsyncSession],
+) -> None:
+    async with SqlAlchemyUnitOfWork(uow_factory) as uow:
+        result = await import_caldris_stage2(uow, root=PACK)
+        await uow.commit()
+
+        char_keys = sorted(k for k in result.seed_keys if k.startswith("character/"))
+        assert char_keys == [
+            "character/dain-arcen",
+            "character/iri-voss",
+            "character/mira-talren",
+            "character/torren-kest",
+        ]
+
+        iri_state = await uow.characters.get_state(seed_uuid("character/iri-voss"))
+        torren_state = await uow.characters.get_state(seed_uuid("character/torren-kest"))
+        assert iri_state is not None
+        assert torren_state is not None
+        assert iri_state.location_id == seed_uuid("location/veycross/lantern-annex")
+        assert torren_state.location_id == seed_uuid("location/veycross/river-forge")
+
+        routes = await uow.routes.list_for_world(result.world_id)
+        assert len(routes) >= 1
+
+        mira_edges = await uow.relationship_edges.list_for_source(
+            seed_uuid("character/mira-talren"), world_id=result.world_id
+        )
+        iri_edges = await uow.relationship_edges.list_for_source(
+            seed_uuid("character/iri-voss"), world_id=result.world_id
+        )
+        assert len(mira_edges) >= 2  # Dain + Iri
+        assert len(iri_edges) >= 2  # Mira + Torren
+
+        mira_goals = await uow.goals.list_for_owner(
+            seed_uuid("character/mira-talren"), world_id=result.world_id
+        )
+        iri_goals = await uow.goals.list_for_owner(
+            seed_uuid("character/iri-voss"), world_id=result.world_id
+        )
+        torren_goals = await uow.goals.list_for_owner(
+            seed_uuid("character/torren-kest"), world_id=result.world_id
+        )
+        assert len(mira_goals) >= 2
+        assert len(iri_goals) >= 2
+        assert len(torren_goals) >= 2
+
+        iri_beliefs = await uow.beliefs.list_for_character(
+            seed_uuid("character/iri-voss"), world_id=result.world_id
+        )
+        torren_beliefs = await uow.beliefs.list_for_character(
+            seed_uuid("character/torren-kest"), world_id=result.world_id
+        )
+        assert len(iri_beliefs) >= 1
+        assert "deliberate interference" in iri_beliefs[0].belief_text
+        assert len(torren_beliefs) >= 1
+        assert "nonstandard internal pattern" in torren_beliefs[0].belief_text
+
+        secrets = await uow.secret_access.list_for_holder(
+            seed_uuid("character/iri-voss"), world_id=result.world_id
+        )
+        assert len(secrets) >= 1
+        assert secrets[0].access_level == "owner"
+        assert secrets[0].owner_character_id == secrets[0].holder_character_id

@@ -2,11 +2,11 @@
 
 **Stage:** 2  
 **Workstream:** CONTENT  
-**Status:** READY  
+**Status:** COMPLETE  
 **Priority:** P0  
 **Owner:** parent coding agent  
-**Branch/worktree:** TBD `cursor/s2-content-001-5704`  
-**Upstream:** `7727c7f`  
+**Branch/worktree:** `cursor/s2-content-001-seed-085f`  
+**Upstream:** S2-DB-001 tip (`5de09a3`, Alembic `0004`)  
 **Depends:** Stage 1 freeze (can parallel S2-DB-001)  
 **AGENTS conceptual branch:** `task/S2-CONTENT-001-seed-expansion`
 
@@ -33,7 +33,7 @@ import cleanly under a stage2 fixture, without breaking stage0/stage1 fixtures.
 
 ## Acceptance
 
-- [ ] Deterministic `seed_uuid` keys for new entities
-- [ ] `import_caldris_stage2` (or fixture flag) loads four characters
-- [ ] Stage 1 fixture regression still green
-- [ ] Handoff written
+- [x] Deterministic `seed_uuid` keys for new entities
+- [x] `import_caldris_stage2` (or fixture flag) loads four characters
+- [x] Stage 1 fixture regression still green
+- [x] Handoff written
