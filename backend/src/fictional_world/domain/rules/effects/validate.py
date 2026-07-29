@@ -1,21 +1,36 @@
-"""Validate Stage 0 effect commands against a minimal context."""
+"""Validate enabled Stage 0/1 effect commands against a minimal context."""
 
 from __future__ import annotations
 
+from uuid import UUID
+
 from fictional_world.domain.common.result import ValidationIssue, ValidationResult
 from fictional_world.domain.effects.commands import (
+    AdvanceActivityEffect,
+    CreateClaimEffect,
     CreateRecentMemoryEffect,
     EffectBase,
     MoveEntityEffect,
     ObserveEffect,
     RestEffect,
+    ScheduleEffect,
     SpendResourceEffect,
     WaitEffect,
 )
 from fictional_world.domain.rules.effects.context import EffectValidationContext
 
-_STAGE0_KINDS = frozenset(
-    {"wait", "observe", "rest", "move_entity", "spend_resource", "create_recent_memory"}
+_ENABLED_KINDS = frozenset(
+    {
+        "wait",
+        "observe",
+        "rest",
+        "move_entity",
+        "spend_resource",
+        "create_recent_memory",
+        "advance_activity",
+        "create_claim",
+        "schedule_effect",
+    }
 )
 
 
@@ -26,12 +41,12 @@ def validate_effect(
 ) -> ValidationResult:
     ctx = context or EffectValidationContext()
     kind = getattr(effect, "kind", None)
-    if kind not in _STAGE0_KINDS:
+    if kind not in _ENABLED_KINDS:
         return ValidationResult(
             issues=(
                 ValidationIssue(
                     code="unsupported_effect_kind",
-                    message=f"effect kind {kind!r} is not enabled for Stage 0 validators",
+                    message=f"effect kind {kind!r} is not enabled for the current stage",
                     path="kind",
                 ),
             )
@@ -48,6 +63,12 @@ def validate_effect(
         return _validate_spend(effect, ctx)
     if isinstance(effect, CreateRecentMemoryEffect):
         return _validate_memory(effect, ctx)
+    if isinstance(effect, AdvanceActivityEffect):
+        return ValidationResult()
+    if isinstance(effect, CreateClaimEffect):
+        return _validate_claim(effect, ctx)
+    if isinstance(effect, ScheduleEffect):
+        return _validate_schedule(effect, ctx)
     return ValidationResult(
         issues=(ValidationIssue(code="unknown_effect", message="unhandled effect type"),)
     )
@@ -197,5 +218,53 @@ def _validate_memory(
     if not effect.text.strip():
         return ValidationResult(
             issues=(ValidationIssue(code="empty_memory_text", message="memory text empty"),)
+        )
+    return ValidationResult()
+
+
+def _validate_claim(
+    effect: CreateClaimEffect,
+    ctx: EffectValidationContext,
+) -> ValidationResult:
+    known = ctx.known_character_ids | frozenset(ctx.entities)
+    if known and effect.speaker_id not in known:
+        return ValidationResult(
+            issues=(
+                ValidationIssue(
+                    code="unknown_claim_speaker",
+                    message="claim speaker is unknown",
+                    path="speaker_id",
+                ),
+            )
+        )
+    unknown_listeners: set[UUID] = set(effect.listener_ids) - known if known else set()
+    if unknown_listeners:
+        return ValidationResult(
+            issues=(
+                ValidationIssue(
+                    code="unknown_claim_listener",
+                    message="claim listener is unknown",
+                    path="listener_ids",
+                ),
+            )
+        )
+    return ValidationResult()
+
+
+def _validate_schedule(
+    effect: ScheduleEffect,
+    ctx: EffectValidationContext,
+) -> ValidationResult:
+    known = ctx.known_character_ids | ctx.known_location_ids | frozenset(ctx.entities)
+    unknown_targets: set[UUID] = set(effect.target_entity_ids) - known if known else set()
+    if unknown_targets:
+        return ValidationResult(
+            issues=(
+                ValidationIssue(
+                    code="unknown_schedule_target",
+                    message="scheduled effect target is unknown",
+                    path="target_entity_ids",
+                ),
+            )
         )
     return ValidationResult()
