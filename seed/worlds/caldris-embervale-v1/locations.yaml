@@ -1,0 +1,11 @@
+locations:
+  - key: location/veycross/cinder-lantern-inn
+    name: Cinder Lantern Inn
+    type: building
+    region_code: embervale-march
+    parent: null
+    description: >-
+      A clean, busy inn used by couriers and small caravans. The common room has
+      a broad stone hearth, a route board, and windows facing the east bridge.
+    capacity: 40
+    environment_tags: [inn, courier, hearth]

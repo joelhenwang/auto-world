@@ -1,0 +1,20 @@
+public_knowledge:
+  - old route markers sometimes drift after storms
+  - the Collegium studies ashglass
+  - the Wardens are short on patrols
+  - the north beacon has been unused for decades
+  - Veycross depends on bridge trade
+
+private_beliefs:
+  - owner: character/mira-talren
+    proposition: Her father's disappearance may be connected to a falsified north-route report.
+    confidence: 0.42
+    objective_status: unresolved
+  - owner: character/dain-arcen
+    proposition: His probationary captain cares more about clean reports than uncertain warnings.
+    confidence: 0.58
+    objective_status: partially_supported
+
+director_only:
+  - the old beacon contains an Ashfall-era pattern recorder, not a weapon
+  - Mira's father hook is not required to connect to the first month's event

@@ -20,6 +20,11 @@ from fictional_world.domain.events.persistence import (
 from fictional_world.domain.knowledge.persistence import ObservationPersistenceRecord
 from fictional_world.domain.memory.persistence import RecentMemoryRecord
 from fictional_world.domain.phases.records import PhaseRunRecord
+from fictional_world.domain.seed.records import (
+    CharacterCardVersionRecord,
+    LocationRecord,
+    WorldConfigRecord,
+)
 from fictional_world.domain.tasks.budget import RequestBudgetRecord
 from fictional_world.domain.tasks.task_run import TaskRun
 from fictional_world.domain.world.records import (
@@ -29,10 +34,12 @@ from fictional_world.domain.world.records import (
 )
 from fictional_world.infrastructure.database.models import (
     AggregateVersionRow,
+    CharacterCardVersionRow,
     CharacterRow,
     CharacterStateRow,
     EntityRow,
     EventEffectRow,
+    LocationRow,
     ObservationRow,
     OutboxMessageRow,
     PhaseRunRow,
@@ -40,6 +47,7 @@ from fictional_world.infrastructure.database.models import (
     RequestBudgetLedgerRow,
     TaskRunRow,
     WorldClockRow,
+    WorldConfigRow,
     WorldEventRow,
     WorldRow,
 )
@@ -337,6 +345,73 @@ def outbox_to_record(row: OutboxMessageRow) -> OutboxMessageRecord:
         claim_expires_at=row.claim_expires_at,
         created_at=row.created_at,
         completed_at=row.completed_at,
+    )
+
+
+def location_to_record(row: LocationRow) -> LocationRecord:
+    tags = tuple(row.environment_tags) if row.environment_tags else ()
+    return LocationRecord(
+        entity_id=row.entity_id,
+        parent_location_id=row.parent_location_id,
+        location_type=row.location_type,
+        region_code=row.region_code,
+        coordinate_x=row.coordinate_x,
+        coordinate_y=row.coordinate_y,
+        elevation=row.elevation,
+        capacity=row.capacity,
+        owner_entity_id=row.owner_entity_id,
+        environment_tags=tags,
+        canonical_description=row.canonical_description,
+        visual_profile_version=int(row.visual_profile_version),
+        version=int(row.version),
+    )
+
+
+def config_to_record(row: WorldConfigRow) -> WorldConfigRecord:
+    phases = row.detailed_phase_names
+    if isinstance(phases, list):
+        phase_tuple = tuple(str(item) for item in cast(list[object], phases))
+    else:
+        phase_tuple = ()
+    return WorldConfigRecord(
+        id=row.id,
+        world_id=row.world_id,
+        config_version=int(row.config_version),
+        is_active=bool(row.is_active),
+        effective_from_phase_index=int(row.effective_from_phase_index),
+        detailed_phase_names=phase_tuple,
+        max_days=int(row.max_days),
+        max_generations=int(row.max_generations),
+        plot_armour_level=Decimal(str(row.plot_armour_level)),
+        director_privileges=_json_obj(row.director_privileges),
+        image_budget_per_day=int(row.image_budget_per_day),
+        macro_simulation_policy=_json_obj(row.macro_simulation_policy),
+        content_policy_version=row.content_policy_version,
+        created_event_id=row.created_event_id,
+        created_at=row.created_at,
+    )
+
+
+def card_to_record(row: CharacterCardVersionRow) -> CharacterCardVersionRecord:
+    return CharacterCardVersionRecord(
+        id=row.id,
+        character_id=row.character_id,
+        version_number=int(row.version_number),
+        identity=_json_obj(row.identity),
+        backstory=row.backstory,
+        appearance=_json_obj(row.appearance),
+        personality_traits=_json_obj(row.personality_traits),
+        values=_json_obj(row.values),
+        fears=_json_obj(row.fears),
+        desires=_json_obj(row.desires),
+        boundaries=_json_obj(row.boundaries),
+        voice_profile=_json_obj(row.voice_profile),
+        initial_capabilities=_json_obj(row.initial_capabilities),
+        secret_manifest=_json_obj(row.secret_manifest),
+        change_summary=row.change_summary,
+        source_event_id=row.source_event_id,
+        content_hash=row.content_hash,
+        created_at=row.created_at,
     )
 
 

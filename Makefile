@@ -53,4 +53,4 @@ migrate:
 	uv run alembic -c backend/alembic.ini upgrade head
 
 seed:
-	@echo "S0-CONTENT-001 not landed yet: uv run python scripts/seed_world.py"
+	uv run python scripts/seed_world.py

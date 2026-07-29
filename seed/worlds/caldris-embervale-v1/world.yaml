@@ -1,0 +1,13 @@
+world:
+  key: world/caldris
+  slug: caldris
+  name: Caldris
+  premise: >-
+    Caldris is a late-medieval fantasy world shaped by Lumen, an ambient force
+    that can be patterned into Resonance magic. The world is recovering from the
+    Ashfall, a celestial event eighty-three years ago.
+  language: en
+  content_rating: young_adult_soft_dark
+  active_region_id: region/embervale-march
+  max_days: 36500
+  max_generations: 3

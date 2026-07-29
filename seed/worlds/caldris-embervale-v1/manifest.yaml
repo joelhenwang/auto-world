@@ -1,0 +1,21 @@
+seed_id: caldris-embervale-v1
+seed_version: 1
+schema_version: 1
+content_version: 1
+world_name: Caldris
+active_region_name: Embervale March
+language: en
+rating: young_adult_soft_dark
+original_content: true
+license: project_private_original
+namespace_uuid: "2ddfdc14-a971-5f68-beb9-7b95eed45d8e"
+created_at: "2026-07-29T00:00:00Z"
+compatible_stages: [0, 1, 2, 3, 4, 5]
+required_files:
+  - world.yaml
+  - calendar.yaml
+  - locations.yaml
+  - initial-beliefs.yaml
+  - characters/mira-talren.yaml
+  - characters/dain-arcen.yaml
+  - fixtures/stage0.yaml

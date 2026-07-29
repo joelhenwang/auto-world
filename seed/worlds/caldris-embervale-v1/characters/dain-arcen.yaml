@@ -1,0 +1,50 @@
+character:
+  key: character/dain-arcen
+  focus_role: main
+  canonical_name: Dain Arcen
+  pronouns: he/him
+  age: 24
+  species: human
+  culture: embervale-marcher
+  occupation: probationary bridge warden
+  current_location: location/veycross/cinder-lantern-inn
+
+identity:
+  formative_history: >-
+    Dain enlisted with the Wardens after a flood year on the east road. He is
+    careful with reports and uneasy when superiors prefer cleanliness over
+    uncertain warnings.
+
+appearance:
+  height_cm: 178
+  build: solid
+  hair: black, cropped
+  eyes: brown
+  clothing: warden grey cloak over travel leathers
+
+psychology:
+  traits:
+    conscientiousness: 0.71
+    agreeableness: 0.40
+  values:
+    - {label: protect_travellers, weight: 0.82}
+  fears:
+    - {label: failing_a_patrol, weight: 0.55}
+  desires:
+    - {label: earn_full_warden_standing, weight: 0.78}
+
+expression:
+  register: formal and measured
+  humour: rare
+
+resources:
+  stamina: 62
+  mana: 20
+  energy: 68
+  hunger: 22
+  pain: 0
+  stress: 28
+  social_need: 30
+  valence: 0.0
+  arousal: 0.2
+  dominance: 0.05
