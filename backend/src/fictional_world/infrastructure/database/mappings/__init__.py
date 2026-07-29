@@ -6,6 +6,7 @@ from fictional_world.infrastructure.database.mappings.records import (
     apply_clock,
     apply_phase,
     apply_world,
+    budget_to_record,
     character_state_to_record,
     character_to_record,
     clock_to_record,
@@ -16,6 +17,7 @@ from fictional_world.infrastructure.database.mappings.records import (
     outbox_to_record,
     parse_aggregate_key,
     phase_to_record,
+    task_to_record,
     world_to_record,
 )
 
@@ -25,6 +27,7 @@ __all__ = [
     "apply_clock",
     "apply_phase",
     "apply_world",
+    "budget_to_record",
     "character_state_to_record",
     "character_to_record",
     "clock_to_record",
@@ -35,5 +38,6 @@ __all__ = [
     "outbox_to_record",
     "parse_aggregate_key",
     "phase_to_record",
+    "task_to_record",
     "world_to_record",
 ]

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
+from datetime import datetime, timedelta
 from typing import Protocol
 from uuid import UUID
 
@@ -19,6 +20,8 @@ from fictional_world.domain.events.persistence import (
 from fictional_world.domain.knowledge.persistence import ObservationPersistenceRecord
 from fictional_world.domain.memory.persistence import RecentMemoryRecord
 from fictional_world.domain.phases.records import PhaseRunRecord
+from fictional_world.domain.tasks.budget import RequestBudgetRecord
+from fictional_world.domain.tasks.task_run import TaskRun
 from fictional_world.domain.world.records import (
     AggregateVersionRecord,
     WorldClockRecord,
@@ -158,9 +161,98 @@ class OutboxRepository(Protocol):
 
     async def find_by_idempotency_key(self, key: str) -> OutboxMessageRecord | None: ...
 
+    async def get(self, message_id: UUID) -> OutboxMessageRecord | None: ...
+
     async def insert_many(
         self, messages: Sequence[OutboxMessageRecord]
     ) -> Sequence[OutboxMessageRecord]: ...
+
+    async def claim_available(
+        self,
+        *,
+        worker_id: str,
+        lease_duration: timedelta,
+        now: datetime,
+        limit: int = 1,
+    ) -> Sequence[OutboxMessageRecord]: ...
+
+    async def complete(
+        self,
+        message_id: UUID,
+        *,
+        worker_id: str,
+        now: datetime,
+    ) -> OutboxMessageRecord: ...
+
+
+class TaskRepository(Protocol):
+    async def get(self, task_id: UUID) -> TaskRun | None: ...
+
+    async def find_by_idempotency_key(self, key: str) -> TaskRun | None: ...
+
+    async def insert(self, task: TaskRun) -> TaskRun: ...
+
+    async def add_dependency(self, task_id: UUID, depends_on_task_id: UUID) -> None: ...
+
+    async def list_dependencies(self, task_id: UUID) -> Sequence[UUID]: ...
+
+    async def claim_available(
+        self,
+        *,
+        worker_id: str,
+        lease_duration: timedelta,
+        now: datetime,
+        limit: int = 1,
+    ) -> Sequence[TaskRun]: ...
+
+    async def heartbeat(
+        self,
+        task_id: UUID,
+        *,
+        worker_id: str,
+        lease_duration: timedelta,
+        now: datetime,
+    ) -> TaskRun: ...
+
+    async def mark_running(self, task_id: UUID, *, worker_id: str, now: datetime) -> TaskRun: ...
+
+    async def complete_success(
+        self,
+        task_id: UUID,
+        *,
+        worker_id: str,
+        now: datetime,
+        result_reference: Mapping[str, object] | None = None,
+    ) -> TaskRun: ...
+
+    async def fail_or_retry(
+        self,
+        task_id: UUID,
+        *,
+        worker_id: str,
+        now: datetime,
+        error_code: str,
+        error_detail: Mapping[str, object] | None,
+        retry_delay: timedelta,
+    ) -> TaskRun: ...
+
+    async def cancel(self, task_id: UUID, *, now: datetime) -> TaskRun: ...
+
+
+class BudgetRepository(Protocol):
+    async def get(self, reservation_id: UUID) -> RequestBudgetRecord | None: ...
+
+    async def find_by_reservation_key(self, key: str) -> RequestBudgetRecord | None: ...
+
+    async def reserve(self, record: RequestBudgetRecord) -> RequestBudgetRecord: ...
+
+    async def consume(self, reservation_id: UUID, *, now: datetime) -> RequestBudgetRecord: ...
+
+    async def release(self, reservation_id: UUID) -> RequestBudgetRecord: ...
+
+    async def expire_due(
+        self, *, now: datetime, limit: int = 100
+    ) -> Sequence[RequestBudgetRecord]: ...
 
 
 class UnitOfWork(Protocol):
@@ -172,6 +264,8 @@ class UnitOfWork(Protocol):
     recent_memories: RecentMemoryRepository
     aggregate_versions: AggregateVersionRepository
     outbox: OutboxRepository
+    tasks: TaskRepository
+    budgets: BudgetRepository
 
     async def __aenter__(self) -> UnitOfWork: ...
 
