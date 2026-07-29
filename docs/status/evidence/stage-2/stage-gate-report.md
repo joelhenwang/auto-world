@@ -1,10 +1,10 @@
 # Stage 2 Gate Report — Coherent Seven-Day World
 
 **Decision:** PASS
-**Report date:** 20260729T231538Z
+**Report date:** 20260729T231801Z
 **Stage owner:** parent coding agent
 **QA owner:** S2-QA-001 subagent
-**Tested integration commit:** `96fa898cee73a5f86378c4e72d2ebf5aa5d484df`
+**Tested integration commit:** `e87fa14ddecd4dd44a2b18f6bb78b98a72dd363f`
 **Release candidate:** `cursor/s2-qa-001-gate-085f`
 **Previous verified stage:** Stage 1 first complete day (FROZEN)
 **Environment/profile:** Linux cloud agent, fake provider default, PostgreSQL 16 + pgvector
@@ -22,7 +22,7 @@ See `version-manifest.json`.
 
 | Component | Version/hash |
 |---|---|
-| Git commit | `96fa898cee73a5f86378c4e72d2ebf5aa5d484df` |
+| Git commit | `e87fa14ddecd4dd44a2b18f6bb78b98a72dd363f` |
 | Alembic head | `0004_stage2_continuity_tables` |
 | uv.lock | `c43c220b…` |
 | frontend lock | `22002950…` |

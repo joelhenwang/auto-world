@@ -105,4 +105,4 @@ uv run python scripts/run_stage2_gate.py
 | 2026-07-29 | S1-DB-001 additive migration `0003_stage1_action_scene_tables` | `0002_core_stage0_tables` | `0003_stage1_action_scene_tables` | S1-* | parent (merged PR #19) |
 | 2026-07-29 | Stage 1 gate merge → freeze Stage 1 contracts | candidate | FROZEN @ `7727c7f` | S2-* | parent |
 | 2026-07-29 | S2-DB-001 additive migration `0004_stage2_continuity_tables` | `0003_stage1_action_scene_tables` | `0004_stage2_continuity_tables` | S2-* | parent |
-| 2026-07-29 | Stage 2 gate → freeze Stage 2 contracts | candidate | FROZEN @ S2-QA-001 tip | S3-* | QA automated PASS; parent merge pending |
+| 2026-07-29 | Stage 2 gate → freeze Stage 2 contracts | candidate | FROZEN @ `e87fa14` (S2-QA-001) | S3-* | QA automated PASS; parent merge pending |
