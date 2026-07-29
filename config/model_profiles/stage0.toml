@@ -1,0 +1,56 @@
+# Stage 0 model profiles — versioned IDs only (no mutable "default").
+
+[[profiles]]
+profile_id = "stage0-character-decision-v1"
+provider_kind = "fake"
+model_slug = "nvidia/nemotron-3-super-120b-a12b:free"
+role = "character_decision"
+enabled = true
+context_limit = 262144
+application_input_limit = 32768
+max_output_tokens = 1200
+supports_json_schema = true
+supports_tools = false
+supports_seed = true
+supports_streaming = false
+supports_embeddings = false
+sampling_profile_id = "samp-character-decision-v1"
+privacy_class = "synthetic_fiction"
+capability_probe_version = "stage0-1"
+
+[[profiles]]
+profile_id = "stage0-semantic-validator-v1"
+provider_kind = "fake"
+model_slug = "nvidia/nemotron-3-super-120b-a12b:free"
+role = "semantic_validator"
+enabled = true
+context_limit = 262144
+application_input_limit = 32768
+max_output_tokens = 700
+supports_json_schema = true
+supports_tools = false
+supports_seed = true
+supports_streaming = false
+supports_embeddings = false
+sampling_profile_id = "samp-validator-v1"
+privacy_class = "synthetic_fiction"
+capability_probe_version = "stage0-1"
+
+[[profiles]]
+profile_id = "stage0-embedding-v1"
+provider_kind = "fake"
+model_slug = "nvidia/nemotron-3-embed-1b:free"
+role = "embedding"
+enabled = true
+context_limit = 8192
+application_input_limit = 8192
+max_output_tokens = 0
+supports_json_schema = false
+supports_tools = false
+supports_seed = false
+supports_streaming = false
+supports_embeddings = true
+embedding_dimensions = 2048
+sampling_profile_id = "samp-embedding-none"
+privacy_class = "synthetic_fiction"
+capability_probe_version = "stage0-1"

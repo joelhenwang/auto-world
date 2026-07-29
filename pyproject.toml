@@ -7,6 +7,9 @@ requires-python = ">=3.12,<3.13"
 dependencies = [
     "pydantic>=2.10,<3",
     "pydantic-settings>=2.7,<3",
+    "sqlalchemy[asyncio]>=2.0.36,<3",
+    "alembic>=1.14,<2",
+    "psycopg[binary]>=3.2,<4",
 ]
 
 [dependency-groups]
@@ -50,9 +53,10 @@ extend-exclude = [
 select = ["E", "F", "I", "B", "UP", "SIM", "ASYNC", "RUF", "C4", "DTZ", "T20", "S"]
 
 [tool.ruff.lint.per-file-ignores]
-"backend/tests/**" = ["S101"]
-"scripts/**" = ["T20"]
+"scripts/**" = ["T20", "S603", "S607"]
+"backend/tests/**" = ["S101", "S603", "S607"]
 "tools/**" = ["T20"]
+"backend/migrations/**" = ["I001"]
 
 [tool.ruff.format]
 quote-style = "double"
