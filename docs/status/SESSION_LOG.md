@@ -44,3 +44,33 @@ Clean worktree on feature branch; S0-ENG-001 ready to merge. Parallel follow-ons
 ### Handoff
 
 `docs/handoffs/2026-07-29_S0-ENG-001_repository-bootstrap.md`
+
+## 2026-07-29T12:46:00Z — S0-ENG-002 / S0-DOM-001 / S0-QA-001 integrated
+
+**Agent/person:** parent coding agent
+**Branch/worktree:** `cursor/s0-eng002-dom001-qa001-09ce`
+**Task IDs:** `S0-ENG-002`, `S0-DOM-001`, `S0-QA-001`
+**Starting HEAD:** `f65fb4ab18c780c351aba479a4ec276d258052c4`
+**Ending HEAD:** pending tip after handoff commit
+
+### Intended outcome
+
+Land configuration/static quality, domain contracts, and test harness in one PR.
+
+### Completed
+
+- Domain contracts + JSON schemas; settings/profiles/validation; Ruff/basedpyright strict/pre-commit.
+- Fake clock/random/model gateway, network block, postgres testcontainer, scenario harness skeleton.
+- ASSUMP-S0-001 / DEC-2026-002–003 recorded.
+
+### Verification
+
+```bash
+uv sync && uv run ruff format --check . && uv run ruff check . && uv run basedpyright
+uv run pytest   # 17 passed (+ postgres with docker.sock access)
+uv run python scripts/generate_json_schemas.py
+```
+
+### Handoff
+
+`docs/handoffs/2026-07-29_S0-ENG002-DOM001-QA001.md`
