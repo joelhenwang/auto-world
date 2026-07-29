@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import subprocess
 import sys
 from datetime import UTC, datetime
@@ -46,6 +47,11 @@ def main() -> int:
     EVIDENCE.mkdir(parents=True, exist_ok=True)
     stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
     failures = 0
+
+    if not os.environ.get("ALEMBIC_DATABASE_URL"):
+        os.environ["ALEMBIC_DATABASE_URL"] = (
+            "postgresql+psycopg://fictional_world:change-me-local@127.0.0.1:5432/fictional_world"
+        )
 
     failures += _run(
         ["uv", "run", "ruff", "check", "backend", "scripts", "tools"],

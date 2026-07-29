@@ -1,0 +1,6 @@
++ uv run alembic -c /workspace/backend/alembic.ini heads
+0002_core_stage0_tables (head)
++ uv run alembic -c /workspace/backend/alembic.ini upgrade head
++ uv run alembic -c /workspace/backend/alembic.ini downgrade -1
++ uv run alembic -c /workspace/backend/alembic.ini upgrade head
+verify_migrations: ok

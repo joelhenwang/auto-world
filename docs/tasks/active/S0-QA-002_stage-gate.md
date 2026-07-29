@@ -1,6 +1,6 @@
 # `S0-QA-002` — Stage 0 gate and review
 
-**Stage:** 0 | **Workstream:** QA | **Status:** IN_PROGRESS | **Priority:** P0  
+**Stage:** 0 | **Workstream:** QA | **Status:** IN_REVIEW | **Priority:** P0  
 **Owner:** parent agent | **Branch:** `cursor/s0-qa002-stage-gate-09ce`  
 **Upstream:** `b45b6d5` | **Depends:** all Stage 0 tasks  
 **AGENTS conceptual branch:** `task/S0-QA-002-stage-gate`

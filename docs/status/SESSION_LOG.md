@@ -134,3 +134,26 @@ uv run ruff check backend scripts && uv run ruff format --check backend scripts 
 ### Handoff
 
 `docs/handoffs/2026-07-29_S0-API001-OPS001.md`
+
+## 2026-07-29T17:45:02Z — S0-QA-002 Stage 0 gate
+
+**Agent/person:** parent coding agent
+**Branch/worktree:** `cursor/s0-qa002-stage-gate-09ce`
+**Task IDs:** `S0-QA-002`
+**Starting HEAD:** `b45b6d5`
+**Ending HEAD:** pending tip after handoff commit
+
+### Intended outcome
+
+Stage 0 hard exit gate evidence, foundation scenario, fault/architecture/security checks, contract freeze.
+
+### Completed
+
+- Foundation scenario harness + fault/architecture/security tests
+- Evidence bundle + gate report (PASS)
+- CONTRACT_FREEZE → FROZEN
+- 99 passed full suite via `scripts/run_stage0_gate.py`
+
+### Handoff
+
+`docs/handoffs/2026-07-29_S0-QA002.md`
