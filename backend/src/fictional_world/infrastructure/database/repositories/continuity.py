@@ -15,6 +15,7 @@ from fictional_world.domain.continuity.persistence import (
     DiaryEntryPersistenceRecord,
     GoalPersistenceRecord,
     HookPersistenceRecord,
+    NarrativeMetricPersistenceRecord,
     NpcLifecyclePersistenceRecord,
     NpcProfilePersistenceRecord,
     PlanPersistenceRecord,
@@ -37,6 +38,7 @@ from fictional_world.infrastructure.database.mappings.continuity_records import 
     diary_entry_to_record,
     goal_to_record,
     hook_to_record,
+    narrative_metric_to_record,
     npc_lifecycle_to_record,
     npc_profile_to_record,
     plan_step_to_record,
@@ -53,6 +55,7 @@ from fictional_world.infrastructure.database.models.continuity import (
     DiaryEntryRow,
     GoalRow,
     HookRow,
+    NarrativeMetricRow,
     NpcLifecycleRow,
     NpcProfileRow,
     PlanRow,
@@ -461,6 +464,13 @@ class SqlAlchemyHookRepository:
         row = await self._session.get(HookRow, hook_id)
         return hook_to_record(row) if row is not None else None
 
+    async def get_by_key(self, world_id: UUID, hook_key: str) -> HookPersistenceRecord | None:
+        result = await self._session.execute(
+            select(HookRow).where(HookRow.world_id == world_id, HookRow.hook_key == hook_key)
+        )
+        row = result.scalar_one_or_none()
+        return hook_to_record(row) if row is not None else None
+
     async def insert(self, hook: HookPersistenceRecord) -> HookPersistenceRecord:
         row = HookRow(
             id=hook.id,
@@ -482,6 +492,26 @@ class SqlAlchemyHookRepository:
         await self._session.flush()
         return hook_to_record(row)
 
+    async def update(self, hook: HookPersistenceRecord) -> HookPersistenceRecord:
+        row = await self._session.get(HookRow, hook.id)
+        if row is None:
+            msg = f"hook {hook.id} not found"
+            raise LookupError(msg)
+        row.hook_key = hook.hook_key
+        row.title = hook.title
+        row.status = hook.status
+        row.premise = hook.premise
+        row.prerequisites = dict(hook.prerequisites)
+        row.scheduled_window = hook.scheduled_window
+        row.involved_entity_ids = list(hook.involved_entity_ids)
+        row.disclosure_state = hook.disclosure_state
+        row.cooldown_until_phase = hook.cooldown_until_phase
+        row.director_profile_key = hook.director_profile_key
+        row.source_event_id = hook.source_event_id
+        row.version = hook.version
+        await self._session.flush()
+        return hook_to_record(row)
+
     async def list_for_world(
         self, world_id: UUID, *, status: str | None = None
     ) -> Sequence[HookPersistenceRecord]:
@@ -490,6 +520,42 @@ class SqlAlchemyHookRepository:
             stmt = stmt.where(HookRow.status == status)
         result = await self._session.execute(stmt.order_by(HookRow.created_at.asc()))
         return [hook_to_record(row) for row in result.scalars().all()]
+
+
+class SqlAlchemyNarrativeMetricRepository:
+    def __init__(self, session: AsyncSession) -> None:
+        self._session = session
+
+    async def insert(
+        self, metric: NarrativeMetricPersistenceRecord
+    ) -> NarrativeMetricPersistenceRecord:
+        row = NarrativeMetricRow(
+            id=metric.id,
+            world_id=metric.world_id,
+            metric_key=metric.metric_key,
+            metric_value=metric.metric_value,
+            window_start_phase=metric.window_start_phase,
+            window_end_phase=metric.window_end_phase,
+            payload=dict(metric.payload),
+        )
+        self._session.add(row)
+        await self._session.flush()
+        return narrative_metric_to_record(row)
+
+    async def list_for_world(
+        self,
+        world_id: UUID,
+        *,
+        metric_key: str | None = None,
+        limit: int = 50,
+    ) -> Sequence[NarrativeMetricPersistenceRecord]:
+        stmt = select(NarrativeMetricRow).where(NarrativeMetricRow.world_id == world_id)
+        if metric_key is not None:
+            stmt = stmt.where(NarrativeMetricRow.metric_key == metric_key)
+        result = await self._session.execute(
+            stmt.order_by(NarrativeMetricRow.recorded_at.desc()).limit(limit)
+        )
+        return [narrative_metric_to_record(row) for row in result.scalars().all()]
 
 
 class SqlAlchemyNpcRepository:

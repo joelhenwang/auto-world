@@ -216,3 +216,16 @@ class DayRunPersistenceRecord(StrictContract):
     recovery_snapshot_id: UUID | None = None
     idempotency_key: str = Field(min_length=1, max_length=200)
     version: int = Field(default=0, ge=0)
+
+
+class NarrativeMetricPersistenceRecord(StrictContract):
+    """Append-only pacing / Director trigger metric sample."""
+
+    id: UUID
+    world_id: UUID
+    metric_key: str = Field(min_length=1, max_length=200)
+    metric_value: Decimal
+    window_start_phase: int = Field(ge=0)
+    window_end_phase: int = Field(ge=0)
+    payload: JsonObject = Field(default_factory=dict)
+    recorded_at: datetime | None = None
