@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import cast
 from uuid import UUID
 
 from fictional_world.agents._pipeline import (
@@ -33,7 +34,11 @@ _ALLOWED_ACTIONS = frozenset(ActionFamily(value) for value in STAGE1_ACTION_FAMI
 
 @dataclass(frozen=True, slots=True)
 class ReactionGraphInput:
-    """Authority for one reactor responding to one perceived attempt."""
+    """Authority for one reactor responding to one perceived attempt.
+
+    ``participant_ids`` makes multi-party scenes explicit. An empty set preserves
+    Stage 1 two-party behaviour (envelope is ``allowed_entity_ids`` alone).
+    """
 
     context: SealedContextPackage
     scene_id: UUID
@@ -41,6 +46,7 @@ class ReactionGraphInput:
     perceived_attempt: ActionProposal
     remaining_beat_budget: int
     allowed_entity_ids: frozenset[UUID]
+    participant_ids: frozenset[UUID] = frozenset()
     model_profile_id: str = "stage0-character_reaction-v1"
 
 
@@ -56,6 +62,13 @@ def _validate_input(graph_input: ReactionGraphInput) -> None:
         raise ValueError("perceived attempt actor is not allowed")
     if not 1 <= graph_input.remaining_beat_budget <= 12:
         raise ValueError("remaining beat budget must be between 1 and 12")
+    if graph_input.participant_ids:
+        if package.observer_id not in graph_input.participant_ids:
+            raise ValueError("reactor must be listed among scene participants")
+        if graph_input.perceived_attempt.actor_id not in graph_input.participant_ids:
+            raise ValueError("perceived attempt actor must be a scene participant")
+        if not graph_input.participant_ids.issubset(graph_input.allowed_entity_ids):
+            raise ValueError("participant_ids must be a subset of allowed_entity_ids")
 
 
 def _render_request(
@@ -77,24 +90,32 @@ def _render_request(
             None if attempt.target_location_id is None else str(attempt.target_location_id)
         ),
     }
+    package_scene = sections.get(ContextSectionId.SCENE_WORKING, {})
+    if isinstance(package_scene, dict):
+        scene_state = cast(dict[str, object], package_scene).copy()
+    else:
+        scene_state = {"scene_working": package_scene}
+    if graph_input.participant_ids:
+        scene_state["participant_ids"] = sorted(str(value) for value in graph_input.participant_ids)
+    allowed_ids: dict[str, object] = {
+        "scene_id": str(graph_input.scene_id),
+        "reaction_request_id": str(graph_input.reaction_request_id),
+        "triggering_attempt_id": str(attempt.decision_request_id),
+        "reactor_id": str(graph_input.context.observer_id),
+        "entity_ids": sorted(str(value) for value in graph_input.allowed_entity_ids),
+        "action_families": list(STAGE1_ACTION_FAMILIES),
+    }
+    if graph_input.participant_ids:
+        allowed_ids["participant_ids"] = sorted(str(value) for value in graph_input.participant_ids)
     variables = {
         "reactor_identity": json_text(sections.get(ContextSectionId.STABLE_IDENTITY, {})),
         "perceived_attempt": json_text(perceived_attempt),
-        "scene_state": json_text(sections.get(ContextSectionId.SCENE_WORKING, {})),
+        "scene_state": json_text(scene_state),
         "capabilities": json_text(sections.get(ContextSectionId.CAPABILITIES, {})),
         "prepared_actions": json_text([]),
         "relationship_context": json_text(sections.get(ContextSectionId.RELATIONSHIPS, [])),
         "remaining_beat_budget": str(graph_input.remaining_beat_budget),
-        "allowed_ids": json_text(
-            {
-                "scene_id": str(graph_input.scene_id),
-                "reaction_request_id": str(graph_input.reaction_request_id),
-                "triggering_attempt_id": str(attempt.decision_request_id),
-                "reactor_id": str(graph_input.context.observer_id),
-                "entity_ids": sorted(str(value) for value in graph_input.allowed_entity_ids),
-                "action_families": list(STAGE1_ACTION_FAMILIES),
-            }
-        ),
+        "allowed_ids": json_text(allowed_ids),
     }
     rendered = renderer.render(registry.load("character_reaction_v1"), variables)
     sampling = sampling_for_role(ModelRole.CHARACTER_REACTION).to_options(
@@ -138,9 +159,17 @@ def _validate_proposal(proposal: ReactionProposal, graph_input: ReactionGraphInp
         raise ValueError("reaction action family is outside Stage 1")
     if not set(proposal.target_entity_ids).issubset(graph_input.allowed_entity_ids):
         raise ValueError("reaction contains an unknown target entity")
+    if graph_input.participant_ids and not set(proposal.target_entity_ids).issubset(
+        graph_input.participant_ids
+    ):
+        raise ValueError("reaction targets a non-participant in a multi-party scene")
     for outcome in proposal.desired_outcomes:
         if not set(outcome.target_entity_ids).issubset(graph_input.allowed_entity_ids):
             raise ValueError("reaction outcome contains an unknown target entity")
+        if graph_input.participant_ids and not set(outcome.target_entity_ids).issubset(
+            graph_input.participant_ids
+        ):
+            raise ValueError("reaction outcome targets a non-participant")
 
 
 def _fallback(graph_input: ReactionGraphInput) -> ReactionProposal:
