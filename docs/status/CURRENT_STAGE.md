@@ -1,55 +1,53 @@
 # Current Stage
 
-**Updated:** 2026-07-29T20:14:53Z
-**Updated by:** integration subagent
+**Updated:** 2026-07-29T20:55:00Z  
+**Updated by:** parent coding agent  
 **Repository:** autonomous-fictional-world  
-**Current branch:** `cursor/s1-integration-5704`
-**Stage:** 1 — First Complete Three-Phase Day | **Status:** GATE_PASS_PENDING_REVIEW
+**Current branch:** `main` @ `7727c7f` (Stage 1 merged)  
+**Stage:** 1 — First Complete Three-Phase Day | **Status:** GATE_PASS / FROZEN  
+**Next stage:** 2 — Coherent Seven-Day World | **Status:** READY (not started)
 
 ## Current objective
 
-Parent-review and merge the completed Stage 1 vertical slice. The deterministic
-S1-QA-001 gate passes at `ada3783`; evidence is under
-`docs/status/evidence/stage-1/`.
+Stage 1 is merged and frozen. **Do not implement Stage 2 in this handoff.**  
+The next parent agent owns Stage 2 kickoff + implementation from handbook `27`.
 
-Active characters: Mira Talren + Dain Arcen. Enabled phases: dawn → morning → evening.
+## Stage 1 (done)
 
-## Active tasks
+| Task ID | Status |
+|---|---|
+| S0-QA-002 … S1-QA-001 | VERIFIED on main |
 
-| Task ID | Status | Notes |
-|---|---|---|
-| S0-QA-002 | VERIFIED on main | Stage 0 GATE_PASS; contracts FROZEN |
-| S1-DB-001 | VERIFIED | migration `0003`, scene/stream repositories |
-| S1-KNOW-001 | VERIFIED | sealed perspective context + leakage tests |
-| S1-MODEL-001 | VERIFIED | prompts/schemas/fake corpus |
-| S1-GRAPH-001 | VERIFIED | bounded character decision pipeline |
-| S1-SIM-001 | VERIFIED | activation/scene assembly |
-| S1-GRAPH-002 | VERIFIED | reaction/resolution pipelines |
-| S1-SIM-002 | VERIFIED | atomic idempotent scene commit |
-| S1-ORCH-001 | VERIFIED | first-day workflow, budget, pause/resume |
-| S1-API-001 | VERIFIED | REST/OpenAPI/WebSocket/player commands |
-| S1-UI-001 | VERIFIED | Vue runtime client; tests/build green |
-| S1-QA-001 | GATE_PASS | 154 offline tests; fake scenario + live smoke pass |
+Evidence: `docs/status/evidence/stage-1/stage-gate-report.md` (**PASS**)  
+Merge: PR #19 → `7727c7f`
 
-## Stage 0 freeze (do not break)
+## Stage 2 prep (docs only — no code yet)
 
-- Canon = PostgreSQL + committed `world_event`; models propose only
-- Idempotency on all externally retried ops
-- No DB transaction across remote model calls
-- Character knowledge isolation
-- Default tests: no live OpenRouter (`openrouter_live` opt-in)
-- Additive contract changes only; new Alembic revisions
+| Artefact | Path |
+|---|---|
+| Kickoff handoff | `docs/handoffs/2026-07-29_S2-KICKOFF.md` |
+| First DB packet | `docs/tasks/active/S2-DB-001_persistence-extensions.md` |
+| Seed packet | `docs/tasks/active/S2-CONTENT-001_seed-expansion.md` |
+| Contract freeze | `docs/status/CONTRACT_FREEZE.md` (Stages 0–1 FROZEN) |
 
-## Latest verified baseline
+## Stage 1 freeze (do not break)
+
+- Simultaneous intents from one sealed snapshot
+- Perspective-safe `SealedContextPackage` v1
+- Atomic `SceneCommitService` / typed effects only
+- Stage 1 OpenAPI/WS core additive-only
+- Migration head `0003` — new Alembic revisions only
+- Default tests: no live OpenRouter
+
+## Baseline before Stage 2 coding
 
 ```bash
-sudo chmod 666 /var/run/docker.sock
+git checkout main && git pull
+uv sync
+sudo service docker start && sudo chmod 666 /var/run/docker.sock
 uv run python scripts/run_stage1_gate.py
-# PASS: 154 passed, 2 live tests deselected; frontend 5 passed + build
-uv run pytest -o addopts='' -m openrouter_live \
-  backend/tests/live/test_stage1_openrouter.py \
-  backend/tests/unit/test_openrouter_errors.py
-# PASS: 2 passed
 ```
 
-Evidence: `docs/status/evidence/stage-1/stage-gate-report.md`
+## Next agent
+
+Implement Stage 2 per `27_STAGE_2_SEVEN_DAY_WORLD.md`, starting with freeze confirmation + `S2-DB-001` / `S2-CONTENT-001`. Use the Stage 2 parent kickoff prompt in the S2 kickoff handoff.

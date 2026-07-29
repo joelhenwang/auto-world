@@ -200,3 +200,34 @@ running for follow-up inspection.
 ### Handoff
 
 `docs/handoffs/2026-07-29_S1-INTEGRATION-001.md`
+
+---
+
+## 2026-07-29T20:55:00Z — Stage 1 closed; Stage 2 handoff prepared (docs only)
+
+**Agent/person:** parent coding agent  
+**Branch/worktree:** `cursor/s2-kickoff-freeze-5704`  
+**Task IDs:** Stage 1 freeze sign-off; Stage 2 kickoff docs (no Stage 2 code)  
+**Starting HEAD:** `7727c7f` (main after PR #19)
+
+### Intended outcome
+
+Mark Stage 1 FROZEN on main, refresh status/integration docs, draft S2-DB-001 and
+S2-CONTENT-001 packets, and leave a copy-paste Stage 2 parent kickoff prompt in
+`docs/handoffs/2026-07-29_S2-KICKOFF.md`. No Stage 2 implementation.
+
+### Completed
+
+- `CONTRACT_FREEZE.md` — Stages 0–1 FROZEN at `7727c7f`
+- `CURRENT_STAGE.md` / `INTEGRATION_STATUS.md` — Stage 2 READY
+- Task packets `S2-DB-001`, `S2-CONTENT-001`
+- Kickoff handoff with full next-agent prompt
+
+### Verification
+
+Docs only; Stage 1 gate already PASS on main. Next agent re-runs
+`uv run python scripts/run_stage1_gate.py` before coding.
+
+### Handoff
+
+`docs/handoffs/2026-07-29_S2-KICKOFF.md`
