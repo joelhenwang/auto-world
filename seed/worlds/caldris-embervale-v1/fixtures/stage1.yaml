@@ -1,0 +1,25 @@
+fixture: stage1
+description: Stage 1 first complete day — Mira and Dain across three detailed phases.
+active_locations:
+  - location/veycross/cinder-lantern-inn
+  - location/veycross/market-square
+  - location/veycross/east-bridge
+active_characters:
+  - character/mira-talren
+  - character/dain-arcen
+enabled_phases:
+  - dawn
+  - morning
+  - evening
+enabled_effects:
+  - wait
+  - observe
+  - rest
+  - move_entity
+  - spend_resource
+  - advance_activity
+  - create_claim
+  - create_recent_memory
+  - schedule_effect
+phase_count: 3
+model_calls: fake_only

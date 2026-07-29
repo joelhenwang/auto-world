@@ -117,6 +117,8 @@ def _render_request(
             "phase_snapshot_id": str(graph_input.context.phase_snapshot_id),
             "scene_id": str(graph_input.scene_id),
             "triggering_attempt_id": str(attempt.decision_request_id),
+            "reactor_id": str(graph_input.context.observer_id),
+            "attempt_actor_id": str(attempt.actor_id),
             "prompt_id": rendered.prompt_id,
             "prompt_hash": rendered.content_hash,
         },

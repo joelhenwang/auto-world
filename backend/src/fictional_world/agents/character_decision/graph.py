@@ -117,6 +117,11 @@ def _render_request(
             "context_package_id": str(graph_input.context.package_id),
             "context_hash": graph_input.context.package_hash,
             "phase_snapshot_id": str(graph_input.context.phase_snapshot_id),
+            "phase_label": graph_input.phase_label,
+            "actor_id": str(graph_input.context.observer_id),
+            "allowed_entity_ids": ",".join(
+                sorted(str(value) for value in graph_input.allowed_entity_ids)
+            ),
             "prompt_id": rendered.prompt_id,
             "prompt_hash": rendered.content_hash,
         },

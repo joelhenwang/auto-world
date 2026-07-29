@@ -242,6 +242,10 @@ def _render_request(
             "scene_id": str(scene.scene_id),
             "phase_id": str(scene.phase_id),
             "snapshot_id": str(scene.snapshot_id),
+            "participant_ids": ",".join(str(value) for value in scene.participant_ids),
+            "attempt_ids": ",".join(
+                str(proposal.decision_request_id) for proposal in graph_input.proposals
+            ),
             "prompt_id": rendered.prompt_id,
             "prompt_hash": rendered.content_hash,
         },

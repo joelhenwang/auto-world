@@ -19,3 +19,4 @@ required_files:
   - characters/mira-talren.yaml
   - characters/dain-arcen.yaml
   - fixtures/stage0.yaml
+  - fixtures/stage1.yaml

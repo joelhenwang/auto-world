@@ -405,3 +405,17 @@ async def import_caldris_stage0(
 ) -> SeedImportResult:
     pack = load_seed_pack(root or DEFAULT_SEED_ROOT, fixture_name=fixture_name)
     return await SeedImporter(uow).import_pack(pack, fixture_name=fixture_name)
+
+
+async def import_caldris_stage1(
+    uow: UnitOfWork,
+    *,
+    root: Path | None = None,
+) -> SeedImportResult:
+    """Import the dual-character Stage 1 fixture."""
+
+    return await import_caldris_stage0(
+        uow,
+        root=root,
+        fixture_name="stage1",
+    )
