@@ -8,6 +8,7 @@ from uuid import UUID, uuid4
 from fastapi import APIRouter, HTTPException, Query, status
 
 from fictional_world.application.context.types import STAGE1_ACTION_FAMILIES
+from fictional_world.application.orchestration.phase_runner import DeterministicPhaseRunner
 from fictional_world.application.orchestration.protocol import PauseMode, PhaseAdvanceResult
 from fictional_world.domain.scenes.persistence import (
     PlayerControlSessionRecord,
@@ -45,7 +46,9 @@ async def _require_world(world_id: UUID, uow: UowDep) -> None:
         raise not_found("world", world_id)
 
 
-async def _runner(uow: UowDep, settings: SettingsDep, world_id: UUID):
+async def _runner(
+    uow: UowDep, settings: SettingsDep, world_id: UUID
+) -> DeterministicPhaseRunner:
     return await phase_runner_for_world(uow, settings, world_id)
 
 
@@ -71,7 +74,8 @@ async def advance_stage1_world(
     settings: SettingsDep,
 ) -> AdvancePhaseResponse:
     await _require_world(world_id, uow)
-    result = await _runner(uow, settings, world_id).request_phase_advance(world_id)
+    runner = await _runner(uow, settings, world_id)
+    result = await runner.request_phase_advance(world_id)
     await uow.commit()
     return _advance_response(result)
 
@@ -84,7 +88,8 @@ async def pause_stage1_world(
     settings: SettingsDep,
 ) -> RuntimeCommandResponse:
     await _require_world(world_id, uow)
-    await _runner(uow, settings, world_id).pause_world(world_id, PauseMode(request.mode))
+    runner = await _runner(uow, settings, world_id)
+    await runner.pause_world(world_id, PauseMode(request.mode))
     await uow.commit()
     return RuntimeCommandResponse(world_id=world_id, status="paused")
 
@@ -96,7 +101,8 @@ async def resume_stage1_world(
     settings: SettingsDep,
 ) -> RuntimeCommandResponse:
     await _require_world(world_id, uow)
-    result = await _runner(uow, settings, world_id).resume_world(world_id)
+    runner = await _runner(uow, settings, world_id)
+    result = await runner.resume_world(world_id)
     await uow.commit()
     return RuntimeCommandResponse(
         world_id=world_id,
