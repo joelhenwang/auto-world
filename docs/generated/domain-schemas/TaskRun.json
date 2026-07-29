@@ -1,7 +1,7 @@
 {
   "$defs": {
     "TaskState": {
-      "description": "Operational task lifecycle states (Stage 0 surface for S0-ORCH-001).",
+      "description": "Operational task lifecycle states (Stage 0 surface for S0-ORCH-001).\n\nHandbook READY maps to ``pending``; LEASED maps to ``claimed``.\nRetry delay uses ``available_at`` rather than a separate WAITING_RETRY state.",
       "enum": [
         "pending",
         "claimed",
@@ -291,6 +291,50 @@
               },
               {
                 "type": "boolean"
+              },
+              {
+                "items": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "type": "object"
               },
               {
                 "type": "null"

@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from collections.abc import Mapping
 from datetime import datetime
 from uuid import UUID
 
@@ -33,7 +32,7 @@ class TaskRun(StrictContract):
     lease_owner: str | None = Field(default=None, max_length=200)
     lease_expires_at: datetime | None = None
     heartbeat_at: datetime | None = None
-    result_reference: Mapping[str, JsonScalar] | None = None
+    result_reference: JsonObject | None = None
     error_code: str | None = Field(default=None, max_length=100)
     error_detail: JsonObject | None = None
     created_at: datetime

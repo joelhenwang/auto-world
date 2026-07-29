@@ -110,9 +110,7 @@ class SeedImporter:
                     parsed: object = json.loads(keys_raw)
                     if isinstance(parsed, dict):
                         typed_items = cast(dict[object, object], parsed)
-                        seed_keys = {
-                            str(key): str(value) for key, value in typed_items.items()
-                        }
+                        seed_keys = {str(key): str(value) for key, value in typed_items.items()}
                 return SeedImportResult(
                     world_id=existing.id,
                     event_id=prior.id,

@@ -7,6 +7,9 @@ from typing import cast
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
+from fictional_world.infrastructure.database.repositories.budgets import (
+    SqlAlchemyBudgetRepository,
+)
 from fictional_world.infrastructure.database.repositories.characters import (
     SqlAlchemyCharacterRepository,
 )
@@ -18,6 +21,7 @@ from fictional_world.infrastructure.database.repositories.support import (
     SqlAlchemyOutboxRepository,
     SqlAlchemyRecentMemoryRepository,
 )
+from fictional_world.infrastructure.database.repositories.tasks import SqlAlchemyTaskRepository
 from fictional_world.infrastructure.database.repositories.worlds import SqlAlchemyWorldRepository
 
 
@@ -35,6 +39,8 @@ class SqlAlchemyUnitOfWork:
         self.recent_memories = cast(SqlAlchemyRecentMemoryRepository, None)
         self.aggregate_versions = cast(SqlAlchemyAggregateVersionRepository, None)
         self.outbox = cast(SqlAlchemyOutboxRepository, None)
+        self.tasks = cast(SqlAlchemyTaskRepository, None)
+        self.budgets = cast(SqlAlchemyBudgetRepository, None)
 
     async def __aenter__(self) -> SqlAlchemyUnitOfWork:
         self.session = self._session_factory()
@@ -46,6 +52,8 @@ class SqlAlchemyUnitOfWork:
         self.recent_memories = SqlAlchemyRecentMemoryRepository(self.session)
         self.aggregate_versions = SqlAlchemyAggregateVersionRepository(self.session)
         self.outbox = SqlAlchemyOutboxRepository(self.session)
+        self.tasks = SqlAlchemyTaskRepository(self.session)
+        self.budgets = SqlAlchemyBudgetRepository(self.session)
         return self
 
     async def __aexit__(

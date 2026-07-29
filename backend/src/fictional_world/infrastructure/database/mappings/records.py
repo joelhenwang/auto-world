@@ -11,6 +11,7 @@ from fictional_world.domain.characters.records import (
     CharacterStateRecord,
     EntityRecord,
 )
+from fictional_world.domain.common.enums import BudgetStatus, TaskState
 from fictional_world.domain.events.persistence import (
     EventEffectRecord,
     OutboxMessageRecord,
@@ -24,6 +25,8 @@ from fictional_world.domain.seed.records import (
     LocationRecord,
     WorldConfigRecord,
 )
+from fictional_world.domain.tasks.budget import RequestBudgetRecord
+from fictional_world.domain.tasks.task_run import TaskRun
 from fictional_world.domain.world.records import (
     AggregateVersionRecord,
     WorldClockRecord,
@@ -41,6 +44,8 @@ from fictional_world.infrastructure.database.models import (
     OutboxMessageRow,
     PhaseRunRow,
     RecentMemoryRow,
+    RequestBudgetLedgerRow,
+    TaskRunRow,
     WorldClockRow,
     WorldConfigRow,
     WorldEventRow,
@@ -407,6 +412,49 @@ def card_to_record(row: CharacterCardVersionRow) -> CharacterCardVersionRecord:
         source_event_id=row.source_event_id,
         content_hash=row.content_hash,
         created_at=row.created_at,
+    )
+
+
+def task_to_record(row: TaskRunRow) -> TaskRun:
+    return TaskRun(
+        id=row.id,
+        task_type=row.task_type,
+        world_id=row.world_id,
+        phase_run_id=row.phase_run_id,
+        scene_id=row.scene_id,
+        subject_entity_id=row.subject_entity_id,
+        state=TaskState(row.state),
+        priority=int(row.priority),
+        payload=_json_obj(row.payload),
+        idempotency_key=row.idempotency_key,
+        attempt_count=int(row.attempt_count),
+        max_attempts=int(row.max_attempts),
+        available_at=row.available_at,
+        lease_owner=row.lease_owner,
+        lease_expires_at=row.lease_expires_at,
+        heartbeat_at=row.heartbeat_at,
+        result_reference=_json_obj(row.result_reference) if row.result_reference else None,
+        error_code=row.error_code,
+        error_detail=_json_obj(row.error_detail) if row.error_detail else None,
+        created_at=row.created_at,
+        completed_at=row.completed_at,
+    )
+
+
+def budget_to_record(row: RequestBudgetLedgerRow) -> RequestBudgetRecord:
+    return RequestBudgetRecord(
+        id=row.id,
+        reservation_key=row.reservation_key,
+        required_request_count=int(row.required_request_count),
+        provider_kind=row.provider_kind,
+        model_slug=row.model_slug,
+        status=BudgetStatus(row.status),
+        world_id=row.world_id,
+        phase_run_id=row.phase_run_id,
+        task_run_id=row.task_run_id,
+        reserved_at=row.reserved_at,
+        expires_at=row.expires_at,
+        consumed_at=row.consumed_at,
     )
 
 
