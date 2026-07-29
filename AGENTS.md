@@ -414,6 +414,7 @@ As of this writing the repository contains **only the normative handbook** (`aut
   - **The daemon does NOT auto-start.** Init is `tini` (no systemd), so start it once per session with `sudo service docker start`, then use `sudo docker ...` (the `ubuntu` user is not in the `docker` group). Verify with `sudo docker info`.
   - The daemon is configured for this VM with the `fuse-overlayfs` storage driver (`/etc/docker/daemon.json`) and `iptables-legacy`; do not switch it to `overlay2`/nftables — containers will fail to start.
   - Verified working: `docker compose` brings up `pgvector/pgvector:pg16` healthy and `CREATE EXTENSION vector` succeeds.
+ - **Testcontainers (S0-QA-001+):** the `ubuntu` user is not in the `docker` group. If `PermissionError` occurs talking to `/var/run/docker.sock`, run `sudo chmod 666 /var/run/docker.sock` once per session (or equivalent group fix) before `uv run pytest` integration tests that start containers.
 
 ### Verifying the environment today
 

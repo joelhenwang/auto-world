@@ -1,16 +1,17 @@
 # Thin aliases — underlying commands remain the source of truth (handbook 20 §7).
-# Targets that depend on later Stage 0 tasks are stubs that print guidance.
 
-.PHONY: help bootstrap sync test lint format typecheck check compose-config compose-up compose-down migrate seed
+.PHONY: help bootstrap sync test lint format typecheck check compose-config compose-up compose-down migrate seed export-schemas pre-commit
 
 help:
-	@echo "S0-ENG-001 bootstrap aliases:"
+	@echo "Stage 0 aliases:"
 	@echo "  make sync            uv sync"
-	@echo "  make test            pytest (suite grows in S0-QA-001+)"
+	@echo "  make test            pytest (default excludes live/soak)"
 	@echo "  make lint            ruff check"
 	@echo "  make format          ruff format --check"
-	@echo "  make typecheck       basedpyright (strict gate is S0-ENG-002)"
-	@echo "  make check           format + lint"
+	@echo "  make typecheck       basedpyright (strict)"
+	@echo "  make check           format + lint + typecheck"
+	@echo "  make export-schemas  generate domain JSON Schemas"
+	@echo "  make pre-commit      run pre-commit on all files"
 	@echo "  make compose-config  validate compose.yaml"
 	@echo "  make compose-up      start postgres"
 	@echo "  make compose-down    stop compose services"
@@ -34,7 +35,13 @@ format:
 typecheck:
 	uv run basedpyright
 
-check: format lint
+check: format lint typecheck
+
+export-schemas:
+	uv run python scripts/generate_json_schemas.py
+
+pre-commit:
+	uv run pre-commit run --all-files
 
 compose-config:
 	docker compose config
