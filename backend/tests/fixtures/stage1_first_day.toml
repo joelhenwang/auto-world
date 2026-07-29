@@ -1,0 +1,31 @@
+scenario_id = "stage1-first-day-v1"
+seed = "caldris-embervale-v1:stage1"
+model_script = "fake/stage1-first-day-v1"
+random_script = "deterministic"
+
+[[steps]]
+action = "seed_caldris_stage1"
+
+[[steps]]
+action = "advance_stage1_phase"
+
+[[steps]]
+action = "advance_stage1_phase"
+
+[[steps]]
+action = "advance_stage1_phase"
+
+[[assertions]]
+invariant = "three_phase_day"
+
+[[assertions]]
+invariant = "two_intents_one_snapshot"
+
+[[assertions]]
+invariant = "isolated_perspective_records"
+
+[[assertions]]
+invariant = "no_duplicate_events"
+
+[[assertions]]
+invariant = "bounded_fake_model_calls"
