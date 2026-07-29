@@ -52,4 +52,4 @@ uv run python scripts/run_stage2_gate.py   # Stage 2 hard exit
 
 ## Current failures
 
-None. Stage 2 automated gate PASS; human rubric worksheet blank (non-blocking).
+None. S2-CHAR-001 unit/domain tests green; full suite green on CHAR branch.
