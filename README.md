@@ -1,12 +1,38 @@
-# Autonomous Fictional World — Build Handbook
+# Autonomous Fictional World
 
 **Version:** 1.0  
 **Date:** 2026-07-29  
-**Status:** Normative build specification for Stages 0–5  
+**Status:** Implementation repository + normative build handbook (Stages 0–5)  
 **Audience:** Coding agents, subagents, reviewers, and the human project owner  
-**Primary language:** Python 3.12  
+**Primary language:** Python 3.12 (`uv`)  
 **Initial inference:** OpenRouter free endpoints  
 **Long-term inference target:** Local model servers across two Strix Halo systems plus one RTX 4060 Ti image worker
+
+---
+
+## Development quickstart
+
+Stage 0 bootstrap (`S0-ENG-001`) provides the Python package skeleton and a PostgreSQL+pgvector Compose service. Domain logic, migrations, and seed import arrive in later Stage 0 tasks.
+
+```bash
+cp .env.example .env
+uv sync
+uv run python -c "import fictional_world"
+docker compose up -d postgres   # optional; validates with: docker compose config
+```
+
+Useful aliases (thin wrappers; see `Makefile`):
+
+```bash
+make sync
+make check          # ruff format --check + ruff check
+make compose-config
+make compose-up
+```
+
+Normative layout and standards: `autonomous_world_build_handbook_v1_0/19_*.md` and `20_*.md`. Agent operating rules: `AGENTS.md`. Current stage status: `docs/status/CURRENT_STAGE.md`.
+
+Never commit `.env`. Default tests must not call external model providers.
 
 ---
 
