@@ -1,0 +1,428 @@
+{
+  "manifest_version": 1,
+  "handbook": {
+    "name": "Autonomous Fictional World — Build Handbook",
+    "version": "1.0",
+    "date": "2026-07-29",
+    "entry_point": "00_README.md",
+    "review_report": "40_REVIEW_REPORT.md",
+    "document_range": "00–40",
+    "document_count": 41,
+    "total_document_bytes": 832409,
+    "total_document_lines": 27146,
+    "total_approximate_words": 99522
+  },
+  "generated_at_utc": "2026-07-29T10:07:41.634878+00:00",
+  "initial_model_profile": {
+    "text": "nvidia/nemotron-3-super-120b-a12b:free",
+    "embedding": "nvidia/nemotron-3-embed-1b:free",
+    "provider": "OpenRouter",
+    "runtime_capability_and_quota_probe_required": true
+  },
+  "validation": {
+    "status": "PASS",
+    "markdown_files": 41,
+    "total_bytes": 832409,
+    "total_lines": 27146,
+    "total_words": 99522,
+    "requirements": 152,
+    "adrs": 30,
+    "task_packets": 80,
+    "code_blocks": {
+      "text": 388,
+      "bash": 19,
+      "mermaid": 6,
+      "python": 16,
+      "yaml": 43,
+      "sql": 3,
+      "http": 2,
+      "json": 9,
+      "dotenv": 1,
+      "markdown": 1
+    },
+    "errors": [],
+    "warnings": [
+      "01_AGENTS.md: placeholder-like tokens require human interpretation: ['<task-id>']",
+      "15_PROMPT_CATALOG_AND_OUTPUT_CONTRACTS.md: placeholder-like tokens require human interpretation: ['<TASK>']",
+      "24_MASTER_IMPLEMENTATION_PLAN.md: placeholder-like tokens require human interpretation: ['<task-id>']",
+      "31_PARALLEL_SUBAGENT_AND_SESSION_PLAYBOOK.md: placeholder-like tokens require human interpretation: ['<task-id>']",
+      "40_REVIEW_REPORT.md: placeholder-like tokens require human interpretation: ['<task-id>', '<TASK>']"
+    ]
+  },
+  "integrity": {
+    "hash_algorithm": "SHA-256",
+    "checksum_file": "CHECKSUMS.sha256",
+    "checksum_scope": "all Markdown documents plus manifest.json; CHECKSUMS.sha256 excludes itself"
+  },
+  "documents": [
+    {
+      "order": 0,
+      "filename": "00_README.md",
+      "title": "Autonomous Fictional World — Build Handbook",
+      "bytes": 14565,
+      "lines": 258,
+      "approximate_words": 1644,
+      "sha256": "8cd63eefa3bb6233d316f50b5b80c443be483fad34d1a165ed1180544cc5ee6b"
+    },
+    {
+      "order": 1,
+      "filename": "01_AGENTS.md",
+      "title": "AGENTS.md — Coding-Agent Operating Contract",
+      "bytes": 14471,
+      "lines": 400,
+      "approximate_words": 1919,
+      "sha256": "18eefcd41cc72f0f0617ebd6db4b15d8cd5a04e5e32d8e6b24f65ffc263e17e5"
+    },
+    {
+      "order": 2,
+      "filename": "02_PROJECT_CHARTER_AND_REQUIREMENTS.md",
+      "title": "Project Charter and Requirements",
+      "bytes": 28256,
+      "lines": 616,
+      "approximate_words": 3526,
+      "sha256": "e7fa1bf410bb1f4fa3e6ddd7712a160e658d39eda878b5c60b8376bd0c000c74"
+    },
+    {
+      "order": 3,
+      "filename": "03_GLOSSARY_AND_ARCHITECTURE_DECISIONS.md",
+      "title": "Glossary and Architecture Decisions",
+      "bytes": 24908,
+      "lines": 541,
+      "approximate_words": 3018,
+      "sha256": "408b89462f7ecf673e3235b128ce1aed02a2dfc13cd7438be574e22ca5635b75"
+    },
+    {
+      "order": 4,
+      "filename": "04_SYSTEM_ARCHITECTURE.md",
+      "title": "System Architecture",
+      "bytes": 20353,
+      "lines": 590,
+      "approximate_words": 2492,
+      "sha256": "cde58b2bf9387d63e7f660bab3764f4314d7a9e707d0bbe4a69445f4320bb3bd"
+    },
+    {
+      "order": 5,
+      "filename": "05_DOMAIN_CONTRACTS_AND_STATE_MACHINES.md",
+      "title": "Autonomous Fictional World — Domain Contracts and Simulation State Machines",
+      "bytes": 67233,
+      "lines": 1916,
+      "approximate_words": 7828,
+      "sha256": "fa6585f4795c3c079942c719e9d1eca2279aa517b418dc13f18af9503df7827c"
+    },
+    {
+      "order": 6,
+      "filename": "06_PERSISTENCE_DATABASE_AND_EVENT_LOG.md",
+      "title": "Persistence, Database, and Canonical Event Log",
+      "bytes": 39926,
+      "lines": 1328,
+      "approximate_words": 4275,
+      "sha256": "5b34902c66c1eb31b50158223029219cd54f4abc75f6cd2273edf7db4111c2af"
+    },
+    {
+      "order": 7,
+      "filename": "07_SIMULATION_ENGINE_PHASES_SCENES_AND_TIME.md",
+      "title": "Simulation Engine: Time, Phases, Scenes, and Resolution Flow",
+      "bytes": 22497,
+      "lines": 753,
+      "approximate_words": 2792,
+      "sha256": "84bb3fc7a332a0cb90540cf299886887e2de1ae4916005542be893f0c5ec3984"
+    },
+    {
+      "order": 8,
+      "filename": "08_CHARACTERS_PSYCHOLOGY_RELATIONSHIPS_AND_AGENCY.md",
+      "title": "Characters, Psychology, Relationships, and Agency",
+      "bytes": 28058,
+      "lines": 1041,
+      "approximate_words": 3345,
+      "sha256": "fc3449d37f976d275a313fc472a38c026c933e4e941a50d026c3b45bb1ac3af4"
+    },
+    {
+      "order": 9,
+      "filename": "09_WORLD_DIRECTOR_NPCS_LORE_MAP_AND_GENERATIONS.md",
+      "title": "World Director, NPCs, Lore, Map, Factions, and Generations",
+      "bytes": 24128,
+      "lines": 937,
+      "approximate_words": 2814,
+      "sha256": "2fc88e671c3c5cb29dfedfd7098ec28e0e52a5c6c9cbb63474f4cda9cbf7f75a"
+    },
+    {
+      "order": 10,
+      "filename": "10_STATS_SKILLS_MAGIC_COMBAT_AND_INJURIES.md",
+      "title": "Stats, Skills, Magic, Combat, Conditions, and Injuries",
+      "bytes": 21932,
+      "lines": 922,
+      "approximate_words": 2581,
+      "sha256": "f7014efca85f23b7b8d0204a6fe5cf4c9b69f3f68720549c50129ac64e6ffd42"
+    },
+    {
+      "order": 11,
+      "filename": "11_PERCEPTION_CONTEXT_MEMORY_AND_RAG.md",
+      "title": "Perception, Context, Memory, Beliefs, and RAG",
+      "bytes": 24243,
+      "lines": 947,
+      "approximate_words": 2918,
+      "sha256": "1578255408ca0603e5b78b16dbfb0323d4eea6d6eea69831afe21bd14c710d45"
+    },
+    {
+      "order": 12,
+      "filename": "12_MODEL_GATEWAY_OPENROUTER_AND_LOCAL_MIGRATION.md",
+      "title": "Model Gateway, OpenRouter Integration, Quotas, and Local Migration",
+      "bytes": 23168,
+      "lines": 886,
+      "approximate_words": 2669,
+      "sha256": "3ab786fde300fdd7dd67cf68861070f545e0300866d31ff3b68f230bd8cfdc1d"
+    },
+    {
+      "order": 13,
+      "filename": "13_LANGGRAPH_AGENT_WORKFLOWS.md",
+      "title": "LangGraph Agent Workflows",
+      "bytes": 18189,
+      "lines": 703,
+      "approximate_words": 2117,
+      "sha256": "2af4fd34a7659691bffd0c9ef2c9634deb86fc95e6056184fbefaa0d45b86388"
+    },
+    {
+      "order": 14,
+      "filename": "14_ORCHESTRATION_JOBS_CONCURRENCY_AND_DISTRIBUTION.md",
+      "title": "Orchestration, Jobs, Concurrency, Recovery, and Distribution",
+      "bytes": 20917,
+      "lines": 749,
+      "approximate_words": 2544,
+      "sha256": "ce0b0ee76ba31c74f7f89235828370ee829c10994a85a50fa6b7292fa6bb268d"
+    },
+    {
+      "order": 15,
+      "filename": "15_PROMPT_CATALOG_AND_OUTPUT_CONTRACTS.md",
+      "title": "Prompt Catalog and Model Output Contracts",
+      "bytes": 23325,
+      "lines": 672,
+      "approximate_words": 2879,
+      "sha256": "bf3f69c9a349bb831613e6cacfa30368a57c480c6c0954e0dd3767effd4aaa12"
+    },
+    {
+      "order": 16,
+      "filename": "16_IMAGE_PIPELINE_AND_VISUAL_CONTINUITY.md",
+      "title": "Image Pipeline and Visual Continuity",
+      "bytes": 18067,
+      "lines": 717,
+      "approximate_words": 2048,
+      "sha256": "453622234b4f385fdbb534912bcb4ec78977e20ea90acf596dbef9d52a1c245b"
+    },
+    {
+      "order": 17,
+      "filename": "17_BACKEND_API_AND_REALTIME_EVENTS.md",
+      "title": "Backend API and Realtime Events",
+      "bytes": 16473,
+      "lines": 628,
+      "approximate_words": 2021,
+      "sha256": "9f307933f43de4a4cb8f49df864c3b505accb1e8e9400162e6cd209729e8902f"
+    },
+    {
+      "order": 18,
+      "filename": "18_FRONTEND_UX_AND_USER_MODES.md",
+      "title": "Frontend UX, Visual-Novel Presentation, and User Modes",
+      "bytes": 16051,
+      "lines": 639,
+      "approximate_words": 1870,
+      "sha256": "3f5e3a03fc7c495a4c49323ff526371dc25e219c2aa85df7befe0935757d1299"
+    },
+    {
+      "order": 19,
+      "filename": "19_REPOSITORY_STRUCTURE_ENGINEERING_STANDARDS_AND_CONFIG.md",
+      "title": "Repository Structure, Engineering Standards, and Configuration",
+      "bytes": 21504,
+      "lines": 775,
+      "approximate_words": 2200,
+      "sha256": "92638ba8616a67fcc930ab2fe83e256f3a12540d895f83d0cb6c7c85349d4314"
+    },
+    {
+      "order": 20,
+      "filename": "20_LOCAL_DEVELOPMENT_DOCKER_CI_AND_DEPLOYMENT.md",
+      "title": "Local Development, Docker, CI, Release, and Deployment",
+      "bytes": 16034,
+      "lines": 639,
+      "approximate_words": 2067,
+      "sha256": "95a98ac94f10d046e4ccb403bd328bdc9215a331f680abf68de7e4039bcfb74e"
+    },
+    {
+      "order": 21,
+      "filename": "21_TESTING_EVALUATION_AND_QUALITY_GATES.md",
+      "title": "Testing, Evaluation, Fault Injection, and Quality Gates",
+      "bytes": 19697,
+      "lines": 823,
+      "approximate_words": 2425,
+      "sha256": "c31fe07c9324f8343de60139c94b4cc8f97ad19f77074af7ff9ffc97742ccc51"
+    },
+    {
+      "order": 22,
+      "filename": "22_OBSERVABILITY_SECURITY_PRIVACY_AND_OPERATIONS.md",
+      "title": "Observability, Security, Privacy, Content Safety, and Operations",
+      "bytes": 20170,
+      "lines": 794,
+      "approximate_words": 2390,
+      "sha256": "e371de8303dba6347c839ad3d1876ceca3150dbd7f2c917363357528c2014432"
+    },
+    {
+      "order": 23,
+      "filename": "23_INITIAL_WORLD_SEED_AND_CONTENT_AUTHORING.md",
+      "title": "Initial World Seed and Content Authoring",
+      "bytes": 41625,
+      "lines": 1439,
+      "approximate_words": 4954,
+      "sha256": "39c5c4130a3976ef3e62c68988a62cee9b7400c60faaad2baddefa07171c4b79"
+    },
+    {
+      "order": 24,
+      "filename": "24_MASTER_IMPLEMENTATION_PLAN.md",
+      "title": "Master Implementation Plan",
+      "bytes": 10974,
+      "lines": 371,
+      "approximate_words": 1449,
+      "sha256": "961e87b7fa5310a2dbd3042331e6622f8a113994914ed7d0df960b6e1ca990f0"
+    },
+    {
+      "order": 25,
+      "filename": "25_STAGE_0_FOUNDATION.md",
+      "title": "Stage 0 — Foundation and Deterministic Contracts",
+      "bytes": 11017,
+      "lines": 272,
+      "approximate_words": 1261,
+      "sha256": "2aa9de62d691b7335f16b3bf75b8e5034e0dcfe6ad991057bb7a39bfbbee703c"
+    },
+    {
+      "order": 26,
+      "filename": "26_STAGE_1_FIRST_COMPLETE_DAY.md",
+      "title": "Stage 1 — First Complete Three-Phase Day",
+      "bytes": 9612,
+      "lines": 249,
+      "approximate_words": 1159,
+      "sha256": "9d9c0889e0eb4fc732769f336bffb014d1e3355b1ef1ce62d9f5ed41ef8932ee"
+    },
+    {
+      "order": 27,
+      "filename": "27_STAGE_2_SEVEN_DAY_WORLD.md",
+      "title": "Stage 2 — Coherent Seven-Day World",
+      "bytes": 22501,
+      "lines": 759,
+      "approximate_words": 2709,
+      "sha256": "220779cc4d4a00ea7de5bcc621935f59060c9c03b4f0bf8ca5aef962757747ca"
+    },
+    {
+      "order": 28,
+      "filename": "28_STAGE_3_AUTONOMOUS_MONTH.md",
+      "title": "Stage 3 — Autonomous Month and Long-Term Coherence",
+      "bytes": 18015,
+      "lines": 531,
+      "approximate_words": 2092,
+      "sha256": "56d6eed67b1b4e6e0b42b88224cb82164b6c48ba6cf4e6f3deec34604aeb0c4d"
+    },
+    {
+      "order": 29,
+      "filename": "29_STAGE_4_LOCAL_DISTRIBUTION_AND_IMAGES.md",
+      "title": "Stage 4 — Local Distribution, Durable Orchestration, and Images",
+      "bytes": 16974,
+      "lines": 506,
+      "approximate_words": 2066,
+      "sha256": "76d70f4b56bbdc5fa17c954f723424373aa67933691f8ccef07d63d7a76c557e"
+    },
+    {
+      "order": 30,
+      "filename": "30_STAGE_5_GENERATIONS_AND_MACRO_SIMULATION.md",
+      "title": "Stage 5 — Three Generations and Macro Simulation",
+      "bytes": 16556,
+      "lines": 482,
+      "approximate_words": 1951,
+      "sha256": "a36b0d31fc114213fe324f0f14e2239426c21e133212a50e520ec233beca0940"
+    },
+    {
+      "order": 31,
+      "filename": "31_PARALLEL_SUBAGENT_AND_SESSION_PLAYBOOK.md",
+      "title": "Parallel Subagent and Multi-Session Playbook",
+      "bytes": 23202,
+      "lines": 808,
+      "approximate_words": 3003,
+      "sha256": "b21ad5cfc320b70ca186d4df042f6ec5f79fb7527550caf7e156bbc74c8eb3fa"
+    },
+    {
+      "order": 32,
+      "filename": "32_BACKLOG_TRACEABILITY_RISKS_AND_DEFINITION_OF_DONE.md",
+      "title": "Backlog, Requirements Traceability, Risk Register, and Definition of Done",
+      "bytes": 27832,
+      "lines": 484,
+      "approximate_words": 3470,
+      "sha256": "fa1b90f1bb59599ce9b10e5d46e669e5df9dfe27a4fef7b34d16c6e991b0c9d8"
+    },
+    {
+      "order": 33,
+      "filename": "33_REFERENCE_REGISTRY_AND_CHANGE_CONTROL.md",
+      "title": "Reference Registry, Version Policy, and Change Control",
+      "bytes": 15890,
+      "lines": 605,
+      "approximate_words": 1978,
+      "sha256": "378f2871d8707af9ce479f6d44f24de50beff1138de7e39d1a3f48b6032e3b77"
+    },
+    {
+      "order": 34,
+      "filename": "34_SESSION_HANDOFF_TEMPLATE.md",
+      "title": "Session / Task Handoff Template",
+      "bytes": 4681,
+      "lines": 214,
+      "approximate_words": 583,
+      "sha256": "51846ea080634262d33042283d8e4661540bcac45ff17c8f3e66a5ec4a3d3ef0"
+    },
+    {
+      "order": 35,
+      "filename": "35_TASK_PACKET_TEMPLATE.md",
+      "title": "Coding-Agent Task Packet Template",
+      "bytes": 6012,
+      "lines": 258,
+      "approximate_words": 710,
+      "sha256": "ab5d5521f9d26d5759cf8ff506320b54b08391c8870b826c0b29d6d96568e4b2"
+    },
+    {
+      "order": 36,
+      "filename": "36_PROJECT_STATUS_TEMPLATES.md",
+      "title": "Project Status and Contract-Freeze Templates",
+      "bytes": 11464,
+      "lines": 466,
+      "approximate_words": 1327,
+      "sha256": "b9580b43c876017d7c328aa1f6bcc1c8517d78e79d1485ae5aae1cda0e6874ec"
+    },
+    {
+      "order": 37,
+      "filename": "37_ADR_AND_CHANGE_REQUEST_TEMPLATES.md",
+      "title": "Architecture Decision and Change Request Templates",
+      "bytes": 7795,
+      "lines": 313,
+      "approximate_words": 884,
+      "sha256": "0389f4e370b08aa2c02f27ba6bf300f68b8de6d7ae945521bec530658f65ff94"
+    },
+    {
+      "order": 38,
+      "filename": "38_STAGE_GATE_REPORT_TEMPLATE.md",
+      "title": "Stage Gate Report Template",
+      "bytes": 8694,
+      "lines": 325,
+      "approximate_words": 944,
+      "sha256": "50916b4108ffd69f747630a686fdd711f469074c0065a7b69c06527724d641c7"
+    },
+    {
+      "order": 39,
+      "filename": "39_FRESH_AGENT_KICKOFF_AND_CONTEXT_PACK_TEMPLATE.md",
+      "title": "Fresh Agent Kickoff and Subagent Context-Pack Templates",
+      "bytes": 10423,
+      "lines": 264,
+      "approximate_words": 1356,
+      "sha256": "b00ececf2f88ea2c15ef01ad32db8050f94b826db89be656accfd9218bc16910"
+    },
+    {
+      "order": 40,
+      "filename": "40_REVIEW_REPORT.md",
+      "title": "Handbook Review Report",
+      "bytes": 24977,
+      "lines": 526,
+      "approximate_words": 3244,
+      "sha256": "cdb66d22c4b0e2ed39ea8d10ba32378bc50492fa2edec1f97cfa09632624d557"
+    }
+  ]
+}
