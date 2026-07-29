@@ -46,4 +46,4 @@ S2-DB-001 → S2-CONTENT-001 → (CHAR ‖ KNOW) → MEM ‖ WORLD* → SIM → 
 
 ## Current failures
 
-None. CHAR+KNOW merge conflicts resolved in status docs only.
+None. S2-CHAR-001 unit/domain tests green; full suite green on CHAR branch.
