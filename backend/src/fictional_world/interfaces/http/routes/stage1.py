@@ -31,7 +31,7 @@ from fictional_world.interfaces.http.dto import (
     StreamEventRead,
 )
 from fictional_world.interfaces.http.errors import conflict, not_found
-from fictional_world.testing import Stage1FakeModelGateway
+from fictional_world.interfaces.http.runtime import phase_runner_for_world
 
 router = APIRouter(prefix="/api/v1/worlds", tags=["stage1"])
 
@@ -46,17 +46,10 @@ async def _require_world(world_id: UUID, uow: UowDep) -> None:
         raise not_found("world", world_id)
 
 
-def _runner(uow: UowDep, settings: SettingsDep) -> DeterministicPhaseRunner:
-    if settings.model_gateway.provider_mode != "fake":
-        raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Stage 1 runtime API currently requires configured fake provider mode",
-        )
-    return DeterministicPhaseRunner(
-        uow,
-        model_gateway=Stage1FakeModelGateway(),
-        stage1=True,
-    )
+async def _runner(
+    uow: UowDep, settings: SettingsDep, world_id: UUID
+) -> DeterministicPhaseRunner:
+    return await phase_runner_for_world(uow, settings, world_id)
 
 
 def _advance_response(result: PhaseAdvanceResult) -> AdvancePhaseResponse:
@@ -81,7 +74,8 @@ async def advance_stage1_world(
     settings: SettingsDep,
 ) -> AdvancePhaseResponse:
     await _require_world(world_id, uow)
-    result = await _runner(uow, settings).request_phase_advance(world_id)
+    runner = await _runner(uow, settings, world_id)
+    result = await runner.request_phase_advance(world_id)
     await uow.commit()
     return _advance_response(result)
 
@@ -94,7 +88,8 @@ async def pause_stage1_world(
     settings: SettingsDep,
 ) -> RuntimeCommandResponse:
     await _require_world(world_id, uow)
-    await _runner(uow, settings).pause_world(world_id, PauseMode(request.mode))
+    runner = await _runner(uow, settings, world_id)
+    await runner.pause_world(world_id, PauseMode(request.mode))
     await uow.commit()
     return RuntimeCommandResponse(world_id=world_id, status="paused")
 
@@ -106,7 +101,8 @@ async def resume_stage1_world(
     settings: SettingsDep,
 ) -> RuntimeCommandResponse:
     await _require_world(world_id, uow)
-    result = await _runner(uow, settings).resume_world(world_id)
+    runner = await _runner(uow, settings, world_id)
+    result = await runner.resume_world(world_id)
     await uow.commit()
     return RuntimeCommandResponse(
         world_id=world_id,

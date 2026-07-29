@@ -155,6 +155,19 @@ class SqlAlchemyWorldRepository:
         await self._session.flush()
         return config_to_record(row)
 
+    async def get_active_config(self, world_id: UUID) -> WorldConfigRecord | None:
+        result = await self._session.execute(
+            select(WorldConfigRow)
+            .where(
+                WorldConfigRow.world_id == world_id,
+                WorldConfigRow.is_active.is_(True),
+            )
+            .order_by(WorldConfigRow.config_version.desc())
+            .limit(1)
+        )
+        row = result.scalar_one_or_none()
+        return config_to_record(row) if row is not None else None
+
     async def set_config_created_event(
         self, config_id: UUID, *, created_event_id: UUID
     ) -> WorldConfigRecord:

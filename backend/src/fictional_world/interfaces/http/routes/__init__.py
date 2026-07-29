@@ -1,5 +1,5 @@
 """HTTP route package."""
 
-from fictional_world.interfaces.http.routes import health, stage1, websocket, worlds
+from fictional_world.interfaces.http.routes import health, stage1, stage2, websocket, worlds
 
-__all__ = ["health", "stage1", "websocket", "worlds"]
+__all__ = ["health", "stage1", "stage2", "websocket", "worlds"]

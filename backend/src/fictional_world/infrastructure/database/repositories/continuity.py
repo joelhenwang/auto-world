@@ -611,6 +611,26 @@ class SqlAlchemyNpcRepository:
         await self._session.flush()
         return npc_lifecycle_to_record(row)
 
+    async def list_for_world(
+        self, world_id: UUID
+    ) -> Sequence[tuple[NpcProfilePersistenceRecord, NpcLifecyclePersistenceRecord | None]]:
+        result = await self._session.execute(
+            select(NpcProfileRow)
+            .where(NpcProfileRow.world_id == world_id)
+            .order_by(NpcProfileRow.display_name.asc())
+        )
+        profiles = list(result.scalars().all())
+        items: list[tuple[NpcProfilePersistenceRecord, NpcLifecyclePersistenceRecord | None]] = []
+        for profile_row in profiles:
+            lifecycle_row = await self._session.get(NpcLifecycleRow, profile_row.character_id)
+            items.append(
+                (
+                    npc_profile_to_record(profile_row),
+                    None if lifecycle_row is None else npc_lifecycle_to_record(lifecycle_row),
+                )
+            )
+        return items
+
 
 class SqlAlchemySummaryRepository:
     def __init__(self, session: AsyncSession) -> None:

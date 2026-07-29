@@ -52,6 +52,10 @@ class SqlAlchemyCharacterRepository:
         await self._session.flush()
         return entity_to_record(row)
 
+    async def get_entity(self, entity_id: UUID) -> EntityRecord | None:
+        row = await self._session.get(EntityRow, entity_id)
+        return entity_to_record(row) if row is not None else None
+
     async def insert_character(self, character: CharacterRecord) -> CharacterRecord:
         row = CharacterRow(
             entity_id=character.entity_id,
@@ -63,6 +67,10 @@ class SqlAlchemyCharacterRepository:
         self._session.add(row)
         await self._session.flush()
         return character_to_record(row)
+
+    async def get_character(self, character_id: UUID) -> CharacterRecord | None:
+        row = await self._session.get(CharacterRow, character_id)
+        return character_to_record(row) if row is not None else None
 
     async def get_state(self, character_id: UUID) -> CharacterStateRecord | None:
         row = await self._session.get(CharacterStateRow, character_id)
@@ -134,6 +142,15 @@ class SqlAlchemyCharacterRepository:
     async def get_location(self, entity_id: UUID) -> LocationRecord | None:
         row = await self._session.get(LocationRow, entity_id)
         return location_to_record(row) if row is not None else None
+
+    async def list_locations_for_world(self, world_id: UUID) -> Sequence[LocationRecord]:
+        result = await self._session.execute(
+            select(LocationRow)
+            .join(EntityRow, EntityRow.id == LocationRow.entity_id)
+            .where(EntityRow.world_id == world_id)
+            .order_by(LocationRow.entity_id.asc())
+        )
+        return [location_to_record(row) for row in result.scalars().all()]
 
     async def insert_card(self, card: CharacterCardVersionRecord) -> CharacterCardVersionRecord:
         row = CharacterCardVersionRow(

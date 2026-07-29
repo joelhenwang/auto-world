@@ -240,6 +240,28 @@ class SqlAlchemyTaskRepository:
         await self._session.flush()
         return task_to_record(row)
 
+    async def list_failures_for_world(
+        self,
+        world_id: UUID,
+        *,
+        limit: int = 50,
+    ) -> Sequence[TaskRun]:
+        result = await self._session.execute(
+            select(TaskRunRow)
+            .where(
+                TaskRunRow.world_id == world_id,
+                TaskRunRow.state.in_(
+                    [
+                        TaskState.FAILED.value,
+                        TaskState.DEAD_LETTER.value,
+                    ]
+                ),
+            )
+            .order_by(TaskRunRow.created_at.desc())
+            .limit(limit)
+        )
+        return [task_to_record(row) for row in result.scalars().all()]
+
     async def _require_lease(self, task_id: UUID, *, worker_id: str) -> TaskRunRow:
         row = await self._session.get(TaskRunRow, task_id, with_for_update=True)
         if row is None:
