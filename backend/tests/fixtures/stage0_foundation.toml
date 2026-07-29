@@ -1,0 +1,28 @@
+scenario_id = "stage0-foundation-v1"
+seed = "caldris-embervale-v1"
+model_script = "none"
+random_script = "none"
+
+[[steps]]
+action = "seed_caldris"
+
+[[steps]]
+action = "advance_phase"
+
+[[steps]]
+action = "reconcile"
+
+[[assertions]]
+invariant = "no_duplicate_events"
+
+[[assertions]]
+invariant = "phase_completed"
+
+[[assertions]]
+invariant = "snapshot_sealed"
+
+[[assertions]]
+invariant = "mira_memory_written"
+
+[[assertions]]
+invariant = "world_tick_present"
