@@ -4,7 +4,7 @@
 **Report date:** 2026-07-29T20:14:53Z
 **Stage owner:** parent coding agent
 **QA owner:** integration subagent
-**Tested integration commit:** `846fe53a44eef93fc03d7466150a6c59c4b4cca9`
+**Tested integration commit:** `ada3783e58ca9ec7f28fee1f3a709c80c8a3bfd3`
 **Release candidate:** `cursor/s1-integration-5704` pending parent merge/review
 **Previous verified stage:** Stage 0 foundation
 **Environment/profile:** Linux cloud agent, fake provider default, PostgreSQL 16 + pgvector
@@ -38,7 +38,7 @@ See `version-manifest.json`.
 
 | Component | Version/hash |
 |---|---|
-| Git commit | `846fe53a44eef93fc03d7466150a6c59c4b4cca9` |
+| Git commit | `ada3783e58ca9ec7f28fee1f3a709c80c8a3bfd3` |
 | Alembic head | `0003_stage1_action_scene_tables` |
 | uv lock | `c43c220b…5454e` |
 | frontend lock | `22002950…32ac` |
