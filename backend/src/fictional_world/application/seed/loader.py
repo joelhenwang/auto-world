@@ -33,6 +33,9 @@ class SeedPack(StrictContract):
     locations: tuple[dict[str, Any], ...]
     characters: dict[str, dict[str, Any]]
     beliefs: dict[str, Any]
+    relationships: tuple[dict[str, Any], ...] = ()
+    routes: tuple[dict[str, Any], ...] = ()
+    goals: tuple[dict[str, Any], ...] = ()
     fixture: dict[str, Any]
     file_bytes: dict[str, bytes]
 
@@ -40,6 +43,20 @@ class SeedPack(StrictContract):
 def _read_yaml(path: Path) -> Any:
     with path.open("r", encoding="utf-8") as handle:
         return yaml.safe_load(handle)
+
+
+def _optional_yaml_list(root: Path, relative: str, *, key: str) -> tuple[dict[str, Any], ...]:
+    path = root / relative
+    if not path.is_file():
+        return ()
+    doc = _read_yaml(path)
+    if not isinstance(doc, dict):
+        return ()
+    typed = cast(dict[str, Any], doc)
+    items = typed.get(key, [])
+    if not isinstance(items, list):
+        return ()
+    return tuple(cast(dict[str, Any], item) for item in cast(list[object], items))
 
 
 def load_seed_pack(root: Path, *, fixture_name: str = "stage0") -> SeedPack:
@@ -80,6 +97,11 @@ def load_seed_pack(root: Path, *, fixture_name: str = "stage0") -> SeedPack:
         file_bytes[f"characters/{path.name}"] = path.read_bytes()
 
     locations = tuple(cast(dict[str, Any], item) for item in locations_doc.get("locations", []))
+    relationships = _optional_yaml_list(root, "relationships.yaml", key="relationships")
+    routes = _optional_yaml_list(root, "routes.yaml", key="routes")
+    goals = _optional_yaml_list(root, "initial-goals.yaml", key="goals")
+    if (root / "relationships.yaml").is_file():
+        file_bytes["relationships.yaml"] = (root / "relationships.yaml").read_bytes()
     return SeedPack(
         root=root,
         manifest=manifest,
@@ -88,6 +110,9 @@ def load_seed_pack(root: Path, *, fixture_name: str = "stage0") -> SeedPack:
         locations=locations,
         characters=characters,
         beliefs=beliefs_doc,
+        relationships=relationships,
+        routes=routes,
+        goals=goals,
         fixture=fixture_doc,
         file_bytes=file_bytes,
     )

@@ -14,6 +14,14 @@ private_beliefs:
     proposition: His probationary captain cares more about clean reports than uncertain warnings.
     confidence: 0.58
     objective_status: partially_supported
+  - owner: character/iri-voss
+    proposition: The current marker anomalies resemble deliberate interference more than natural drift.
+    confidence: 0.36
+    objective_status: unresolved
+  - owner: character/torren-kest
+    proposition: The cracked route compass contains a nonstandard internal pattern.
+    confidence: 0.63
+    objective_status: true_but_incomplete
 
 director_only:
   - the old beacon contains an Ashfall-era pattern recorder, not a weapon

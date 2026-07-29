@@ -1,7 +1,7 @@
 seed_id: caldris-embervale-v1
 seed_version: 1
 schema_version: 1
-content_version: 1
+content_version: 2
 world_name: Caldris
 active_region_name: Embervale March
 language: en
@@ -15,8 +15,13 @@ required_files:
   - world.yaml
   - calendar.yaml
   - locations.yaml
+  - routes.yaml
   - initial-beliefs.yaml
+  - initial-goals.yaml
   - characters/mira-talren.yaml
   - characters/dain-arcen.yaml
+  - characters/iri-voss.yaml
+  - characters/torren-kest.yaml
   - fixtures/stage0.yaml
   - fixtures/stage1.yaml
+  - fixtures/stage2.yaml

@@ -1,0 +1,102 @@
+# Stage 2 travel graph (handbook 23 §13). Short walks use duration >= 1 and
+# small distance_units to satisfy DB constraints (base_duration_phases > 0,
+# distance_units > 0).
+routes:
+  - key: route/inn-to-market
+    origin: location/veycross/cinder-lantern-inn
+    destination: location/veycross/market-square
+    is_bidirectional: true
+    base_duration_phases: 1
+    distance_units: 0.1
+    danger: 0.01
+    danger_level: 0.01
+    status: active
+    terrain_tags: [street]
+
+  - key: route/market-to-east-bridge
+    origin: location/veycross/market-square
+    destination: location/veycross/east-bridge
+    is_bidirectional: true
+    base_duration_phases: 1
+    distance_units: 0.2
+    danger: 0.01
+    danger_level: 0.01
+    status: active
+    terrain_tags: [street, bridge_approach]
+
+  - key: route/market-to-lantern-annex
+    origin: location/veycross/market-square
+    destination: location/veycross/lantern-annex
+    is_bidirectional: true
+    base_duration_phases: 1
+    distance_units: 0.1
+    danger: 0.0
+    danger_level: 0.0
+    status: active
+    terrain_tags: [street]
+
+  - key: route/market-to-wardens-yard
+    origin: location/veycross/market-square
+    destination: location/veycross/wardens-yard
+    is_bidirectional: true
+    base_duration_phases: 1
+    distance_units: 0.15
+    danger: 0.0
+    danger_level: 0.0
+    status: active
+    terrain_tags: [street]
+
+  - key: route/market-to-river-forge
+    origin: location/veycross/market-square
+    destination: location/veycross/river-forge
+    is_bidirectional: true
+    base_duration_phases: 1
+    distance_units: 0.2
+    danger: 0.0
+    danger_level: 0.0
+    status: active
+    terrain_tags: [street, riverbank]
+
+  - key: route/market-to-lantern-ward
+    origin: location/veycross/market-square
+    destination: location/veycross/lantern-ward
+    is_bidirectional: true
+    base_duration_phases: 1
+    distance_units: 0.15
+    danger: 0.01
+    danger_level: 0.01
+    status: active
+    terrain_tags: [street, district]
+
+  - key: route/lantern-ward-to-north-road
+    origin: location/veycross/lantern-ward
+    destination: location/north-road/corridor
+    is_bidirectional: true
+    base_duration_phases: 1
+    distance_units: 1.0
+    danger: 0.08
+    danger_level: 0.08
+    status: active
+    terrain_tags: [muddy_road]
+
+  - key: route/north-road-to-old-beacon
+    origin: location/north-road/corridor
+    destination: location/north-road/old-beacon
+    is_bidirectional: true
+    base_duration_phases: 1
+    distance_units: 2.0
+    danger: 0.18
+    danger_level: 0.18
+    status: active
+    terrain_tags: [muddy_road, ashglass_ridge]
+
+  - key: route/market-to-ash-orchard
+    origin: location/veycross/market-square
+    destination: location/west-road/ash-orchard
+    is_bidirectional: true
+    base_duration_phases: 1
+    distance_units: 1.5
+    danger: 0.06
+    danger_level: 0.06
+    status: active
+    terrain_tags: [farm_road]

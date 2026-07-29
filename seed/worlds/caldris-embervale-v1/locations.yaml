@@ -29,3 +29,72 @@ locations:
       wardens during flood season.
     capacity: 80
     environment_tags: [bridge, road, warden]
+  - key: location/veycross/lantern-annex
+    name: Lantern Annex
+    type: building
+    region_code: embervale-march
+    parent: null
+    description: >-
+      Small Collegium archive, laboratory, and public map room used for Resonance
+      readings and marker reconciliation.
+    capacity: 30
+    environment_tags: [archive, collegium, resonance]
+  - key: location/veycross/river-forge
+    name: River Forge
+    type: building
+    region_code: embervale-march
+    parent: null
+    description: >-
+      Forge and repair shop powered by a water wheel, known for Lumen-instrument
+      work and careful ashglass handling.
+    capacity: 20
+    environment_tags: [forge, workshop, river]
+  - key: location/veycross/wardens-yard
+    name: Wardens' Yard
+    type: building
+    region_code: embervale-march
+    parent: null
+    description: >-
+      Training yard, stable, evidence store, and route-patrol office for the
+      Veycross Wardens.
+    capacity: 60
+    environment_tags: [warden, training, stable]
+  - key: location/veycross/lantern-ward
+    name: Lantern Ward
+    type: district
+    region_code: embervale-march
+    parent: null
+    description: >-
+      Mixed residential and workshop district around the Annex, lit by low Lumen
+      lanterns and used as a local hub for scholars and craftspeople.
+    capacity: 180
+    environment_tags: [district, residential, lantern]
+  - key: location/north-road/corridor
+    name: North Road
+    type: road
+    region_code: embervale-march
+    parent: null
+    description: >-
+      The north road corridor leaving Veycross toward the old beacon ridge,
+      muddy after storms and marked by faded Compact posts.
+    capacity: 40
+    environment_tags: [road, corridor, travel]
+  - key: location/north-road/old-beacon
+    name: Old North Beacon
+    type: landmark
+    region_code: embervale-march
+    parent: null
+    description: >-
+      Abandoned Ashfall-era signal tower two hours north by ordinary travel.
+    capacity: 12
+    environment_tags: [landmark, beacon, ashfall]
+  - key: location/west-road/ash-orchard
+    name: Ash Orchard
+    type: rural_district
+    region_code: embervale-march
+    parent: null
+    description: >-
+      Orchard stands west of Veycross where ashglass grit still catches in the
+      bark after old storms; a quiet farm-road destination.
+    capacity: 50
+    environment_tags: [orchard, farm_road, rural]

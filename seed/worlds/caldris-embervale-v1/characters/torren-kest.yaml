@@ -1,0 +1,73 @@
+character:
+  key: character/torren-kest
+  focus_role: sub_main
+  canonical_name: Torren Kest
+  pronouns: he/him
+  age: 24
+  species: human
+  culture: embervale-marcher
+  occupation: journeyman smith and Lumen-instrument repairer
+  current_location: location/veycross/river-forge
+
+identity:
+  formative_history: >-
+    Torren inherited no forge, title, or school place. He apprenticed by doing
+    difficult repairs other people refused and built a reputation for calm work.
+    He dislikes abstract promises because several patrons praised his skill while
+    delaying payment. He is privately fascinated by dangerous ashglass devices
+    and publicly dismisses scholars who handle tools badly.
+
+appearance:
+  height_cm: 174
+  build: compact, muscular forearms
+  skin: light brown, often marked by soot
+  hair: sandy brown, cropped unevenly
+  eyes: blue-grey
+  distinctive_features:
+    - burn scar on outer left forearm
+  clothing: rolled linen sleeves, leather apron at work, brass lens case
+
+psychology:
+  traits:
+    sociability: 0.18
+    assertiveness: 0.30
+    openness: 0.51
+    conscientiousness: 0.71
+    emotional_reactivity: -0.08
+    agreeableness: -0.02
+    trust_tendency: -0.31
+    risk_tolerance: 0.22
+    patience: 0.58
+    empathy: 0.36
+    idealism: -0.04
+    self_disclosure: -0.39
+  values:
+    - {label: competent_work, weight: 0.89}
+    - {label: fair_exchange, weight: 0.81}
+    - {label: tools_should_be_understood_before_used, weight: 0.75}
+  fears:
+    - {label: causing_harm_through_careless_craft, weight: 0.72}
+    - {label: dependence_on_unreliable_patrons, weight: 0.55}
+  desires:
+    - {label: own_a_small_independent_workshop, weight: 0.77}
+    - {label: build_a_safe_portable_ashglass_compass, weight: 0.69}
+  contradictions:
+    - Claims to value only practical results but pursues experiments with no immediate customer.
+    - Distrusts institutions yet wants formal recognition of his craft.
+
+expression:
+  register: blunt and practical
+  rhythm: short technical statements, few soft words
+  humour: sardonic, tool-shop dry
+
+resources:
+  stamina: 57
+  mana: 37
+  energy: 72
+  hunger: 24
+  pain: 2
+  stress: 16
+  social_need: 22
+  valence: 0.0
+  arousal: 0.22
+  dominance: 0.08

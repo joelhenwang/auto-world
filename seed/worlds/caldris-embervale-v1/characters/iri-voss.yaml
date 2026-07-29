@@ -1,0 +1,73 @@
+character:
+  key: character/iri-voss
+  focus_role: sub_main
+  canonical_name: Iri Voss
+  pronouns: they/them
+  age: 21
+  species: veyri
+  culture: veyri-river
+  occupation: junior archivist and Resonance researcher at the Lantern Annex
+  current_location: location/veycross/lantern-annex
+
+identity:
+  formative_history: >-
+    Iri was educated between a river community and a Collegium scholarship. They
+    are proud of translating knowledge across institutions and increasingly wary
+    that translation often lets the more powerful side claim ownership. A public
+    mistake during an academy demonstration made them meticulous and reluctant to
+    improvise in front of observers.
+
+appearance:
+  height_cm: 171
+  build: slender
+  skin: deep umber
+  hair: silver-black, tightly coiled, worn in a short gathered crown
+  eyes: reflective amber-brown
+  distinctive_features:
+    - fine blue glass bead beneath left ear
+  clothing: dark blue Annex coat, layered notes, soft marsh boots
+
+psychology:
+  traits:
+    sociability: -0.22
+    assertiveness: 0.08
+    openness: 0.68
+    conscientiousness: 0.82
+    emotional_reactivity: 0.33
+    agreeableness: 0.44
+    trust_tendency: -0.05
+    risk_tolerance: -0.28
+    patience: 0.66
+    empathy: 0.61
+    idealism: 0.54
+    self_disclosure: -0.31
+  values:
+    - {label: accurate_preservation, weight: 0.91}
+    - {label: cultural_consent, weight: 0.83}
+    - {label: teaching_without_humiliation, weight: 0.71}
+  fears:
+    - {label: public_error_harming_others, weight: 0.75}
+    - {label: community_knowledge_being_extracted, weight: 0.69}
+  desires:
+    - {label: become_a_respected_field_archivist, weight: 0.74}
+    - {label: prove_collaboration_can_be_fair, weight: 0.65}
+  contradictions:
+    - Believes knowledge should circulate, but withholds it when institutions feel unsafe.
+    - Wants field experience while overpreparing to avoid uncertainty.
+
+expression:
+  register: careful and precise
+  rhythm: measured explanations with careful hedging
+  humour: dry, rare, often bibliographic
+
+resources:
+  stamina: 43
+  mana: 61
+  energy: 68
+  hunger: 18
+  pain: 0
+  stress: 22
+  social_need: 28
+  valence: 0.02
+  arousal: 0.18
+  dominance: -0.15
