@@ -27,6 +27,19 @@ describe('WorldApiClient', () => {
     )
   })
 
+  it('returns empty stage2 collections when endpoints are missing', async () => {
+    fetchMock.mockImplementation(async () => new Response('not found', { status: 404 }))
+    const client = new WorldApiClient('https://world.test')
+
+    await expect(client.getGoals('world-1', 'mira')).resolves.toEqual([])
+    await expect(client.getMap('world-1')).resolves.toEqual({
+      locations: [],
+      routes: [],
+      travel: [],
+    })
+    await expect(client.getDirectorPanel('world-1')).resolves.toBeNull()
+  })
+
   it('submits player intent fields rather than canonical effects', async () => {
     fetchMock.mockResolvedValue(
       new Response(

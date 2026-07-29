@@ -35,6 +35,7 @@ describe('RuntimeHeader', () => {
     })
 
     expect(wrapper.text()).toContain('Caldris: Embervale')
+    expect(wrapper.text()).toContain('Stage 2')
     expect(wrapper.text()).toContain('morning')
     expect(wrapper.text()).toContain('live')
     await wrapper.get('button').trigger('click')
