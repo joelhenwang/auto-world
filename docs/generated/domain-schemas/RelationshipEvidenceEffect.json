@@ -1,0 +1,83 @@
+{
+  "$defs": {
+    "RelationshipDimension": {
+      "enum": [
+        "familiarity",
+        "trust",
+        "affection",
+        "attraction",
+        "respect",
+        "fear",
+        "resentment",
+        "dependency",
+        "loyalty"
+      ],
+      "title": "RelationshipDimension",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "dimension": {
+      "$ref": "#/$defs/RelationshipDimension"
+    },
+    "effect_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Effect Key",
+      "type": "string"
+    },
+    "evidence_strength": {
+      "maximum": 1,
+      "minimum": -1,
+      "title": "Evidence Strength",
+      "type": "number"
+    },
+    "justification": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Justification",
+      "type": "string"
+    },
+    "kind": {
+      "const": "relationship_evidence",
+      "default": "relationship_evidence",
+      "title": "Kind",
+      "type": "string"
+    },
+    "perceived_by_source": {
+      "default": true,
+      "title": "Perceived By Source",
+      "type": "boolean"
+    },
+    "source_attempt_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Attempt Ids",
+      "type": "array"
+    },
+    "source_character_id": {
+      "format": "uuid",
+      "title": "Source Character Id",
+      "type": "string"
+    },
+    "target_character_id": {
+      "format": "uuid",
+      "title": "Target Character Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "effect_key",
+    "justification",
+    "source_character_id",
+    "target_character_id",
+    "dimension",
+    "evidence_strength"
+  ],
+  "title": "RelationshipEvidenceEffect",
+  "type": "object"
+}

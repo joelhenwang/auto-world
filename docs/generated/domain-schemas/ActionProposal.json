@@ -1,0 +1,257 @@
+{
+  "$defs": {
+    "ActionFamily": {
+      "enum": [
+        "wait",
+        "continue_activity",
+        "move",
+        "observe",
+        "communicate",
+        "socialize",
+        "persuade",
+        "deceive",
+        "investigate",
+        "attack",
+        "defend",
+        "cast_magic",
+        "use_item",
+        "transfer",
+        "create",
+        "craft",
+        "train",
+        "work",
+        "rest",
+        "care",
+        "perform",
+        "ritual",
+        "interact_environment",
+        "other"
+      ],
+      "title": "ActionFamily",
+      "type": "string"
+    },
+    "DesiredOutcome": {
+      "additionalProperties": false,
+      "description": "Non-authoritative outcome requested by an actor.",
+      "properties": {
+        "description": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "target_entity_ids": {
+          "default": [],
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Target Entity Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "description"
+      ],
+      "title": "DesiredOutcome",
+      "type": "object"
+    },
+    "FallbackAction": {
+      "additionalProperties": false,
+      "properties": {
+        "action_family": {
+          "$ref": "#/$defs/ActionFamily"
+        },
+        "description": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        }
+      },
+      "required": [
+        "action_family",
+        "description"
+      ],
+      "title": "FallbackAction",
+      "type": "object"
+    },
+    "ResourceIntention": {
+      "additionalProperties": false,
+      "properties": {
+        "maximum_amount": {
+          "exclusiveMinimum": 0,
+          "title": "Maximum Amount",
+          "type": "number"
+        },
+        "resource": {
+          "$ref": "#/$defs/ResourceKind"
+        }
+      },
+      "required": [
+        "resource",
+        "maximum_amount"
+      ],
+      "title": "ResourceIntention",
+      "type": "object"
+    },
+    "ResourceKind": {
+      "enum": [
+        "stamina",
+        "mana",
+        "money"
+      ],
+      "title": "ResourceKind",
+      "type": "string"
+    },
+    "Visibility": {
+      "enum": [
+        "public",
+        "observable",
+        "covert",
+        "private"
+      ],
+      "title": "Visibility",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "action_family": {
+      "$ref": "#/$defs/ActionFamily"
+    },
+    "actor_id": {
+      "format": "uuid",
+      "title": "Actor Id",
+      "type": "string"
+    },
+    "continuation_activity_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Continuation Activity Id"
+    },
+    "decision_request_id": {
+      "format": "uuid",
+      "title": "Decision Request Id",
+      "type": "string"
+    },
+    "description": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Description",
+      "type": "string"
+    },
+    "desired_outcomes": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/DesiredOutcome"
+      },
+      "maxItems": 6,
+      "title": "Desired Outcomes",
+      "type": "array"
+    },
+    "estimated_duration_phases": {
+      "default": 1,
+      "maximum": 240,
+      "minimum": 1,
+      "title": "Estimated Duration Phases",
+      "type": "integer"
+    },
+    "fallback": {
+      "$ref": "#/$defs/FallbackAction"
+    },
+    "interruptible": {
+      "default": true,
+      "title": "Interruptible",
+      "type": "boolean"
+    },
+    "interruption_conditions": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 8,
+      "title": "Interruption Conditions",
+      "type": "array"
+    },
+    "relevant_goal_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Relevant Goal Ids",
+      "type": "array"
+    },
+    "resource_intentions": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ResourceIntention"
+      },
+      "title": "Resource Intentions",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "target_entity_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Target Entity Ids",
+      "type": "array"
+    },
+    "target_location_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Target Location Id"
+    },
+    "utterance": {
+      "anyOf": [
+        {
+          "maxLength": 1000,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Utterance"
+    },
+    "visibility": {
+      "$ref": "#/$defs/Visibility",
+      "default": "observable"
+    }
+  },
+  "required": [
+    "decision_request_id",
+    "actor_id",
+    "action_family",
+    "description",
+    "fallback"
+  ],
+  "title": "ActionProposal",
+  "type": "object"
+}

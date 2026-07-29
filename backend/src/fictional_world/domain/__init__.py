@@ -1,1 +1,131 @@
-"""Domain contracts and value objects (S0-DOM-001+)."""
+"""Domain package — Stage 0 contracts.
+
+Canonical schemas follow handbook ``05`` §7. Stage-0 effect kinds
+``wait`` / ``observe`` / ``rest`` / ``create_recent_memory`` are additive
+per ASSUMP-S0-001 (``25`` §2).
+"""
+
+from fictional_world.domain.common import (
+    CharacterId,
+    ConcurrencyConflict,
+    DomainError,
+    EventId,
+    InsufficientResource,
+    InvalidAction,
+    InvalidStateTransition,
+    MemoryId,
+    ObservationId,
+    PhaseId,
+    SceneId,
+    SecretAccessDenied,
+    SnapshotId,
+    StrictContract,
+    TaskId,
+    UnknownTarget,
+    ValidationIssue,
+    ValidationResult,
+    WorldId,
+)
+from fictional_world.domain.common.enums import (
+    ActionFamily,
+    DayPhase,
+    EntityKind,
+    MemoryKind,
+    ObservationChannel,
+    PhaseStage,
+    RelationshipDimension,
+    ResolutionLevel,
+    ResourceKind,
+    RunStatus,
+    SceneStage,
+    SimulationMode,
+    SourceKind,
+    TaskState,
+    UserRole,
+    Visibility,
+)
+from fictional_world.domain.effects import (
+    EFFECT_COMMAND_TYPES,
+    CreateRecentMemoryEffect,
+    EffectCommand,
+    MoveEntityEffect,
+    ObserveEffect,
+    RestEffect,
+    SpendResourceEffect,
+    WaitEffect,
+)
+from fictional_world.domain.events import (
+    CommittedWorldEvent,
+    EntityRef,
+    PhaseSnapshotRef,
+    Provenance,
+)
+from fictional_world.domain.knowledge import BeliefRecord, ClaimRecord, ObservationRecord
+from fictional_world.domain.memory import EmbeddingMetadata, MemoryRecord
+from fictional_world.domain.scenes import ActionProposal, PhaseRun, SceneResolution, SceneRun
+from fictional_world.domain.tasks import TaskRun
+from fictional_world.domain.time import FictionalTime
+
+__all__ = [
+    "ACTION_FAMILIES",
+    "EFFECT_COMMAND_TYPES",
+    "ActionFamily",
+    "ActionProposal",
+    "BeliefRecord",
+    "CharacterId",
+    "ClaimRecord",
+    "CommittedWorldEvent",
+    "ConcurrencyConflict",
+    "CreateRecentMemoryEffect",
+    "DayPhase",
+    "DomainError",
+    "EffectCommand",
+    "EmbeddingMetadata",
+    "EntityKind",
+    "EntityRef",
+    "EventId",
+    "FictionalTime",
+    "InsufficientResource",
+    "InvalidAction",
+    "InvalidStateTransition",
+    "MemoryId",
+    "MemoryKind",
+    "MemoryRecord",
+    "MoveEntityEffect",
+    "ObservationChannel",
+    "ObservationId",
+    "ObservationRecord",
+    "ObserveEffect",
+    "PhaseId",
+    "PhaseRun",
+    "PhaseSnapshotRef",
+    "PhaseStage",
+    "Provenance",
+    "RelationshipDimension",
+    "ResolutionLevel",
+    "ResourceKind",
+    "RestEffect",
+    "RunStatus",
+    "SceneId",
+    "SceneResolution",
+    "SceneRun",
+    "SceneStage",
+    "SecretAccessDenied",
+    "SimulationMode",
+    "SnapshotId",
+    "SourceKind",
+    "SpendResourceEffect",
+    "StrictContract",
+    "TaskId",
+    "TaskRun",
+    "TaskState",
+    "UnknownTarget",
+    "UserRole",
+    "ValidationIssue",
+    "ValidationResult",
+    "Visibility",
+    "WaitEffect",
+    "WorldId",
+]
+
+ACTION_FAMILIES = tuple(ActionFamily)

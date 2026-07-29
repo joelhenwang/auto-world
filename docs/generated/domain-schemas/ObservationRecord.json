@@ -1,0 +1,107 @@
+{
+  "$defs": {
+    "ObservationChannel": {
+      "enum": [
+        "sight",
+        "hearing",
+        "touch",
+        "smell",
+        "magic",
+        "communication",
+        "inference"
+      ],
+      "title": "ObservationChannel",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "channels": {
+      "items": {
+        "$ref": "#/$defs/ObservationChannel"
+      },
+      "minItems": 1,
+      "title": "Channels",
+      "type": "array"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "event_id": {
+      "format": "uuid",
+      "title": "Event Id",
+      "type": "string"
+    },
+    "interpretation": {
+      "anyOf": [
+        {
+          "maxLength": 1500,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Interpretation"
+    },
+    "observation_id": {
+      "format": "uuid",
+      "title": "Observation Id",
+      "type": "string"
+    },
+    "observer_id": {
+      "format": "uuid",
+      "title": "Observer Id",
+      "type": "string"
+    },
+    "perceived_summary": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Perceived Summary",
+      "type": "string"
+    },
+    "phase_id": {
+      "format": "uuid",
+      "title": "Phase Id",
+      "type": "string"
+    },
+    "referenced_entity_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Referenced Entity Ids",
+      "type": "array"
+    },
+    "uncertainty": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Uncertainty",
+      "type": "number"
+    },
+    "visible_effect_keys": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Visible Effect Keys",
+      "type": "array"
+    }
+  },
+  "required": [
+    "observation_id",
+    "observer_id",
+    "event_id",
+    "phase_id",
+    "channels",
+    "perceived_summary",
+    "uncertainty",
+    "created_at"
+  ],
+  "title": "ObservationRecord",
+  "type": "object"
+}

@@ -1,0 +1,63 @@
+{
+  "$defs": {
+    "DayPhase": {
+      "enum": [
+        "dawn",
+        "sunrise",
+        "morning",
+        "noon",
+        "afternoon",
+        "sunset",
+        "dusk",
+        "evening",
+        "night",
+        "midnight"
+      ],
+      "title": "DayPhase",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "absolute_phase_index": {
+      "minimum": 0,
+      "title": "Absolute Phase Index",
+      "type": "integer"
+    },
+    "calendar_label": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Calendar Label"
+    },
+    "generation_index": {
+      "maximum": 3,
+      "minimum": 1,
+      "title": "Generation Index",
+      "type": "integer"
+    },
+    "phase": {
+      "$ref": "#/$defs/DayPhase"
+    },
+    "world_day_index": {
+      "minimum": 1,
+      "title": "World Day Index",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "generation_index",
+    "world_day_index",
+    "phase",
+    "absolute_phase_index"
+  ],
+  "title": "FictionalTime",
+  "type": "object"
+}

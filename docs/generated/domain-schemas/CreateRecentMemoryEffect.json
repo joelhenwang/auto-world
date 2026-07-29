@@ -1,0 +1,106 @@
+{
+  "$defs": {
+    "MemoryKind": {
+      "enum": [
+        "episodic",
+        "semantic",
+        "relational",
+        "emotional",
+        "autobiographical",
+        "procedural",
+        "commitment",
+        "plan",
+        "unresolved_question",
+        "secret",
+        "claim"
+      ],
+      "title": "MemoryKind",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "confidence": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "effect_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Effect Key",
+      "type": "string"
+    },
+    "justification": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Justification",
+      "type": "string"
+    },
+    "kind": {
+      "const": "create_recent_memory",
+      "default": "create_recent_memory",
+      "title": "Kind",
+      "type": "string"
+    },
+    "memory_kind": {
+      "$ref": "#/$defs/MemoryKind"
+    },
+    "owner_character_id": {
+      "format": "uuid",
+      "title": "Owner Character Id",
+      "type": "string"
+    },
+    "salience": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Salience",
+      "type": "number"
+    },
+    "source_attempt_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Attempt Ids",
+      "type": "array"
+    },
+    "source_event_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Event Ids",
+      "type": "array"
+    },
+    "source_observation_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Observation Ids",
+      "type": "array"
+    },
+    "text": {
+      "maxLength": 4000,
+      "minLength": 1,
+      "title": "Text",
+      "type": "string"
+    }
+  },
+  "required": [
+    "effect_key",
+    "justification",
+    "owner_character_id",
+    "memory_kind",
+    "text",
+    "salience",
+    "confidence"
+  ],
+  "title": "CreateRecentMemoryEffect",
+  "type": "object"
+}

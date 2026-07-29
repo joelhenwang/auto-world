@@ -1,0 +1,84 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "due_absolute_phase_index": {
+      "minimum": 0,
+      "title": "Due Absolute Phase Index",
+      "type": "integer"
+    },
+    "effect_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Effect Key",
+      "type": "string"
+    },
+    "effect_type": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Effect Type",
+      "type": "string"
+    },
+    "justification": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Justification",
+      "type": "string"
+    },
+    "kind": {
+      "const": "schedule_effect",
+      "default": "schedule_effect",
+      "title": "Kind",
+      "type": "string"
+    },
+    "payload": {
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "integer"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "title": "Payload",
+      "type": "object"
+    },
+    "source_attempt_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Attempt Ids",
+      "type": "array"
+    },
+    "target_entity_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Target Entity Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "effect_key",
+    "justification",
+    "due_absolute_phase_index",
+    "effect_type",
+    "payload"
+  ],
+  "title": "ScheduleEffect",
+  "type": "object"
+}

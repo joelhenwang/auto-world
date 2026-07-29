@@ -1,0 +1,65 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "content_hash": {
+      "maxLength": 128,
+      "minLength": 32,
+      "title": "Content Hash",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "dimensions": {
+      "const": 2048,
+      "default": 2048,
+      "title": "Dimensions",
+      "type": "integer"
+    },
+    "embedding_id": {
+      "format": "uuid",
+      "title": "Embedding Id",
+      "type": "string"
+    },
+    "model_slug": {
+      "title": "Model Slug",
+      "type": "string"
+    },
+    "owner_object_id": {
+      "format": "uuid",
+      "title": "Owner Object Id",
+      "type": "string"
+    },
+    "owner_object_type": {
+      "enum": [
+        "memory",
+        "summary",
+        "event",
+        "lore"
+      ],
+      "title": "Owner Object Type",
+      "type": "string"
+    },
+    "prefix_type": {
+      "enum": [
+        "query",
+        "passage"
+      ],
+      "title": "Prefix Type",
+      "type": "string"
+    }
+  },
+  "required": [
+    "embedding_id",
+    "owner_object_id",
+    "owner_object_type",
+    "model_slug",
+    "prefix_type",
+    "content_hash",
+    "created_at"
+  ],
+  "title": "EmbeddingMetadata",
+  "type": "object"
+}

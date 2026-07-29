@@ -1,0 +1,98 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "bleeding": {
+      "default": 0,
+      "maximum": 5,
+      "minimum": 0,
+      "title": "Bleeding",
+      "type": "integer"
+    },
+    "body_region": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Body Region",
+      "type": "string"
+    },
+    "consciousness_impact": {
+      "default": 0,
+      "maximum": 5,
+      "minimum": 0,
+      "title": "Consciousness Impact",
+      "type": "integer"
+    },
+    "effect_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Effect Key",
+      "type": "string"
+    },
+    "entity_id": {
+      "format": "uuid",
+      "title": "Entity Id",
+      "type": "string"
+    },
+    "injury_type": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Injury Type",
+      "type": "string"
+    },
+    "justification": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Justification",
+      "type": "string"
+    },
+    "kind": {
+      "const": "apply_injury",
+      "default": "apply_injury",
+      "title": "Kind",
+      "type": "string"
+    },
+    "mobility_impact": {
+      "default": 0,
+      "maximum": 5,
+      "minimum": 0,
+      "title": "Mobility Impact",
+      "type": "integer"
+    },
+    "pain": {
+      "default": 0,
+      "maximum": 5,
+      "minimum": 0,
+      "title": "Pain",
+      "type": "integer"
+    },
+    "potentially_permanent": {
+      "default": false,
+      "title": "Potentially Permanent",
+      "type": "boolean"
+    },
+    "severity": {
+      "maximum": 5,
+      "minimum": 1,
+      "title": "Severity",
+      "type": "integer"
+    },
+    "source_attempt_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Attempt Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "effect_key",
+    "justification",
+    "entity_id",
+    "body_region",
+    "injury_type",
+    "severity"
+  ],
+  "title": "ApplyInjuryEffect",
+  "type": "object"
+}

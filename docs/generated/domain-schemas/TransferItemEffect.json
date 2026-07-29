@@ -1,0 +1,62 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "effect_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Effect Key",
+      "type": "string"
+    },
+    "from_owner_id": {
+      "format": "uuid",
+      "title": "From Owner Id",
+      "type": "string"
+    },
+    "item_id": {
+      "format": "uuid",
+      "title": "Item Id",
+      "type": "string"
+    },
+    "justification": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Justification",
+      "type": "string"
+    },
+    "kind": {
+      "const": "transfer_item",
+      "default": "transfer_item",
+      "title": "Kind",
+      "type": "string"
+    },
+    "quantity": {
+      "default": 1,
+      "minimum": 1,
+      "title": "Quantity",
+      "type": "integer"
+    },
+    "source_attempt_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Attempt Ids",
+      "type": "array"
+    },
+    "to_owner_id": {
+      "format": "uuid",
+      "title": "To Owner Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "effect_key",
+    "justification",
+    "item_id",
+    "from_owner_id",
+    "to_owner_id"
+  ],
+  "title": "TransferItemEffect",
+  "type": "object"
+}

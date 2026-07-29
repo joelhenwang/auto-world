@@ -1,0 +1,71 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "condition_type": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Condition Type",
+      "type": "string"
+    },
+    "duration_phases": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Duration Phases"
+    },
+    "effect_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Effect Key",
+      "type": "string"
+    },
+    "entity_id": {
+      "format": "uuid",
+      "title": "Entity Id",
+      "type": "string"
+    },
+    "intensity": {
+      "maximum": 5,
+      "minimum": 1,
+      "title": "Intensity",
+      "type": "integer"
+    },
+    "justification": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Justification",
+      "type": "string"
+    },
+    "kind": {
+      "const": "apply_condition",
+      "default": "apply_condition",
+      "title": "Kind",
+      "type": "string"
+    },
+    "source_attempt_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Attempt Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "effect_key",
+    "justification",
+    "entity_id",
+    "condition_type",
+    "intensity"
+  ],
+  "title": "ApplyConditionEffect",
+  "type": "object"
+}
