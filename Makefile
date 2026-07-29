@@ -1,12 +1,12 @@
 # Thin aliases — underlying commands remain the source of truth (handbook 20 §7).
 
-.PHONY: help bootstrap sync test lint format typecheck check compose-config compose-up compose-down migrate seed export-schemas export-db-schema export-openapi api world-cli pre-commit verify-migrations
+.PHONY: help bootstrap sync test lint format typecheck check compose-config compose-up compose-down migrate seed export-schemas export-db-schema export-openapi api world-cli stage0-gate pre-commit verify-migrations
 
 help:
 	@echo "Stage 0 aliases:"
 	@echo "  make sync / test / lint / format / typecheck / check"
 	@echo "  make export-schemas / export-db-schema / export-openapi / verify-migrations / migrate"
-	@echo "  make api / world-cli / seed / compose-up / compose-down / bootstrap"
+	@echo "  make api / world-cli / seed / stage0-gate / compose-up / compose-down / bootstrap"
 
 sync:
 	uv sync
@@ -63,3 +63,6 @@ api:
 
 world-cli:
 	uv run python scripts/world_cli.py $(ARGS)
+
+stage0-gate:
+	uv run python scripts/run_stage0_gate.py

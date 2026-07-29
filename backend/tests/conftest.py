@@ -20,6 +20,7 @@ def pytest_configure(config: pytest.Config) -> None:
         "contract",
         "scenario",
         "fault",
+        "architecture",
         "model_fake",
         "openrouter_live",
         "local_model_live",
