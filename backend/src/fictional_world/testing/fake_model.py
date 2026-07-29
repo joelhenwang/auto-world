@@ -1,10 +1,21 @@
-"""Minimal fake model gateway for tests (refined by S0-MODEL-001/002)."""
+"""Minimal fake model gateway for tests — bridges to S0-MODEL-002 adapter."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import StrEnum
 from typing import Any, Literal, Protocol
+
+from fictional_world.application.models.messages import (
+    EmbeddingRequest,
+    EmbeddingResult,
+    TextGenerationRequest,
+    TextGenerationResult,
+)
+from fictional_world.infrastructure.model_gateway.fake import (
+    FakeModelGatewayAdapter,
+    FakeScriptKind,
+)
 
 
 class FakeResponseKind(StrEnum):
@@ -51,33 +62,60 @@ class FakeEmbedResult:
 
 
 class ModelGatewayPort(Protocol):
-    """Minimal port used by the Stage 0 fake; S0-MODEL-001 owns the real protocol."""
+    """Legacy harness port; prefer TextModelGateway / EmbeddingGateway."""
 
     async def generate_text(self, request: FakeTextRequest) -> FakeTextResult: ...
 
     async def embed(self, request: FakeEmbedRequest) -> FakeEmbedResult: ...
 
 
+_KIND_MAP: dict[FakeResponseKind, FakeScriptKind] = {
+    FakeResponseKind.VALID: FakeScriptKind.VALID,
+    FakeResponseKind.MALFORMED_JSON: FakeScriptKind.MALFORMED_JSON,
+    FakeResponseKind.SCHEMA_INVALID: FakeScriptKind.SCHEMA_INVALID,
+    FakeResponseKind.SEMANTIC_INVALID: FakeScriptKind.SEMANTIC_INVALID,
+    FakeResponseKind.TIMEOUT: FakeScriptKind.TIMEOUT,
+    FakeResponseKind.RATE_LIMITED: FakeScriptKind.RATE_LIMITED,
+    FakeResponseKind.UNSUPPORTED: FakeScriptKind.UNSUPPORTED,
+    FakeResponseKind.LATE: FakeScriptKind.VALID,
+    FakeResponseKind.CANCELLED: FakeScriptKind.CANCELLED,
+    FakeResponseKind.EMBED_OK: FakeScriptKind.EMBED_OK,
+    FakeResponseKind.EMBED_DIM_MISMATCH: FakeScriptKind.EMBED_DIM_MISMATCH,
+}
+
+
 @dataclass
 class FakeModelGateway:
-    """Scripted gateway keyed by role and/or request_id."""
+    """Harness wrapper retaining generate_text/embed shapes used by S0-QA-001 tests."""
 
     scripts: dict[str, FakeResponseKind] = field(default_factory=dict)
     default_kind: FakeResponseKind = FakeResponseKind.VALID
     calls: list[dict[str, Any]] = field(default_factory=list)
     valid_payload: str = '{"ok": true}'
     embed_dimensions: int = 2048
+    _adapter: FakeModelGatewayAdapter = field(init=False, repr=False)
+
+    def __post_init__(self) -> None:
+        self._adapter = FakeModelGatewayAdapter(
+            default_kind=_KIND_MAP[self.default_kind],
+            valid_payload=self.valid_payload,
+            embed_dimensions=self.embed_dimensions,
+        )
+        for key, kind in self.scripts.items():
+            self._adapter.script(key=key, kind=_KIND_MAP[kind])
 
     def script(self, *, key: str, kind: FakeResponseKind) -> None:
         self.scripts[key] = kind
-
-    def _resolve(self, *, role: str, request_id: str) -> FakeResponseKind:
-        return self.scripts.get(request_id) or self.scripts.get(role) or self.default_kind
+        self._adapter.script(key=key, kind=_KIND_MAP[kind])
 
     async def generate_text(self, request: FakeTextRequest) -> FakeTextResult:
-        kind = self._resolve(role=request.role, request_id=request.request_id)
+        kind = (
+            self.scripts.get(request.request_id)
+            or self.scripts.get(request.role)
+            or self.default_kind
+        )
         self.calls.append({"type": "text", "role": request.role, "request_id": request.request_id})
-        if kind is FakeResponseKind.VALID:
+        if kind is FakeResponseKind.VALID or kind is FakeResponseKind.LATE:
             return FakeTextResult(kind=kind, payload=self.valid_payload)
         if kind is FakeResponseKind.MALFORMED_JSON:
             return FakeTextResult(kind=kind, payload="{not-json")
@@ -91,14 +129,14 @@ class FakeModelGateway:
             return FakeTextResult(kind=kind, retry_after_seconds=1.0, error_message="429")
         if kind is FakeResponseKind.UNSUPPORTED:
             return FakeTextResult(kind=kind, error_message="unsupported parameter")
-        if kind is FakeResponseKind.LATE:
-            return FakeTextResult(kind=kind, payload=self.valid_payload, error_message="late")
         if kind is FakeResponseKind.CANCELLED:
             return FakeTextResult(kind=kind, error_message="cancelled")
         return FakeTextResult(kind=kind, error_message=f"unhandled kind {kind}")
 
     async def embed(self, request: FakeEmbedRequest) -> FakeEmbedResult:
-        kind = self._resolve(role="embed", request_id=request.request_id)
+        kind = (
+            self.scripts.get(request.request_id) or self.scripts.get("embed") or self.default_kind
+        )
         self.calls.append(
             {"type": "embed", "request_id": request.request_id, "n": len(request.texts)}
         )
@@ -111,7 +149,6 @@ class FakeModelGateway:
                 dimensions=bad_dim,
                 error_message="embedding dimension mismatch",
             )
-        # Default / EMBED_OK
         vectors = tuple(
             tuple(float(i % 7) for i in range(self.embed_dimensions)) for _ in request.texts
         )
@@ -120,6 +157,16 @@ class FakeModelGateway:
             vectors=vectors,
             dimensions=self.embed_dimensions,
         )
+
+    async def generate(self, request: TextGenerationRequest) -> TextGenerationResult:
+        """Protocol-compatible path used by application code."""
+
+        return await self._adapter.generate(request)
+
+    async def embed_gateway(self, request: EmbeddingRequest) -> EmbeddingResult:
+        """Protocol EmbeddingGateway path (distinct from harness FakeEmbedRequest embed)."""
+
+        return await self._adapter.embed(request)
 
 
 ProviderMode = Literal["fake"]

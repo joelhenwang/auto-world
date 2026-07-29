@@ -10,6 +10,7 @@ dependencies = [
     "sqlalchemy[asyncio]>=2.0.36,<3",
     "alembic>=1.14,<2",
     "psycopg[binary]>=3.2,<4",
+    "httpx>=0.28.1",
 ]
 
 [dependency-groups]
@@ -56,7 +57,7 @@ select = ["E", "F", "I", "B", "UP", "SIM", "ASYNC", "RUF", "C4", "DTZ", "T20", "
 "scripts/**" = ["T20", "S603", "S607"]
 "backend/tests/**" = ["S101", "S603", "S607"]
 "tools/**" = ["T20"]
-"backend/migrations/**" = ["I001"]
+"backend/migrations/**" = ["I001", "E501"]
 
 [tool.ruff.format]
 quote-style = "double"

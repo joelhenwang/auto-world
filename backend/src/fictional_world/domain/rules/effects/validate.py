@@ -99,9 +99,7 @@ def _validate_observe(effect: ObserveEffect, ctx: EffectValidationContext) -> Va
         and effect.observer_id not in ctx.entities
     ):
         issues.append(
-            ValidationIssue(
-                code="unknown_observer", message="observer unknown", path="observer_id"
-            )
+            ValidationIssue(code="unknown_observer", message="observer unknown", path="observer_id")
         )
     for target in effect.target_entity_ids:
         if ctx.entities and target not in ctx.entities and target not in ctx.known_character_ids:

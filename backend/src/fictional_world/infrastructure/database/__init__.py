@@ -1,5 +1,7 @@
-"""Database infrastructure package (S0-DB-001 baseline)."""
+"""Database infrastructure package (S0-DB-001 baseline + S0-DB-002 models)."""
 
+# Ensure ORM tables are registered when the package is imported.
+from fictional_world.infrastructure.database import models as models
 from fictional_world.infrastructure.database.base import Base
 from fictional_world.infrastructure.database.naming import NAMING_CONVENTION, WORLDSIM_SCHEMA
 from fictional_world.infrastructure.database.session import (
@@ -16,5 +18,6 @@ __all__ = [
     "create_engine",
     "create_session_factory",
     "database_url",
+    "models",
     "session_scope",
 ]

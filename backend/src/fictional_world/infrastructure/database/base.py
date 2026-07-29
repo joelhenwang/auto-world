@@ -9,6 +9,6 @@ from fictional_world.infrastructure.database.naming import NAMING_CONVENTION
 
 
 class Base(DeclarativeBase):
-    """ORM declarative base. Domain tables arrive in S0-DB-002."""
+    """ORM declarative base for worldsim schema tables."""
 
-    metadata = MetaData(naming_convention=NAMING_CONVENTION)
+    metadata = MetaData(naming_convention=NAMING_CONVENTION, schema="worldsim")
