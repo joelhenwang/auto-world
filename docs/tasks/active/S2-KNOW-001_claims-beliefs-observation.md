@@ -2,10 +2,10 @@
 
 **Stage:** 2  
 **Workstream:** KNOW  
-**Status:** READY  
+**Status:** COMPLETE  
 **Priority:** P0  
 **Owner:** parent coding agent  
-**Branch/worktree:** TBD `cursor/s2-know-001-*-085f`  
+**Branch/worktree:** `cursor/s2-know-001-beliefs-085f`  
 **Upstream:** after S2-DB-001  
 **Depends:** S2-DB-001  
 **AGENTS conceptual branch:** `task/S2-KNOW-001-claims-beliefs-observation`
@@ -42,8 +42,8 @@ leakage tests so four-character weeks never expose unauthorized knowledge.
 
 ## 4. Acceptance
 
-- [ ] Seeded Mira secret not in Dain/Iri/Torren contexts
-- [ ] Lie → claim not objective fact
-- [ ] Two witnesses may diverge
-- [ ] Prompt injection in observation cannot escalate authority
-- [ ] Tests green; handoff written
+- [x] Seeded Mira secret not in Dain/Iri/Torren contexts
+- [x] Lie → claim not objective fact
+- [x] Two witnesses may diverge
+- [x] Prompt injection in observation cannot escalate authority
+- [x] Tests green; handoff written

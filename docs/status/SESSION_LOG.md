@@ -231,3 +231,32 @@ Docs only; Stage 1 gate already PASS on main. Next agent re-runs
 ### Handoff
 
 `docs/handoffs/2026-07-29_S2-KICKOFF.md`
+
+---
+
+## 2026-07-29T22:15:00Z — S2-KNOW-001 observation→claim→belief pipeline
+
+**Agent/person:** coding subagent (S2-KNOW-001)  
+**Branch/worktree:** `cursor/s2-know-001-beliefs-085f`  
+**Task IDs:** `S2-KNOW-001`  
+**Starting HEAD:** `bdcdc70`
+
+### Intended outcome
+
+Ship pure/application knowledge pipeline v2 with secret access + leakage tests;
+keep Stage 1 assembler leakage green; no migrations / MEM / CHAR.
+
+### Completed
+
+- Domain visibility enums + fact policy
+- Application knowledge services (eligibility, facts, observations, claims, beliefs, secrets, lookup)
+- Assembler optional `perspective_knowledge` + Stage 2 fixture beliefs
+- Unit/leakage/injection tests
+
+### Verification
+
+`ruff` / `basedpyright` / full `pytest` pass.
+
+### Handoff
+
+`docs/handoffs/2026-07-29_S2-KNOW-001.md`

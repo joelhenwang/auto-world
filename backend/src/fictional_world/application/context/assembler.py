@@ -1,4 +1,4 @@
-"""Assemble sealed perspective-safe character context packages (S1-KNOW-001)."""
+"""Assemble sealed perspective-safe character context packages (S1-KNOW-001 / S2-KNOW-001)."""
 
 from __future__ import annotations
 
@@ -32,9 +32,31 @@ from fictional_world.application.context.types import (
     ContextTaskType,
     SealedContextPackage,
 )
+from fictional_world.application.knowledge.types import PerspectiveKnowledge
 from fictional_world.domain.characters.records import CharacterStateRecord
 from fictional_world.domain.common.errors import SecretAccessDenied
 from fictional_world.domain.seed.records import CharacterCardVersionRecord
+
+
+def _beliefs_from_perspective(knowledge: PerspectiveKnowledge) -> list[dict[str, Any]]:
+    """Map lookup output into the private_beliefs section shape."""
+
+    beliefs: list[dict[str, Any]] = [dict(b) for b in knowledge.beliefs]
+    # Secret keys held by the observer may be listed without payloads for others.
+    if knowledge.secret_keys:
+        beliefs.append(
+            {
+                "held_secret_keys": list(knowledge.secret_keys),
+                "access": "granted",
+            }
+        )
+    return beliefs
+
+
+def _assert_no_director_leak(text: str) -> None:
+    for secret in DIRECTOR_ONLY_FACTS:
+        if secret in text:
+            raise SecretAccessDenied("director-only fact leaked into context")
 
 
 def _make_section(
@@ -75,24 +97,33 @@ def assemble_character_context(
     scene_working: Mapping[str, Any] | None = None,
     package_id: UUID | None = None,
     now: datetime | None = None,
+    perspective_knowledge: PerspectiveKnowledge | None = None,
 ) -> SealedContextPackage:
     """Build a sealed context package for one observer from snapshot-pinned inputs.
 
     Callers must supply only already-filtered, owner-scoped memories and
     perception facts. This function enforces directional relationship isolation
     and never includes director-only secrets.
+
+    When ``perspective_knowledge`` is provided (S2-KNOW-001 lookup output), it
+    replaces fixture private beliefs. The lookup must already be observer-scoped.
     """
 
     if state.character_id != observer_id:
         raise SecretAccessDenied("character state does not match observer")
     if card.character_id != observer_id:
         raise SecretAccessDenied("character card does not match observer")
+    if perspective_knowledge is not None and perspective_knowledge.character_id != observer_id:
+        raise SecretAccessDenied("perspective knowledge does not match observer")
 
     seed_key = seed_key_for_character_id(observer_id)
     if seed_key is None:
         seed_key = f"character/{observer_id}"
 
-    own_beliefs: list[dict[str, Any]] = private_beliefs_for(seed_key)
+    if perspective_knowledge is not None:
+        own_beliefs = _beliefs_from_perspective(perspective_knowledge)
+    else:
+        own_beliefs = private_beliefs_for(seed_key)
 
     sanitized_memories = [sanitize_memory_text(m) for m in recent_memories if m.strip()]
 
@@ -198,10 +229,7 @@ def assemble_character_context(
     # Hard invariant: director-only facts never appear in any section content.
     for section in trimmed:
         blob = content_hash(section.content)  # force materialization
-        text = str(section.content)
-        for secret in DIRECTOR_ONLY_FACTS:
-            if secret in text:
-                raise SecretAccessDenied("director-only fact leaked into context")
+        _assert_no_director_leak(str(section.content))
         _ = blob
 
     created = now or datetime.now(UTC)
