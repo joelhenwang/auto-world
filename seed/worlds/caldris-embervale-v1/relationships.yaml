@@ -1,0 +1,30 @@
+# Stage 1 directional relationships (handbook 23 §19 subset).
+# Context assembler exposes only outgoing edges for the observing character.
+relationships:
+  - source: character/mira-talren
+    target: character/dain-arcen
+    familiarity: 0.24
+    trust: 0.12
+    affection: 0.06
+    attraction: 0.00
+    respect: 0.18
+    fear: 0.00
+    resentment: 0.00
+    dependency: 0.00
+    loyalty: 0.02
+    perceived_reciprocity: 0.08
+    basis: They have crossed paths on two courier escorts.
+
+  - source: character/dain-arcen
+    target: character/mira-talren
+    familiarity: 0.27
+    trust: 0.16
+    affection: 0.09
+    attraction: 0.00
+    respect: 0.22
+    fear: 0.00
+    resentment: 0.00
+    dependency: 0.00
+    loyalty: 0.03
+    perceived_reciprocity: 0.04
+    basis: He considers her observant and unnecessarily willing to travel alone.
