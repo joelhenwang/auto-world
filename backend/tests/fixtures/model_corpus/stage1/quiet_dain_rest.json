@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "decision_request_id": "22222222-2222-4222-8222-222222222222",
+  "actor_id": "b8835163-1a5e-5e8a-93a5-8c94a5ff71f5",
+  "action_family": "rest",
+  "description": "Dain sits near the hearth, loosens his wet cloak, and rests before returning to duty.",
+  "utterance": null,
+  "target_entity_ids": [],
+  "target_location_id": null,
+  "relevant_goal_ids": [],
+  "continuation_activity_id": null,
+  "visibility": "observable",
+  "estimated_duration_phases": 1,
+  "interruptible": true,
+  "interruption_conditions": ["A warden summons him.", "Someone nearby needs immediate help."],
+  "resource_intentions": [],
+  "desired_outcomes": [
+    {
+      "description": "Recover enough stamina to resume ordinary duties.",
+      "target_entity_ids": ["b8835163-1a5e-5e8a-93a5-8c94a5ff71f5"]
+    }
+  ],
+  "fallback": {
+    "action_family": "wait",
+    "description": "Stay seated and remain available."
+  }
+}

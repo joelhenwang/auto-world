@@ -1,0 +1,8 @@
+{
+  "schema_version": "1.0",
+  "decision_request_id": "44444444-4444-4444-8444-444444444444",
+  "actor_id": "61e05284-c7df-50d7-9631-9aa1fee29b95",
+  "action_family": "teleport",
+  "description": "Mira teleports to an unknown castle.",
+  "unexpected_effect": "move_entity"
+}

@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "decision_request_id": "55555555-5555-4555-8555-555555555555",
+  "actor_id": "61e05284-c7df-50d7-9631-9aa1fee29b95",
+  "action_family": "communicate",
+  "description": "Mira asks Dain for his report, and Dain nods before agreeing to tell her everything.",
+  "utterance": "What did you see at the east bridge?",
+  "target_entity_ids": ["b8835163-1a5e-5e8a-93a5-8c94a5ff71f5"],
+  "target_location_id": null,
+  "relevant_goal_ids": [],
+  "continuation_activity_id": null,
+  "visibility": "observable",
+  "estimated_duration_phases": 1,
+  "interruptible": true,
+  "interruption_conditions": [],
+  "resource_intentions": [],
+  "desired_outcomes": [],
+  "fallback": {
+    "action_family": "wait",
+    "description": "Leave Dain free to choose whether to answer."
+  }
+}
