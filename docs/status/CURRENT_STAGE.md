@@ -1,17 +1,17 @@
 # Current Stage
 
-**Updated:** 2026-07-29T23:30:00Z  
-**Updated by:** S2-QA-001 coding subagent  
+**Updated:** 2026-07-29T23:25:00Z  
+**Updated by:** parent coding agent (Stage 2)  
 **Repository:** autonomous-fictional-world  
-**Current branch:** `cursor/s2-qa-001-gate-085f`  
+**Current branch:** `cursor/s2-integration-char-know-085f`  
 **Stage:** 2 — Coherent Seven-Day World | **Status:** GATE_PASS / FROZEN  
 **Previous stage:** 1 — First Complete Three-Phase Day | **Status:** GATE_PASS / FROZEN @ `7727c7f`  
 **Next stage:** 3 — READY (not started)
 
 ## Current objective
 
-Stage 2 deterministic gate PASS. Freeze Stage 2 contracts. Parent merge/review,
-then Stage 3 kickoff.
+Stage 2 deterministic gate **PASS** (`docs/status/evidence/stage-2/`).  
+Parent merge of packet/integration PRs to main, then Stage 3 kickoff.
 
 ## Stage 1 (frozen — do not break)
 

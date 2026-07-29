@@ -1,8 +1,8 @@
 {
   "alembic_head": "0004_stage2_continuity_tables",
-  "collected_at": "20260729T231801Z",
+  "collected_at": "20260729T232111Z",
   "gate_script_exit_nonzero_count": 0,
-  "git_commit": "e87fa14ddecd4dd44a2b18f6bb78b98a72dd363f",
+  "git_commit": "5322d9de0e6da9a342e1deb5922ea2ab7f207fc0",
   "hashes": {
     "database-schema.sql": "08236d04096262d07026aecb9e79bfeaf8aa9a6733d0c80d80a76f5cc77ccab2",
     "frontend/pnpm-lock.yaml": "22002950d79c21ad580902db44355d4e0f817b76e7a4ed2d4b8c3ed0520c32ac",
