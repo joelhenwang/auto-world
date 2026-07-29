@@ -1,0 +1,23 @@
+[project]
+name = "map-ingestion-prototype"
+version = "0.0.1"
+description = "Proposal-only prototype: world-map image -> MapExtraction contract + fake adapter (ADR-0001 / MAP-INGEST-001)"
+requires-python = ">=3.12"
+dependencies = ["pydantic>=2,<3"]
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+# This is a throwaway prototype, not an installable package. uv installs the
+# dependencies into the venv but does not try to build/install this project.
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100

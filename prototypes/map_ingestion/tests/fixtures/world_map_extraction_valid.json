@@ -1,0 +1,32 @@
+{
+  "extraction_id": "7e96347927ec8a0f5574f1c14397a551ff659ac2220c614b0b6b686f07ccea2d",
+  "provenance": {
+    "model_slug": "fake/multimodal-map-extractor:synthetic",
+    "prompt_version": "map-extractor-v0",
+    "image_content_hash": "c64417236e385ca3b51658c4ef7e8e8fe48a8a7a96ad335bc7e0349b26b3ac9f",
+    "config_version": "map-extract-config-v1"
+  },
+  "generated_at": "2026-07-29T11:20:00+00:00",
+  "points_of_interest": [
+    {"poi_id": "valerian_empire", "name": "The Valerian Empire", "location_type": "region", "coordinates": {"x": 0.42, "y": 0.53}, "source_label": "THE VALERIAN EMPIRE", "confidence": 0.97},
+    {"poi_id": "valerion", "name": "Valerion", "location_type": "settlement", "region_ref": "valerian_empire", "coordinates": {"x": 0.41, "y": 0.44}, "source_label": "Valerion (Imperial Capital)", "tags": ["capital"], "confidence": 0.95},
+    {"poi_id": "dawnspire_kingdom", "name": "Dawnspire Kingdom", "location_type": "region", "coordinates": {"x": 0.78, "y": 0.36}, "source_label": "DAWNSPIRE KINGDOM", "confidence": 0.96},
+    {"poi_id": "dawnspire_citadel", "name": "Dawnspire Citadel", "location_type": "landmark", "region_ref": "dawnspire_kingdom", "coordinates": {"x": 0.79, "y": 0.31}, "confidence": 0.9},
+    {"poi_id": "shadowfell", "name": "The Shadowfell", "location_type": "region", "coordinates": {"x": 0.73, "y": 0.72}, "source_label": "THE SHADOWFELL", "confidence": 0.94},
+    {"poi_id": "moonbrook_village", "name": "Moonbrook Village", "location_type": "settlement", "region_ref": "valerian_empire", "coordinates": {"x": 0.5, "y": 0.5}, "confidence": 0.82}
+  ],
+  "edges": [
+    {
+      "edge_id": "valerion_to_dawnspire",
+      "origin_poi_id": "valerion",
+      "destination_poi_id": "dawnspire_citadel",
+      "directionality": "two_way",
+      "terrain_tags": ["road", "plains"],
+      "danger": 0.2,
+      "waypoints": [
+        {"name": "Moonbrook crossing", "location_type": "road_segment", "coordinates": {"x": 0.5, "y": 0.5}, "confidence": 0.7},
+        {"name": null, "location_type": "wilderness_zone", "coordinates": {"x": 0.64, "y": 0.42}, "confidence": 0.6}
+      ]
+    }
+  ]
+}
