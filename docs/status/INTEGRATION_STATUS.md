@@ -3,7 +3,7 @@
 **Updated:** 2026-07-29T11:35:57Z
 **Integration owner:** parent coding agent
 **Integration branch/worktree:** `main` (task branch `cursor/s0-eng-001-repository-bootstrap-09ce`)
-**Integration HEAD:** `3a46f01e5724aac4f9751d6f88c66f6e7d300e60` (task branch; awaiting merge to main)
+**Integration HEAD:** `0866d3743ef51874f42f7f817ba1ea6b4fa24d82` (task branch; awaiting merge to main)
 **Target stage:** 0
 
 ## Contract baseline

@@ -7,7 +7,7 @@
 **Status:** `COMPLETE` (awaiting PR merge / parent verification)  
 **Branch/worktree:** `cursor/s0-eng-001-repository-bootstrap-09ce` (`/workspace`)  
 **Upstream commit:** `89960fb38dadc1e9026af6392d6b4a1519539854`  
-**Current/final commit(s):** `3a46f01e5724aac4f9751d6f88c66f6e7d300e60`
+**Current/final commit(s):** `0866d3743ef51874f42f7f817ba1ea6b4fa24d82`
 
 ---
 
