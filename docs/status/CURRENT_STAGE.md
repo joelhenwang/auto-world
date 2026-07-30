@@ -32,9 +32,9 @@ See `docs/status/CONTRACT_FREEZE.md`. Stage 4 may add migrations **after** `0005
 | Task ID | Status |
 |---|---|
 | S4-BENCH-001 | COMPLETE |
-| S4-MODEL-001 | IN_PROGRESS |
-| S4-MODEL-002 | READY (packet authored) |
-| S4-ORCH-001 | READY (packet authored) |
+| S4-MODEL-001 | COMPLETE |
+| S4-MODEL-002 | COMPLETE |
+| S4-ORCH-001 | IN_PROGRESS |
 | S4-ORCH-002 | READY (packet authored) |
 | S4-STORAGE-001 | PENDING |
 | S4-IMG-001 | PENDING |

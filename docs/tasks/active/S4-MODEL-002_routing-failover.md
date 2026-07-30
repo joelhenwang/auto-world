@@ -35,7 +35,7 @@ Out of scope: worker leases (S4-ORCH-001); image routing (S4-IMG-*).
 
 ## 4. Acceptance criteria
 
-- [ ] Ten-step routing flow from handbook implemented
-- [ ] Simultaneous character intents can spread across replicas from one snapshot
-- [ ] Fault tests cover death, stale health, OOM, privacy, double completion
-- [ ] Offline by default
+- [x] Ten-step routing flow from handbook implemented
+- [x] Simultaneous character intents can spread across replicas from one snapshot
+- [x] Fault tests cover death, stale health, OOM, privacy, double completion
+- [x] Offline by default
