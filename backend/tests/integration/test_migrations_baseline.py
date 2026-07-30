@@ -37,7 +37,7 @@ async def test_alembic_baseline_empty_upgrade(postgres_container: dict[str, str]
     )
     heads = _alembic(url, "heads").stdout.strip().splitlines()
     assert len(heads) == 1
-    assert "0004_stage2_continuity_tables" in heads[0]
+    assert "0005_stage3_long_term_tables" in heads[0]
 
     _alembic(url, "upgrade", "head")
     engine = create_async_engine(url)

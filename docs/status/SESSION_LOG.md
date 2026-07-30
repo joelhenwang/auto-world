@@ -293,3 +293,33 @@ uv run python scripts/run_stage2_gate.py
 ### Handoff
 
 `docs/handoffs/2026-07-29_S2-QA-001.md`
+
+## 2026-07-29T24:10:00Z — Stage 3 kickoff / S3-DB-001
+
+**Agent/person:** parent coding agent (Stage 3)
+**Branch/worktree:** `cursor/s3-db-001-persistence-03fc`
+**Task IDs:** `S3-DB-001`
+**Starting HEAD:** `9294a5a`
+
+### Intended outcome
+
+Confirm Stage 2 freeze on main, set Stage 3 active, land S3-DB-001 migration `0005`
+plus ORM/repos/tests.
+
+### Completed
+
+- Preflight + Stage 3 status/kickoff/packet docs
+- Continuity `__init__` basedpyright regression fix
+- Alembic `0005_stage3_long_term_tables` (35 tables)
+- ORM, domain persistence, UoW ports/repos, schema export, integration tests
+
+### Verification
+
+```bash
+uv run pytest backend/tests/integration/test_stage3_schema.py \
+  backend/tests/integration/test_migrations_baseline.py -q   # 4 passed
+```
+
+### Handoff
+
+`docs/handoffs/2026-07-29_S3-DB-001.md`

@@ -46,6 +46,18 @@ from fictional_world.infrastructure.database.repositories.scenes import (
 from fictional_world.infrastructure.database.repositories.snapshots import (
     SqlAlchemyPhaseSnapshotRepository,
 )
+from fictional_world.infrastructure.database.repositories.stage3 import (
+    SqlAlchemyArcRepository,
+    SqlAlchemyEmbeddingJobRepository,
+    SqlAlchemyEmbeddingModelVersionRepository,
+    SqlAlchemyEvaluatorRunRepository,
+    SqlAlchemyFactionRepository,
+    SqlAlchemyInjuryRepository,
+    SqlAlchemyLongTermMemoryRepository,
+    SqlAlchemyMemoryEmbeddingRepository,
+    SqlAlchemyMonthRunRepository,
+    SqlAlchemyStatStateRepository,
+)
 from fictional_world.infrastructure.database.repositories.support import (
     SqlAlchemyAggregateVersionRepository,
     SqlAlchemyObservationRepository,
@@ -101,6 +113,16 @@ class SqlAlchemyUnitOfWork:
         self.diary_entries = cast(SqlAlchemyDiaryEntryRepository, None)
         self.day_runs = cast(SqlAlchemyDayRunRepository, None)
         self.daily_audits = cast(SqlAlchemyDailyAuditRepository, None)
+        self.long_term_memories = cast(SqlAlchemyLongTermMemoryRepository, None)
+        self.memory_embeddings = cast(SqlAlchemyMemoryEmbeddingRepository, None)
+        self.embedding_model_versions = cast(SqlAlchemyEmbeddingModelVersionRepository, None)
+        self.embedding_jobs = cast(SqlAlchemyEmbeddingJobRepository, None)
+        self.stat_states = cast(SqlAlchemyStatStateRepository, None)
+        self.injuries = cast(SqlAlchemyInjuryRepository, None)
+        self.factions = cast(SqlAlchemyFactionRepository, None)
+        self.arcs = cast(SqlAlchemyArcRepository, None)
+        self.evaluator_runs = cast(SqlAlchemyEvaluatorRunRepository, None)
+        self.month_runs = cast(SqlAlchemyMonthRunRepository, None)
 
     async def __aenter__(self) -> SqlAlchemyUnitOfWork:
         self.session = self._session_factory()
@@ -140,6 +162,16 @@ class SqlAlchemyUnitOfWork:
         self.diary_entries = SqlAlchemyDiaryEntryRepository(self.session)
         self.day_runs = SqlAlchemyDayRunRepository(self.session)
         self.daily_audits = SqlAlchemyDailyAuditRepository(self.session)
+        self.long_term_memories = SqlAlchemyLongTermMemoryRepository(self.session)
+        self.memory_embeddings = SqlAlchemyMemoryEmbeddingRepository(self.session)
+        self.embedding_model_versions = SqlAlchemyEmbeddingModelVersionRepository(self.session)
+        self.embedding_jobs = SqlAlchemyEmbeddingJobRepository(self.session)
+        self.stat_states = SqlAlchemyStatStateRepository(self.session)
+        self.injuries = SqlAlchemyInjuryRepository(self.session)
+        self.factions = SqlAlchemyFactionRepository(self.session)
+        self.arcs = SqlAlchemyArcRepository(self.session)
+        self.evaluator_runs = SqlAlchemyEvaluatorRunRepository(self.session)
+        self.month_runs = SqlAlchemyMonthRunRepository(self.session)
         return self
 
     async def __aexit__(
