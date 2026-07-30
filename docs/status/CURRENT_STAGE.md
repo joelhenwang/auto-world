@@ -1,7 +1,7 @@
 # Current Stage
 
-**Updated:** 2026-07-30T01:35:00Z  
-**Updated by:** Stage 4 ORCH subagent (S4-ORCH-002)  
+**Updated:** 2026-07-30T03:00:00Z  
+**Updated by:** Stage 4 STORAGE+IMG subagent (S4-STORAGE-001, S4-IMG-001/002/003)  
 **Repository:** autonomous-fictional-world  
 **Current branch:** `cursor/s4-integration-8b4a`  
 **Stage:** 4 — Local Distribution, Durable Orchestration, and Images | **Status:** ACTIVE  
@@ -36,10 +36,10 @@ See `docs/status/CONTRACT_FREEZE.md`. Stage 4 may add migrations **after** `0005
 | S4-MODEL-002 | COMPLETE |
 | S4-ORCH-001 | IN_PROGRESS |
 | S4-ORCH-002 | COMPLETE (ADR-0003 DEFER Temporal; noop port) |
-| S4-STORAGE-001 | PENDING |
-| S4-IMG-001 | PENDING |
-| S4-IMG-002 | PENDING |
-| S4-IMG-003 | PENDING |
+| S4-STORAGE-001 | COMPLETE |
+| S4-IMG-001 | COMPLETE |
+| S4-IMG-002 | COMPLETE |
+| S4-IMG-003 | COMPLETE |
 | S4-OPS-001 | PENDING |
 | S4-API-001 | PENDING |
 | S4-UI-001 | PENDING |

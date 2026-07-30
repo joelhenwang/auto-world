@@ -1,0 +1,81 @@
+{
+  "_meta": {
+    "name": "Stub Event CG — v1",
+    "version": "stub_v1",
+    "workflow_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "supported_asset_classes": ["EVENT_CG", "CHARACTER_PORTRAIT"],
+    "default_width": 832,
+    "default_height": 1216,
+    "required_node_types": ["KSampler", "CLIPTextEncode", "EmptyLatentImage", "VAEDecode"],
+    "output_node_ids": ["9"],
+    "safety_policy_version": "1.0"
+  },
+  "3": {
+    "class_type": "KSampler",
+    "_bindings": {
+      "seed": "inputs.seed",
+      "width": "inputs.width",
+      "height": "inputs.height"
+    },
+    "inputs": {
+      "seed": 42,
+      "steps": 20,
+      "cfg": 7.0,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "denoise": 1.0,
+      "model": ["4", 0],
+      "positive": ["6", 0],
+      "negative": ["7", 0],
+      "latent_image": ["5", 0]
+    }
+  },
+  "4": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "placeholder.safetensors"
+    }
+  },
+  "5": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "batch_size": 1,
+      "height": 1216,
+      "width": 832
+    }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "_bindings": {
+      "positive_prompt": "inputs.text"
+    },
+    "inputs": {
+      "text": "a beautiful scene",
+      "clip": ["4", 1]
+    }
+  },
+  "7": {
+    "class_type": "CLIPTextEncode",
+    "_bindings": {
+      "negative_prompt": "inputs.text"
+    },
+    "inputs": {
+      "text": "low quality, blurry",
+      "clip": ["4", 1]
+    }
+  },
+  "8": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": ["3", 0],
+      "vae": ["4", 2]
+    }
+  },
+  "9": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "filename_prefix": "worldsim",
+      "images": ["8", 0]
+    }
+  }
+}

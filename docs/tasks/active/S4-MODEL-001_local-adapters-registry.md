@@ -41,7 +41,7 @@ default for private worlds.
 
 ## 5. Acceptance criteria
 
-- [ ] Local adapters behind protocols
-- [ ] Explicit capability discovery (no auto-all-roles)
-- [ ] Tests with fake local HTTP / recorded responses
-- [ ] Default CI remains offline
+- [x] Local adapters behind protocols
+- [x] Explicit capability discovery (no auto-all-roles)
+- [x] Tests with fake local HTTP / recorded responses
+- [x] Default CI remains offline

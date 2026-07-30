@@ -29,6 +29,12 @@ from fictional_world.infrastructure.database.models.continuity import (
 )
 from fictional_world.infrastructure.database.models.entity import EntityRow, LocationRow
 from fictional_world.infrastructure.database.models.events import EventEffectRow, WorldEventRow
+from fictional_world.infrastructure.database.models.images import (
+    AssetObjectRow,
+    GalleryItemRow,
+    ImageJobRow,
+    VisualProfileRow,
+)
 from fictional_world.infrastructure.database.models.knowledge import (
     BeliefEvidenceRow,
     BeliefRow,
@@ -119,6 +125,7 @@ __all__ = [
     "ActivityRow",
     "AggregateVersionRow",
     "ArcRow",
+    "AssetObjectRow",
     "BeliefEvidenceRow",
     "BeliefRow",
     "CharacterCardVersionRow",
@@ -143,9 +150,11 @@ __all__ = [
     "FactionRelationRow",
     "FactionRow",
     "FactionStateRow",
+    "GalleryItemRow",
     "GoalRow",
     "HookRow",
     "HostRegistryRow",
+    "ImageJobRow",
     "InjuryRow",
     "InventoryEntryRow",
     "ItemRow",
@@ -204,6 +213,7 @@ __all__ = [
     "TravelProgressRow",
     "TropeUsageRow",
     "UserCommandRow",
+    "VisualProfileRow",
     "WorkerRegistryRow",
     "WorldClockRow",
     "WorldConfigRow",

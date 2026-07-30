@@ -7,6 +7,12 @@ from datetime import datetime, timedelta
 from typing import Protocol
 from uuid import UUID
 
+from fictional_world.application.ports.image_repositories import (
+    AssetObjectRepository,
+    GalleryItemRepository,
+    ImageJobRepository,
+    VisualProfileRepository,
+)
 from fictional_world.application.ports.stage3_repositories import (
     ArcRepository,
     EmbeddingJobRepository,
@@ -787,6 +793,10 @@ class UnitOfWork(Protocol):
     arcs: ArcRepository
     evaluator_runs: EvaluatorRunRepository
     month_runs: MonthRunRepository
+    asset_objects: AssetObjectRepository
+    image_jobs: ImageJobRepository
+    visual_profiles: VisualProfileRepository
+    gallery_items: GalleryItemRepository
 
     async def __aenter__(self) -> UnitOfWork: ...
 

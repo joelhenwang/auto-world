@@ -1,6 +1,7 @@
-# Stage 0 Compose skeleton — PostgreSQL + pgvector only.
-# Application / frontend / Stage 4 services are added by later tasks.
-# Handbook: 20 §5.
+# Stage 0–4 Compose.
+# Default profile: PostgreSQL only (no MinIO required for offline tests).
+# Add the `minio` profile to start object storage: `docker compose --profile minio up`.
+# Handbook: 20 §5; S4-STORAGE-001.
 
 name: fictional-world
 
@@ -24,6 +25,29 @@ services:
       retries: 10
       start_period: 10s
 
+  minio:
+    profiles: ["minio"]
+    image: quay.io/minio/minio:RELEASE.2024-01-16T16-07-38Z
+    container_name: fictional-world-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+    ports:
+      - "${MINIO_API_PORT:-9000}:9000"
+      - "${MINIO_CONSOLE_PORT:-9001}:9001"
+    volumes:
+      - fictional_world_minio_data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "mc ready local || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
 volumes:
   fictional_world_pgdata:
     name: fictional-world-pgdata
+  fictional_world_minio_data:
+    name: fictional-world-minio-data
