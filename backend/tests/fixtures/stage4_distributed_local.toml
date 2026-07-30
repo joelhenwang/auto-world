@@ -1,0 +1,38 @@
+scenario_id = "stage4-distributed-local-v1"
+seed = "caldris-embervale-v1:stage2"
+model_script = "fake/stage3-autonomous-month-v1"
+random_script = "deterministic"
+
+[[steps]]
+action = "seed_caldris_stage2"
+
+[[steps]]
+action = "run_stage3_thirty_day"
+
+# Stage 4 distributed-mode assertions
+[[assertions]]
+invariant = "thirty_days_ten_phases"
+
+[[assertions]]
+invariant = "four_focus_characters"
+
+[[assertions]]
+invariant = "thirty_day_runs"
+
+[[assertions]]
+invariant = "month_run_completed"
+
+[[assertions]]
+invariant = "no_hard_audit_violations"
+
+[[assertions]]
+invariant = "no_duplicate_events"
+
+[[assertions]]
+invariant = "stage4_fencing_rejects_stale_worker"
+
+[[assertions]]
+invariant = "stage4_image_enqueue_non_blocking"
+
+[[assertions]]
+invariant = "stage4_halo_loss_failover"
