@@ -42,7 +42,7 @@ See `docs/status/CONTRACT_FREEZE.md`. Stage 4 may add migrations **after** `0005
 | S4-IMG-003 | COMPLETE |
 | S4-OPS-001 | PENDING |
 | S4-API-001 | PENDING |
-| S4-UI-001 | PENDING |
+| S4-UI-001 | COMPLETE |
 | S4-QA-001 | PENDING |
 
 ## Baseline confirmed at Stage 4 kickoff

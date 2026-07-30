@@ -350,3 +350,33 @@ S4-MODEL-001 local adapters + capability registry.
 ### Handoff
 
 `docs/handoffs/2026-07-30_S4-KICKOFF.md`, `docs/handoffs/2026-07-30_S4-BENCH-001.md`
+
+## 2026-07-30T02:20:00Z — S4-UI-001 ops/gallery UI
+
+**Agent/person:** coding subagent (S4-UI-001)
+**Branch/worktree:** `cursor/s4-integration-8b4a`
+**Task IDs:** `S4-UI-001`
+**Starting HEAD:** `5d3c45a`
+
+### Intended outcome
+
+Observer panels for worker health, image gallery (noncanonical banner), image
+queue, and visual profiles — additive Vue wiring only under `frontend/`.
+
+### Completed
+
+- Four panels under `frontend/src/features/ops/`
+- Stage 4 DTO stubs + soft-fail API client methods
+- Vitest coverage including noncanonical banner assertion
+- Task packet COMPLETE; handoff written
+
+### Verification
+
+```bash
+pnpm --dir frontend test   # 20 passed
+pnpm --dir frontend build  # OK
+```
+
+### Handoff
+
+`docs/handoffs/2026-07-30_S4-UI-001.md`

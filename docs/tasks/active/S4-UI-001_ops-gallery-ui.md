@@ -2,7 +2,7 @@
 
 **Stage:** 4  
 **Workstream:** UI  
-**Status:** READY  
+**Status:** COMPLETE  
 **Priority:** P1  
 
 ## Objective
@@ -12,6 +12,6 @@ with clear noncanonical labeling.
 
 ## Acceptance
 
-- [ ] New panels under frontend/src/features/
-- [ ] Frontend tests pass
-- [ ] Noncanonical banner on gallery
+- [x] New panels under frontend/src/features/
+- [x] Frontend tests pass
+- [x] Noncanonical banner on gallery

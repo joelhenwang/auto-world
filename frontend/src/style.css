@@ -694,6 +694,71 @@ footer {
   text-align: center;
 }
 
+.noncanonical-banner {
+  margin: 0;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid #5a4a32;
+  color: #e8d4a8;
+  background: rgb(108 59 37 / 28%);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+  padding: 1rem 1.25rem 1.25rem;
+  list-style: none;
+}
+
+.gallery-tile {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.gallery-preview {
+  display: grid;
+  min-height: 7rem;
+  place-content: center;
+  overflow: hidden;
+  border: 1px solid #3b4d46;
+  border-radius: 0.45rem;
+  color: var(--muted);
+  background:
+    linear-gradient(145deg, rgb(216 135 84 / 14%), transparent),
+    #17201d;
+  text-align: center;
+}
+
+.gallery-preview img {
+  display: block;
+  width: 100%;
+  height: 7rem;
+  object-fit: cover;
+}
+
+.gallery-preview span {
+  color: var(--ember);
+  font-family: Charter, Georgia, serif;
+  font-size: 1.6rem;
+}
+
+.gallery-preview small {
+  font-size: 0.66rem;
+}
+
+.gallery-meta {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.gallery-meta .muted {
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
 @media (max-width: 780px) {
   .runtime-header,
   .runtime-grid,

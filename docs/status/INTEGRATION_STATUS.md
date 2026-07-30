@@ -29,7 +29,7 @@
 | S4-IMG-003 | COMPLETE | QC + gallery lifecycle; phase isolation guaranteed |
 | S4-OPS-001 | PENDING | |
 | S4-API-001 | PENDING | |
-| S4-UI-001 | PENDING | |
+| S4-UI-001 | COMPLETE | ops/gallery panels + noncanonical banner |
 | S4-QA-001 | PENDING | |
 
 ## Gate commands (regression)
