@@ -1,0 +1,12 @@
+
+> fictional-world-web@0.0.0 test /workspace/frontend
+> vitest run
+
+
+ RUN  v4.1.10 /workspace/frontend
+
+
+ Test Files  7 passed (7)
+      Tests  13 passed (13)
+   Start at  00:30:22
+   Duration  2.25s (transform 414ms, setup 0ms, import 1.43s, tests 169ms, environment 3.37s)

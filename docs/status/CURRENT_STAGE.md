@@ -32,19 +32,19 @@ contracts only.
 | Task ID | Status |
 |---|---|
 | S3-DB-001 | COMPLETE |
-| S3-MEM-001 | READY (blocked on S3-DB-001) |
-| S3-MEM-002 | READY (blocked on S3-MEM-001) |
-| S3-MEM-003 | READY (blocked on S3-MEM-002) |
-| S3-RULES-001 | READY (blocked on S3-DB-001) |
-| S3-RULES-002 | READY (blocked on S3-RULES-001) |
-| S3-RULES-003 | READY (blocked on S3-RULES-001) |
-| S3-WORLD-001 | READY (blocked on S3-DB-001) |
-| S3-WORLD-002 | READY (blocked on S3-WORLD-001) |
-| S3-GRAPH-001 | READY (blocked on effect/rules freeze) |
-| S3-ORCH-001 | READY (blocked on MEM/RULES/WORLD) |
-| S3-API-001 | READY (blocked on ORCH projections) |
-| S3-UI-001 | READY (blocked on S3-API-001) |
-| S3-QA-001 | READY (blocked on all above) |
+| S3-MEM-001 | COMPLETE |
+| S3-MEM-002 | COMPLETE |
+| S3-MEM-003 | COMPLETE |
+| S3-RULES-001 | COMPLETE |
+| S3-RULES-002 | COMPLETE |
+| S3-RULES-003 | COMPLETE |
+| S3-WORLD-001 | COMPLETE |
+| S3-WORLD-002 | COMPLETE |
+| S3-GRAPH-001 | COMPLETE |
+| S3-ORCH-001 | COMPLETE |
+| S3-API-001 | COMPLETE |
+| S3-UI-001 | COMPLETE |
+| S3-QA-001 | IN_PROGRESS |
 
 ## Next concrete step
 
