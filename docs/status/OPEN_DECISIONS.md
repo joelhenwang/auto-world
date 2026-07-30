@@ -77,3 +77,24 @@ S0-SIM-001 implements validators/projectors for these kinds.
 ### Decision
 
 Use `extra=forbid` + `frozen=True` (handbook `05`) without global `strict=True`, so JSON string→UUID/datetime coercion works at boundaries. Callers may still `model_validate(..., strict=True)` for model-output paths.
+
+---
+
+## DEC-2026-004 — Stage 4 local serving stack pin without Halo silicon in CI
+
+**Status:** ACCEPTED  
+**Opened:** 2026-07-30T01:25:00Z  
+**Owner:** Stage 4 parent  
+**Affected tasks/contracts:** S4-BENCH-001; ADR-0002; S4-MODEL-001/002  
+**Blocking:** no for software integration; yes for claiming live GPU soak
+
+### Question
+
+Can Stage 4 accept a serving-stack ADR when the cloud agent lacks Strix Halo / RTX 4060 Ti?
+
+### Decision
+
+Accept **provisional** preference (llama.cpp primary; vLLM upgrade gated on live soak) via
+ADR-0002. Require `local_model_live` evidence on target hosts before production pin
+promotion. Do not invent GPU soak metrics. OpenRouter remains emergency/dev only.
+

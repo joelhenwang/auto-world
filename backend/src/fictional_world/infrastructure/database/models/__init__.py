@@ -1,4 +1,4 @@
-"""SQLAlchemy ORM models for Stage 0-3 schema."""
+"""SQLAlchemy ORM models for Stage 0-4 schema."""
 
 from fictional_world.infrastructure.database.models.character import (
     CharacterCardVersionRow,
@@ -29,6 +29,12 @@ from fictional_world.infrastructure.database.models.continuity import (
 )
 from fictional_world.infrastructure.database.models.entity import EntityRow, LocationRow
 from fictional_world.infrastructure.database.models.events import EventEffectRow, WorldEventRow
+from fictional_world.infrastructure.database.models.images import (
+    AssetObjectRow,
+    GalleryItemRow,
+    ImageJobRow,
+    VisualProfileRow,
+)
 from fictional_world.infrastructure.database.models.knowledge import (
     BeliefEvidenceRow,
     BeliefRow,
@@ -102,6 +108,10 @@ from fictional_world.infrastructure.database.models.stage3 import (
     StatStateRow,
     TropeUsageRow,
 )
+from fictional_world.infrastructure.database.models.workers import (
+    HostRegistryRow,
+    WorkerRegistryRow,
+)
 from fictional_world.infrastructure.database.models.world import (
     WorldClockRow,
     WorldConfigRow,
@@ -115,6 +125,7 @@ __all__ = [
     "ActivityRow",
     "AggregateVersionRow",
     "ArcRow",
+    "AssetObjectRow",
     "BeliefEvidenceRow",
     "BeliefRow",
     "CharacterCardVersionRow",
@@ -139,8 +150,11 @@ __all__ = [
     "FactionRelationRow",
     "FactionRow",
     "FactionStateRow",
+    "GalleryItemRow",
     "GoalRow",
     "HookRow",
+    "HostRegistryRow",
+    "ImageJobRow",
     "InjuryRow",
     "InventoryEntryRow",
     "ItemRow",
@@ -199,6 +213,8 @@ __all__ = [
     "TravelProgressRow",
     "TropeUsageRow",
     "UserCommandRow",
+    "VisualProfileRow",
+    "WorkerRegistryRow",
     "WorldClockRow",
     "WorldConfigRow",
     "WorldEventRow",

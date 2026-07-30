@@ -1,4 +1,4 @@
-"""Task-run repository with SKIP LOCKED claim semantics."""
+"""Task-run repository with SKIP LOCKED claim semantics (S0-ORCH-001, S4-ORCH-001)."""
 
 from __future__ import annotations
 
@@ -7,7 +7,8 @@ from datetime import datetime, timedelta
 from typing import Any, cast
 from uuid import UUID
 
-from sqlalchemy import and_, exists, not_, or_, select
+from sqlalchemy import and_, exists, not_, or_, select, update
+from sqlalchemy.engine import CursorResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import aliased
 
@@ -59,6 +60,7 @@ class SqlAlchemyTaskRepository:
             lease_owner=task.lease_owner,
             lease_expires_at=task.lease_expires_at,
             heartbeat_at=task.heartbeat_at,
+            fencing_token=task.fencing_token,
             result_reference=_json_map(task.result_reference),
             error_code=task.error_code,
             error_detail=_json_map(task.error_detail),
@@ -142,6 +144,7 @@ class SqlAlchemyTaskRepository:
             row.lease_owner = worker_id
             row.lease_expires_at = now + lease_duration
             row.heartbeat_at = now
+            row.fencing_token = int(row.fencing_token) + 1
             claimed.append(task_to_record(row))
         await self._session.flush()
         return claimed
@@ -153,15 +156,23 @@ class SqlAlchemyTaskRepository:
         worker_id: str,
         lease_duration: timedelta,
         now: datetime,
+        fencing_token: int | None = None,
     ) -> TaskRun:
-        row = await self._require_lease(task_id, worker_id=worker_id)
+        row = await self._require_lease(task_id, worker_id=worker_id, fencing_token=fencing_token)
         row.heartbeat_at = now
         row.lease_expires_at = now + lease_duration
         await self._session.flush()
         return task_to_record(row)
 
-    async def mark_running(self, task_id: UUID, *, worker_id: str, now: datetime) -> TaskRun:
-        row = await self._require_lease(task_id, worker_id=worker_id)
+    async def mark_running(
+        self,
+        task_id: UUID,
+        *,
+        worker_id: str,
+        now: datetime,
+        fencing_token: int | None = None,
+    ) -> TaskRun:
+        row = await self._require_lease(task_id, worker_id=worker_id, fencing_token=fencing_token)
         if TaskState(row.state) not in LEASED_TASK_STATES:
             raise InvalidStateTransition(
                 entity="task_run",
@@ -180,8 +191,9 @@ class SqlAlchemyTaskRepository:
         worker_id: str,
         now: datetime,
         result_reference: Mapping[str, object] | None = None,
+        fencing_token: int | None = None,
     ) -> TaskRun:
-        row = await self._require_lease(task_id, worker_id=worker_id)
+        row = await self._require_lease(task_id, worker_id=worker_id, fencing_token=fencing_token)
         row.state = TaskState.SUCCEEDED.value
         row.result_reference = _json_map(result_reference)
         row.lease_owner = None
@@ -202,8 +214,9 @@ class SqlAlchemyTaskRepository:
         error_code: str,
         error_detail: Mapping[str, object] | None,
         retry_delay: timedelta,
+        fencing_token: int | None = None,
     ) -> TaskRun:
-        row = await self._require_lease(task_id, worker_id=worker_id)
+        row = await self._require_lease(task_id, worker_id=worker_id, fencing_token=fencing_token)
         row.error_code = error_code
         row.error_detail = _json_map(error_detail)
         row.lease_owner = None
@@ -262,7 +275,48 @@ class SqlAlchemyTaskRepository:
         )
         return [task_to_record(row) for row in result.scalars().all()]
 
-    async def _require_lease(self, task_id: UUID, *, worker_id: str) -> TaskRunRow:
+    async def reset_abandoned_leases(
+        self,
+        *,
+        worker_keys: Sequence[str],
+        now: datetime,
+    ) -> int:
+        """Reset tasks claimed by lost workers back to PENDING for re-queuing.
+
+        Returns the number of tasks reset.
+        """
+        if not worker_keys:
+            return 0
+        stmt = (
+            update(TaskRunRow)
+            .where(
+                TaskRunRow.lease_owner.in_(worker_keys),
+                TaskRunRow.state.in_([s.value for s in LEASED_TASK_STATES]),
+            )
+            .values(
+                state=TaskState.PENDING.value,
+                lease_owner=None,
+                lease_expires_at=None,
+                available_at=now,
+            )
+            .execution_options(synchronize_session="fetch")
+        )
+        cursor: CursorResult[tuple[()]] = await self._session.execute(stmt)  # type: ignore[assignment]
+        await self._session.flush()
+        return int(cursor.rowcount)
+
+    async def _require_lease(
+        self,
+        task_id: UUID,
+        *,
+        worker_id: str,
+        fencing_token: int | None = None,
+    ) -> TaskRunRow:
+        """Load a task row under FOR UPDATE and verify the caller still owns the lease.
+
+        When *fencing_token* is provided it must match the value stored in the row;
+        this rejects stale workers whose lease was superseded by a fresh claim.
+        """
         row = await self._session.get(TaskRunRow, task_id, with_for_update=True)
         if row is None:
             raise OptimisticConcurrencyError(
@@ -281,5 +335,11 @@ class SqlAlchemyTaskRepository:
                 entity="task_run",
                 entity_id=str(task_id),
                 expected_version=-1,
+            )
+        if fencing_token is not None and int(row.fencing_token) != fencing_token:
+            raise OptimisticConcurrencyError(
+                entity="task_run",
+                entity_id=str(task_id),
+                expected_version=fencing_token,
             )
         return row

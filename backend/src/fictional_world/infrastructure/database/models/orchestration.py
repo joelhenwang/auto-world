@@ -71,6 +71,7 @@ class TaskRunRow(Base):
         DateTime(timezone=True), nullable=True
     )
     heartbeat_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    fencing_token: Mapped[int] = mapped_column(BigInteger, nullable=False, server_default=text("0"))
     result_reference: Mapped[object | None] = mapped_column(JSONB, nullable=True)
     error_code: Mapped[str | None] = mapped_column(Text, nullable=True)
     error_detail: Mapped[object | None] = mapped_column(JSONB, nullable=True)

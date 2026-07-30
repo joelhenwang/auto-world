@@ -1,16 +1,18 @@
-# Contract Freeze — Stages 0–3
+# Contract Freeze — Stages 0–4
 
-**Status:** FROZEN (Stage 0 + Stage 1 + Stage 2 + Stage 3)
+**Status:** FROZEN (Stage 0 + Stage 1 + Stage 2 + Stage 3 + Stage 4)
 **Freeze date:** 2026-07-30
 **Freeze owner:** parent coding agent  
 **Stage 1 integration commit:** `7727c7f69d935bba58dd6608c9504efe86aa9ec5` (main after PR #19)  
 **Stage 2 freeze branch:** `cursor/s2-qa-001-gate-085f` (see `docs/status/evidence/stage-2/version-manifest.json`)  
-**Stage documents:** `25_STAGE_0_FOUNDATION.md`, `26_STAGE_1_FIRST_COMPLETE_DAY.md`, `27_STAGE_2_SEVEN_DAY_WORLD.md`, `28_STAGE_3_AUTONOMOUS_MONTH.md`
+**Stage 4 freeze branch:** `cursor/s4-integration-8b4a` (see `docs/status/evidence/stage-4/version-manifest.json`)  
+**Stage documents:** `25_STAGE_0_FOUNDATION.md`, `26_STAGE_1_FIRST_COMPLETE_DAY.md`, `27_STAGE_2_SEVEN_DAY_WORLD.md`, `28_STAGE_3_AUTONOMOUS_MONTH.md`, `29_STAGE_4_LOCAL_DISTRIBUTION_AND_IMAGES.md`
 **Gate reports:**  
 - Stage 0: `docs/status/evidence/stage-0/stage-gate-report.md`  
 - Stage 1: `docs/status/evidence/stage-1/stage-gate-report.md`  
 - Stage 2: `docs/status/evidence/stage-2/stage-gate-report.md`
 - Stage 3: `docs/status/evidence/stage-3/stage-gate-report.md`
+- Stage 4: `docs/status/evidence/stage-4/stage-gate-report.md`
 
 ## Frozen contracts — Stage 0
 
@@ -104,6 +106,40 @@ Key Stage 3 freeze hashes (recomputed by `scripts/run_stage3_gate.py`):
 | Migration `0004` | S3 schema revisions forward only |
 | Stage 2 API/UI | additive long-horizon observer surfaces |
 
+## Frozen contracts — Stage 4
+
+| Contract | Source | Generated artefact / evidence | Version/hash | Allowed change in Stage 5 |
+|---|---|---|---|---|
+| Migration head | S4-ORCH-001, S4-IMG-001 | `docs/generated/database-schema.sql` | `74405bd9…` / `0007_stage4_img` | **new revisions only** |
+| Worker/host registry + fencing | S4-ORCH-001 | `domain/tasks/workers.py`, `transitions.py` | `fencing_token >= 0` | additive fields via ADR |
+| Task-run fencing token | S4-ORCH-001 | `domain/tasks/task_run.py` | `fencing_token: int = 0` | additive; must increment on reclaim |
+| Capability registry + health | S4-MODEL-001 | `application/models/capability_registry.py` | Stage 4 surface | additive endpoint fields via ADR |
+| Health-aware routing | S4-MODEL-002 | `application/models/routing.py` | Stage 4 | additive scoring rules |
+| Image outbox/enqueue | S4-IMG-001 | `application/images/enqueue.py` | never-blocking, idempotent | no sync-enqueue from phase runner |
+| image_job / asset_object / gallery_item / visual_profile tables | S4-IMG-001/002/003 | migration `0007_stage4_img` | `0007` | additive columns/tables |
+| Image non-canon rule | S4-IMG-001 | handbook 29 §4 | images never auto-canon | no auto-canon path permitted |
+| Temporal port (deferred) | S4-ORCH-002 | `application/orchestration/temporal_port.py` | ADR-0003 DEFER | DB orchestrator is prod path; Temporal adoption requires new ADR |
+| OpenAPI Stage 4 additive | S4-API-001 | `docs/generated/openapi.json` | `279a2a42…` | additive endpoints only |
+| Admin/worker/image API | S4-API-001 | `interfaces/api/v1/admin.py` | Stage 4 | additive routes/fields |
+
+Key Stage 4 freeze hashes (recomputed by `scripts/run_stage4_gate.py`):
+
+| Artefact | sha256 |
+|---|---|
+| `uv.lock` | `c43c220b80302e42f452d72c65a02e97ebd101ff73845fe866c1eb3010e5454e` |
+| `frontend/pnpm-lock.yaml` | `22002950d79c21ad580902db44355d4e0f817b76e7a4ed2d4b8c3ed0520c32ac` |
+| `docs/generated/openapi.json` | `279a2a42c03ac37cb4d77c019560fb798b8c1f19927d2e849653188aa07896be` |
+| `docs/generated/database-schema.sql` | `74405bd9937ffcb846e758ea0a5f135e9998e15363ce10639b9cee80f129e339` |
+
+## Consumers (Stage 5)
+
+| Contract | Consumer tasks |
+|---|---|
+| Worker/fencing/registry | S5 multi-host ops, live soak |
+| Health-aware routing | S5 live Halo A/B serving |
+| Image pipeline | S5 visual continuity, live ComfyUI |
+| Migration `0007` | S5 schema revisions forward only |
+
 ## Freeze tests
 
 ```bash
@@ -112,6 +148,7 @@ sudo chmod 666 /var/run/docker.sock
 uv run python scripts/run_stage1_gate.py
 uv run python scripts/run_stage2_gate.py
 uv run python scripts/run_stage3_gate.py
+uv run python scripts/run_stage4_gate.py
 ```
 
 ## Amendment procedure
@@ -134,3 +171,7 @@ uv run python scripts/run_stage3_gate.py
 | 2026-07-29 | Stage 2 gate → freeze Stage 2 contracts | candidate | FROZEN @ `e87fa14` (S2-QA-001) | S3-* | QA automated PASS; parent merge pending |
 | 2026-07-29 | S3-DB-001 additive migration `0005_stage3_long_term_tables` | `0004_stage2_continuity_tables` | `0005_stage3_long_term_tables` | S3-* | parent |
 | 2026-07-30 | Stage 3 gate → freeze Stage 3 contracts | candidate | FROZEN @ `b055f5b` | S4-* | QA automated PASS; parent merge pending |
+| 2026-07-30 | S4-ORCH-001 migration `0006_stage4_distributed_workers` + S4-IMG-001 `0007_stage4_img` | `0005_stage3_long_term_tables` | `0007_stage4_img` | S4-* | parent |
+| 2026-07-30 | ADR-0002 local serving stack selection (llama.cpp Q5_K_M) | — | ADR-0002 | S4-MODEL-001/002 | parent |
+| 2026-07-30 | ADR-0003 Temporal evaluation: DEFER, DB orchestrator is Stage 4 prod path | — | ADR-0003 | S4-ORCH-002 | parent |
+| 2026-07-30 | Stage 4 gate → freeze Stage 4 contracts | candidate | FROZEN @ `cursor/s4-integration-8b4a` | S5-* | QA automated PASS; parent review pending |

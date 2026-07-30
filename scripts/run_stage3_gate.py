@@ -277,7 +277,7 @@ def _write_reports(
                 "",
                 "Four primary characters complete thirty autonomous days x ten phases from one",
                 "sealed snapshot per phase. Day-finalization is restart-safe; knowledge",
-                "isolation holds across perspective packages; Stage 1–2 remain green.",
+                "isolation holds across perspective packages; Stage 1-2 remain green.",
                 "",
                 "## 2. Build and version manifest",
                 "",

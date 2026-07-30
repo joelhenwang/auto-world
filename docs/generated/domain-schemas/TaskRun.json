@@ -134,6 +134,12 @@
       "default": null,
       "title": "Error Detail"
     },
+    "fencing_token": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Fencing Token",
+      "type": "integer"
+    },
     "heartbeat_at": {
       "anyOf": [
         {

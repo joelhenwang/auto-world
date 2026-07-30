@@ -40,6 +40,20 @@ describe('WorldApiClient', () => {
     await expect(client.getDirectorPanel('world-1')).resolves.toBeNull()
   })
 
+  it('returns empty stage4 ops collections when endpoints are missing', async () => {
+    fetchMock.mockImplementation(async () => new Response('not found', { status: 404 }))
+    const client = new WorldApiClient('https://world.test')
+
+    await expect(client.getWorkerHealth('world-1')).resolves.toEqual({
+      hosts: [],
+      workers: [],
+      models: [],
+    })
+    await expect(client.getGallery('world-1')).resolves.toEqual([])
+    await expect(client.getImageJobs('world-1')).resolves.toEqual([])
+    await expect(client.getVisualProfiles('world-1')).resolves.toEqual([])
+  })
+
   it('submits player intent fields rather than canonical effects', async () => {
     fetchMock.mockResolvedValue(
       new Response(

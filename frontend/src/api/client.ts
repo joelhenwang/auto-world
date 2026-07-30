@@ -13,6 +13,12 @@ import type {
   SummaryRead,
 } from './stage2-types'
 import type { ArcRead, FactionRead, LongTermMemoryRead, MonthRunRead } from './stage3-types'
+import type {
+  GalleryItemRead,
+  ImageJobRead,
+  VisualProfileRead,
+  WorkerHealthPanelRead,
+} from './stage4-types'
 
 export type WorldRead = components['schemas']['WorldRead']
 export type ClockRead = components['schemas']['ClockRead']
@@ -39,6 +45,22 @@ export type {
 }
 
 export type { ArcRead, FactionRead, LongTermMemoryRead, MonthRunRead }
+
+export type {
+  GalleryItemRead,
+  HostHealthRead,
+  ImageJobRead,
+  ModelHealthRead,
+  VisualProfileRead,
+  WorkerHealthPanelRead,
+  WorkerHealthRead,
+} from './stage4-types'
+
+export { NONCANONICAL_ILLUSTRATION_BANNER } from './stage4-types'
+
+function emptyWorkerHealth(): WorkerHealthPanelRead {
+  return { hosts: [], workers: [], models: [] }
+}
 
 type RequestOptions = Omit<RequestInit, 'body'> & {
   body?: object
@@ -210,6 +232,40 @@ export class WorldApiClient {
     return this.optionalArray(
       `/api/v1/worlds/${worldId}/characters/${characterId}/memories`,
     )
+  }
+
+  /** Stage 4 host/worker/model health; empty when admin API is not yet available. */
+  getWorkerHealth(worldId: string): Promise<WorkerHealthPanelRead> {
+    return this.optionalList(
+      `/api/v1/worlds/${worldId}/ops/workers`,
+      emptyWorkerHealth,
+      (raw) => {
+        if (raw && typeof raw === 'object' && !Array.isArray(raw)) {
+          const panel = raw as Partial<WorkerHealthPanelRead>
+          return {
+            hosts: Array.isArray(panel.hosts) ? panel.hosts : [],
+            workers: Array.isArray(panel.workers) ? panel.workers : [],
+            models: Array.isArray(panel.models) ? panel.models : [],
+          }
+        }
+        return emptyWorkerHealth()
+      },
+    )
+  }
+
+  /** Stage 4 gallery items; empty until S4-API-001 lands. */
+  getGallery(worldId: string): Promise<GalleryItemRead[]> {
+    return this.optionalArray(`/api/v1/worlds/${worldId}/gallery`)
+  }
+
+  /** Stage 4 image job queue; empty until S4-API-001 lands. */
+  getImageJobs(worldId: string): Promise<ImageJobRead[]> {
+    return this.optionalArray(`/api/v1/worlds/${worldId}/image-jobs`)
+  }
+
+  /** Stage 4 visual profiles; empty until S4-API-001 lands. */
+  getVisualProfiles(worldId: string): Promise<VisualProfileRead[]> {
+    return this.optionalArray(`/api/v1/worlds/${worldId}/visual-profiles`)
   }
 
   advance(worldId: string): Promise<AdvancePhaseResponse> {

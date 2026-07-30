@@ -22,6 +22,10 @@ import {
   type WorldRead,
   type ArcRead,
   type FactionRead,
+  type GalleryItemRead,
+  type ImageJobRead,
+  type VisualProfileRead,
+  type WorkerHealthPanelRead,
 } from './api/client'
 import {
   connectWorldStream,
@@ -38,6 +42,10 @@ import NpcLifecyclePanel from './features/runtime/NpcLifecyclePanel.vue'
 import PlayerComposer from './features/runtime/PlayerComposer.vue'
 import RuntimeHeader from './features/runtime/RuntimeHeader.vue'
 import TimelinePanel from './features/runtime/TimelinePanel.vue'
+import ImageGalleryPanel from './features/ops/ImageGalleryPanel.vue'
+import ImageQueuePanel from './features/ops/ImageQueuePanel.vue'
+import VisualProfilePanel from './features/ops/VisualProfilePanel.vue'
+import WorkerHealthPanel from './features/ops/WorkerHealthPanel.vue'
 import type { ActionDraft } from './features/runtime/types'
 import { useSessionStore } from './stores/session'
 
@@ -62,6 +70,10 @@ const directorPanel = ref<DirectorPanelRead | null>(null)
 const monthRuns = ref<MonthRunRead[]>([])
 const arcs = ref<ArcRead[]>([])
 const factions = ref<FactionRead[]>([])
+const workerHealth = ref<WorkerHealthPanelRead>({ hosts: [], workers: [], models: [] })
+const galleryItems = ref<GalleryItemRead[]>([])
+const imageJobs = ref<ImageJobRead[]>([])
+const visualProfiles = ref<VisualProfileRead[]>([])
 const memoryCount = ref(0)
 const focusCharacterId = ref<string>()
 const timelineFilters = ref<{ characterId?: string; locationId?: string }>({})
@@ -191,7 +203,7 @@ async function refreshProjections(): Promise<void> {
   if (!world.value) {
     return
   }
-  const [nextClock, nextCharacters, nextProgress, nextMap, nextNpcs, nextMonths, nextArcs, nextFactions] =
+  const [nextClock, nextCharacters, nextProgress, nextMap, nextNpcs, nextMonths, nextArcs, nextFactions, nextHealth, nextGallery, nextJobs, nextProfiles] =
     await Promise.all([
       worldApi.getClock(world.value.id),
       worldApi.getCharacters(world.value.id),
@@ -201,6 +213,10 @@ async function refreshProjections(): Promise<void> {
       worldApi.getMonthRuns(world.value.id),
       worldApi.getArcs(world.value.id),
       worldApi.getFactions(world.value.id),
+      worldApi.getWorkerHealth(world.value.id),
+      worldApi.getGallery(world.value.id),
+      worldApi.getImageJobs(world.value.id),
+      worldApi.getVisualProfiles(world.value.id),
     ])
   clock.value = nextClock
   characters.value = nextCharacters
@@ -210,6 +226,10 @@ async function refreshProjections(): Promise<void> {
   monthRuns.value = nextMonths
   arcs.value = nextArcs
   factions.value = nextFactions
+  workerHealth.value = nextHealth
+  galleryItems.value = nextGallery
+  imageJobs.value = nextJobs
+  visualProfiles.value = nextProfiles
 
   if (session.canViewDirector) {
     try {
@@ -242,6 +262,10 @@ async function refreshAll(): Promise<void> {
     nextMonths,
     nextArcs,
     nextFactions,
+    nextHealth,
+    nextGallery,
+    nextJobs,
+    nextProfiles,
   ] = await Promise.all([
     worldApi.getClock(world.value.id),
     worldApi.getCharacters(world.value.id),
@@ -256,6 +280,10 @@ async function refreshAll(): Promise<void> {
     worldApi.getMonthRuns(world.value.id),
     worldApi.getArcs(world.value.id),
     worldApi.getFactions(world.value.id),
+    worldApi.getWorkerHealth(world.value.id),
+    worldApi.getGallery(world.value.id),
+    worldApi.getImageJobs(world.value.id),
+    worldApi.getVisualProfiles(world.value.id),
   ])
   clock.value = nextClock
   characters.value = nextCharacters
@@ -266,6 +294,10 @@ async function refreshAll(): Promise<void> {
   monthRuns.value = nextMonths
   arcs.value = nextArcs
   factions.value = nextFactions
+  workerHealth.value = nextHealth
+  galleryItems.value = nextGallery
+  imageJobs.value = nextJobs
+  visualProfiles.value = nextProfiles
 
   if (session.canViewDirector) {
     try {
@@ -524,6 +556,10 @@ onUnmounted(() => stream?.close())
         :factions="factions"
         :character-name="focusedCharacter?.name"
       />
+      <WorkerHealthPanel :health="workerHealth" />
+      <ImageGalleryPanel :items="galleryItems" />
+      <ImageQueuePanel :jobs="imageJobs" />
+      <VisualProfilePanel :profiles="visualProfiles" />
       <DirectorMetricsPanel
         v-if="session.canViewDirector && directorPanel"
         :panel="directorPanel"

@@ -37,7 +37,7 @@ async def test_alembic_baseline_empty_upgrade(postgres_container: dict[str, str]
     )
     heads = _alembic(url, "heads").stdout.strip().splitlines()
     assert len(heads) == 1
-    assert "0005_stage3_long_term_tables" in heads[0]
+    assert "0007_stage4_img" in heads[0]
 
     _alembic(url, "upgrade", "head")
     engine = create_async_engine(url)
@@ -57,7 +57,7 @@ async def test_alembic_baseline_empty_upgrade(postgres_container: dict[str, str]
         tables = await conn.execute(
             text("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'worldsim'")
         )
-        assert int(tables.scalar_one()) >= 34
+        assert int(tables.scalar_one()) >= 40
         await conn.execute(text("SELECT '[1,2,3]'::vector"))
     await engine.dispose()
 

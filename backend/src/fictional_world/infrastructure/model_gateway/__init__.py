@@ -10,6 +10,7 @@ from fictional_world.infrastructure.model_gateway.errors import (
     map_openrouter_error_body,
 )
 from fictional_world.infrastructure.model_gateway.fake import FakeModelGatewayAdapter
+from fictional_world.infrastructure.model_gateway.local import LocalOpenAICompatibleGateway
 from fictional_world.infrastructure.model_gateway.openrouter import OpenRouterGateway
 
 __all__ = [
@@ -17,6 +18,7 @@ __all__ = [
     "CapabilityProbeResult",
     "CapabilityProbeStub",
     "FakeModelGatewayAdapter",
+    "LocalOpenAICompatibleGateway",
     "OpenRouterGateway",
     "map_http_error",
     "map_openrouter_error_body",

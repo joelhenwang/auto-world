@@ -32,6 +32,12 @@ from fictional_world.infrastructure.database.repositories.continuity import (
     SqlAlchemySummaryRepository,
 )
 from fictional_world.infrastructure.database.repositories.events import SqlAlchemyEventRepository
+from fictional_world.infrastructure.database.repositories.images import (
+    SqlAlchemyAssetObjectRepository,
+    SqlAlchemyGalleryItemRepository,
+    SqlAlchemyImageJobRepository,
+    SqlAlchemyVisualProfileRepository,
+)
 from fictional_world.infrastructure.database.repositories.phases import SqlAlchemyPhaseRepository
 from fictional_world.infrastructure.database.repositories.scenes import (
     SqlAlchemyActionProposalRepository,
@@ -67,6 +73,10 @@ from fictional_world.infrastructure.database.repositories.support import (
 from fictional_world.infrastructure.database.repositories.tasks import SqlAlchemyTaskRepository
 from fictional_world.infrastructure.database.repositories.user_commands import (
     SqlAlchemyUserCommandRepository,
+)
+from fictional_world.infrastructure.database.repositories.workers import (
+    SqlAlchemyHostRepository,
+    SqlAlchemyWorkerRepository,
 )
 from fictional_world.infrastructure.database.repositories.worlds import SqlAlchemyWorldRepository
 
@@ -123,6 +133,12 @@ class SqlAlchemyUnitOfWork:
         self.arcs = cast(SqlAlchemyArcRepository, None)
         self.evaluator_runs = cast(SqlAlchemyEvaluatorRunRepository, None)
         self.month_runs = cast(SqlAlchemyMonthRunRepository, None)
+        self.hosts = cast(SqlAlchemyHostRepository, None)
+        self.workers = cast(SqlAlchemyWorkerRepository, None)
+        self.asset_objects = cast(SqlAlchemyAssetObjectRepository, None)
+        self.image_jobs = cast(SqlAlchemyImageJobRepository, None)
+        self.visual_profiles = cast(SqlAlchemyVisualProfileRepository, None)
+        self.gallery_items = cast(SqlAlchemyGalleryItemRepository, None)
 
     async def __aenter__(self) -> SqlAlchemyUnitOfWork:
         self.session = self._session_factory()
@@ -172,6 +188,12 @@ class SqlAlchemyUnitOfWork:
         self.arcs = SqlAlchemyArcRepository(self.session)
         self.evaluator_runs = SqlAlchemyEvaluatorRunRepository(self.session)
         self.month_runs = SqlAlchemyMonthRunRepository(self.session)
+        self.hosts = SqlAlchemyHostRepository(self.session)
+        self.workers = SqlAlchemyWorkerRepository(self.session)
+        self.asset_objects = SqlAlchemyAssetObjectRepository(self.session)
+        self.image_jobs = SqlAlchemyImageJobRepository(self.session)
+        self.visual_profiles = SqlAlchemyVisualProfileRepository(self.session)
+        self.gallery_items = SqlAlchemyGalleryItemRepository(self.session)
         return self
 
     async def __aexit__(

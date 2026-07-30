@@ -1,0 +1,69 @@
+# Stage 4 target hardware inventory (machine-readable)
+version: 1
+document: docs/ops/hardware/README.md
+task_id: S4-BENCH-001
+updated: "2026-07-30"
+
+hosts:
+  - host_id: strix-halo-a
+    class: strix_halo
+    unified_memory_gb: 128
+    preferred_roles:
+      - text_large_replica
+      - director_overflow
+      - embedding_optional
+      - worker_heartbeat
+    notes: Primary large text replica; no character-to-machine affinity.
+
+  - host_id: strix-halo-b
+    class: strix_halo
+    unified_memory_gb: 128
+    preferred_roles:
+      - text_large_replica
+      - text_small
+      - summarization
+      - failover_for_a
+    notes: Compatible failover for Halo A.
+
+  - host_id: rtx-4060-ti
+    class: nvidia_consumer
+    vram_gb: 16
+    system_ram_gb: 32
+    preferred_roles:
+      - comfyui
+      - vision_qc_optional
+      - control_plane
+    notes: Prefer PostgreSQL here when this host is most continuously available.
+
+control_plane:
+  prefer_host_id: rtx-4060-ti
+  services:
+    - fastapi
+    - postgres
+    - orchestration
+    - model_gateway
+    - minio
+    - frontend
+  postgres_distribution: single_host_only
+
+context_budgets:
+  character_decision: {min_tokens: 12000, max_tokens: 20000}
+  character_reaction: {min_tokens: 4000, max_tokens: 10000}
+  director_proposal: {min_tokens: 8000, max_tokens: 16000}
+  resolver: {min_tokens: 8000, max_tokens: 16000}
+  scene_narrator: {min_tokens: 8000, max_tokens: 16000}
+  daily_summarizer: {min_tokens: 16000, max_tokens: 32000}
+  monthly_reflector: {min_tokens: 16000, max_tokens: 32000}
+  quality_evaluator: {min_tokens: 8000, max_tokens: 16000}
+  embedding: {max_tokens: 8192}
+
+candidate_stacks:
+  - stack_id: vllm
+    required: true
+  - stack_id: llamacpp
+    required: true
+  - stack_id: transformers
+    required: true
+  - stack_id: sglang
+    required: false
+    notes: Optional; only if stable on pinned ROCm.

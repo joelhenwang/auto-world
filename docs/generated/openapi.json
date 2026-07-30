@@ -839,6 +839,36 @@
         "title": "DirectorHooksMetricsRead",
         "type": "object"
       },
+      "DrainHostResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "drained_workers": {
+            "title": "Drained Workers",
+            "type": "integer"
+          },
+          "host_id": {
+            "format": "uuid",
+            "title": "Host Id",
+            "type": "string"
+          },
+          "host_key": {
+            "title": "Host Key",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "host_key",
+          "host_id",
+          "drained_workers",
+          "status"
+        ],
+        "title": "DrainHostResponse",
+        "type": "object"
+      },
       "EventRead": {
         "additionalProperties": false,
         "properties": {
@@ -1006,6 +1036,105 @@
         "title": "FactionRead",
         "type": "object"
       },
+      "GalleryItemRead": {
+        "additionalProperties": false,
+        "properties": {
+          "asset_class": {
+            "title": "Asset Class",
+            "type": "string"
+          },
+          "asset_object_id": {
+            "format": "uuid",
+            "title": "Asset Object Id",
+            "type": "string"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At"
+          },
+          "display_status": {
+            "title": "Display Status",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "image_job_id": {
+            "format": "uuid",
+            "title": "Image Job Id",
+            "type": "string"
+          },
+          "is_canonical_illustration": {
+            "title": "Is Canonical Illustration",
+            "type": "boolean"
+          },
+          "qc_passed": {
+            "title": "Qc Passed",
+            "type": "boolean"
+          },
+          "qc_report": {
+            "additionalProperties": true,
+            "title": "Qc Report",
+            "type": "object"
+          },
+          "source_event_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Event Id"
+          },
+          "source_scene_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Scene Id"
+          },
+          "version": {
+            "title": "Version",
+            "type": "integer"
+          },
+          "world_id": {
+            "format": "uuid",
+            "title": "World Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "world_id",
+          "image_job_id",
+          "asset_object_id",
+          "asset_class",
+          "display_status",
+          "is_canonical_illustration",
+          "qc_passed",
+          "version"
+        ],
+        "title": "GalleryItemRead",
+        "type": "object"
+      },
       "GoalRead": {
         "additionalProperties": false,
         "properties": {
@@ -1111,6 +1240,234 @@
           "database"
         ],
         "title": "HealthReadyResponse",
+        "type": "object"
+      },
+      "ImageJobActionResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "title": "Action",
+            "type": "string"
+          },
+          "job_id": {
+            "format": "uuid",
+            "title": "Job Id",
+            "type": "string"
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "job_id",
+          "action",
+          "status",
+          "message"
+        ],
+        "title": "ImageJobActionResponse",
+        "type": "object"
+      },
+      "ImageJobRead": {
+        "additionalProperties": false,
+        "properties": {
+          "asset_class": {
+            "title": "Asset Class",
+            "type": "string"
+          },
+          "attempt": {
+            "title": "Attempt",
+            "type": "integer"
+          },
+          "completed_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed At"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At"
+          },
+          "error_class": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Class"
+          },
+          "error_detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Detail"
+          },
+          "external_prompt_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "External Prompt Id"
+          },
+          "generation_number": {
+            "title": "Generation Number",
+            "type": "integer"
+          },
+          "height_px": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Height Px"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "idempotency_key": {
+            "title": "Idempotency Key",
+            "type": "string"
+          },
+          "max_attempts": {
+            "title": "Max Attempts",
+            "type": "integer"
+          },
+          "priority": {
+            "title": "Priority",
+            "type": "integer"
+          },
+          "seed": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seed"
+          },
+          "source_event_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Event Id"
+          },
+          "source_scene_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Scene Id"
+          },
+          "started_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Started At"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "version": {
+            "title": "Version",
+            "type": "integer"
+          },
+          "width_px": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Width Px"
+          },
+          "workflow_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Workflow Version"
+          },
+          "world_id": {
+            "format": "uuid",
+            "title": "World Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "world_id",
+          "idempotency_key",
+          "asset_class",
+          "status",
+          "priority",
+          "generation_number",
+          "attempt",
+          "max_attempts",
+          "version"
+        ],
+        "title": "ImageJobRead",
         "type": "object"
       },
       "LocationMapRead": {
@@ -1298,6 +1655,165 @@
           "travel_progress"
         ],
         "title": "MapStateRead",
+        "type": "object"
+      },
+      "ModelEndpointRead": {
+        "additionalProperties": false,
+        "properties": {
+          "available_memory_bytes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Available Memory Bytes"
+          },
+          "base_url": {
+            "title": "Base Url",
+            "type": "string"
+          },
+          "context_limit": {
+            "title": "Context Limit",
+            "type": "integer"
+          },
+          "cost_class": {
+            "title": "Cost Class",
+            "type": "string"
+          },
+          "embedding_dimensions": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Embedding Dimensions"
+          },
+          "endpoint_id": {
+            "title": "Endpoint Id",
+            "type": "string"
+          },
+          "health": {
+            "title": "Health",
+            "type": "string"
+          },
+          "host_id": {
+            "title": "Host Id",
+            "type": "string"
+          },
+          "last_error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Error"
+          },
+          "last_probe_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Probe At"
+          },
+          "loaded_state": {
+            "title": "Loaded State",
+            "type": "string"
+          },
+          "max_concurrency": {
+            "title": "Max Concurrency",
+            "type": "integer"
+          },
+          "model_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Hash"
+          },
+          "model_id": {
+            "title": "Model Id",
+            "type": "string"
+          },
+          "privacy_policy": {
+            "title": "Privacy Policy",
+            "type": "string"
+          },
+          "provider_kind": {
+            "title": "Provider Kind",
+            "type": "string"
+          },
+          "quantization": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quantization"
+          },
+          "queue_depth": {
+            "title": "Queue Depth",
+            "type": "integer"
+          },
+          "recent_error_rate": {
+            "title": "Recent Error Rate",
+            "type": "number"
+          },
+          "roles": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Roles",
+            "type": "array"
+          },
+          "structured_output_mode": {
+            "title": "Structured Output Mode",
+            "type": "string"
+          },
+          "supports_embeddings": {
+            "title": "Supports Embeddings",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "endpoint_id",
+          "host_id",
+          "provider_kind",
+          "base_url",
+          "model_id",
+          "roles",
+          "context_limit",
+          "structured_output_mode",
+          "max_concurrency",
+          "health",
+          "loaded_state",
+          "privacy_policy",
+          "cost_class",
+          "supports_embeddings",
+          "queue_depth",
+          "recent_error_rate"
+        ],
+        "title": "ModelEndpointRead",
         "type": "object"
       },
       "MonthFinalizeSummaryRead": {
@@ -2829,6 +3345,184 @@
         "title": "ValidationError",
         "type": "object"
       },
+      "VisualProfileRead": {
+        "additionalProperties": false,
+        "properties": {
+          "created_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "negative_constraints": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Negative Constraints",
+            "type": "array"
+          },
+          "profile_version": {
+            "title": "Profile Version",
+            "type": "integer"
+          },
+          "reference_asset_ids": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Reference Asset Ids",
+            "type": "array"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "style_spec": {
+            "additionalProperties": true,
+            "title": "Style Spec",
+            "type": "object"
+          },
+          "subject_id": {
+            "format": "uuid",
+            "title": "Subject Id",
+            "type": "string"
+          },
+          "subject_type": {
+            "title": "Subject Type",
+            "type": "string"
+          },
+          "supersedes_profile_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Supersedes Profile Id"
+          },
+          "valid_from_event_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Valid From Event Id"
+          },
+          "version": {
+            "title": "Version",
+            "type": "integer"
+          },
+          "world_id": {
+            "format": "uuid",
+            "title": "World Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "world_id",
+          "subject_type",
+          "subject_id",
+          "profile_version",
+          "status",
+          "version"
+        ],
+        "title": "VisualProfileRead",
+        "type": "object"
+      },
+      "WorkerRead": {
+        "additionalProperties": false,
+        "properties": {
+          "capabilities": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Capabilities",
+            "type": "array"
+          },
+          "drain_requested_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Drain Requested At"
+          },
+          "heartbeat_at": {
+            "format": "date-time",
+            "title": "Heartbeat At",
+            "type": "string"
+          },
+          "host_id": {
+            "format": "uuid",
+            "title": "Host Id",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "last_task_claimed_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Task Claimed At"
+          },
+          "registered_at": {
+            "format": "date-time",
+            "title": "Registered At",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "worker_key": {
+            "title": "Worker Key",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "host_id",
+          "worker_key",
+          "capabilities",
+          "status",
+          "heartbeat_at",
+          "registered_at"
+        ],
+        "title": "WorkerRead",
+        "type": "object"
+      },
       "WorldRead": {
         "additionalProperties": false,
         "properties": {
@@ -2869,6 +3563,12 @@
         "title": "WorldRead",
         "type": "object"
       }
+    },
+    "securitySchemes": {
+      "HTTPBasic": {
+        "scheme": "basic",
+        "type": "http"
+      }
     }
   },
   "info": {
@@ -2877,6 +3577,585 @@
   },
   "openapi": "3.1.0",
   "paths": {
+    "/admin/v1/gallery": {
+      "get": {
+        "description": "Return gallery items for the given world, optionally filtered by display_status.",
+        "operationId": "list_gallery_admin_v1_gallery_get",
+        "parameters": [
+          {
+            "description": "World UUID",
+            "in": "query",
+            "name": "world_id",
+            "required": true,
+            "schema": {
+              "description": "World UUID",
+              "format": "uuid",
+              "title": "World Id",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter by display_status: auto_selected|user_selected|rejected|hidden|superseded",
+            "in": "query",
+            "name": "display_status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by display_status: auto_selected|user_selected|rejected|hidden|superseded",
+              "title": "Display Status"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/GalleryItemRead"
+                  },
+                  "title": "Response List Gallery Admin V1 Gallery Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBasic": []
+          }
+        ],
+        "summary": "List gallery items for a world",
+        "tags": [
+          "admin-stage4"
+        ]
+      }
+    },
+    "/admin/v1/hosts/{host_key}/drain": {
+      "post": {
+        "description": "Mark all workers on ``host_key`` as draining.\n\nNew tasks will not be routed to draining workers.  In-flight tasks complete\nor their leases expire and are re-queued.\n\nHandbook: 29 \u00a7S4-OPS-001; runbook-drain-failover.md \u00a71.",
+        "operationId": "drain_host_admin_v1_hosts__host_key__drain_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "host_key",
+            "required": true,
+            "schema": {
+              "title": "Host Key",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrainHostResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBasic": []
+          }
+        ],
+        "summary": "Drain all workers on a named host",
+        "tags": [
+          "admin-stage4"
+        ]
+      }
+    },
+    "/admin/v1/image-jobs": {
+      "get": {
+        "description": "Return image jobs for the given world, optionally filtered by status.",
+        "operationId": "list_image_jobs_admin_v1_image_jobs_get",
+        "parameters": [
+          {
+            "description": "World UUID to filter image jobs",
+            "in": "query",
+            "name": "world_id",
+            "required": true,
+            "schema": {
+              "description": "World UUID to filter image jobs",
+              "format": "uuid",
+              "title": "World Id",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter by job status: queued|running|succeeded|failed|rejected|approved|cancelled|dead_letter",
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by job status: queued|running|succeeded|failed|rejected|approved|cancelled|dead_letter",
+              "title": "Status"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ImageJobRead"
+                  },
+                  "title": "Response List Image Jobs Admin V1 Image Jobs Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBasic": []
+          }
+        ],
+        "summary": "List image jobs for a world",
+        "tags": [
+          "admin-stage4"
+        ]
+      }
+    },
+    "/admin/v1/image-jobs/{job_id}/approve": {
+      "post": {
+        "description": "Find the gallery item linked to this job and approve it.\n\nDelegates to ``ImageQCService.approve`` on the most-recent gallery item\nfor the job.",
+        "operationId": "approve_image_job_admin_v1_image_jobs__job_id__approve_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Job Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageJobActionResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBasic": []
+          }
+        ],
+        "summary": "Manually approve an image job's gallery item",
+        "tags": [
+          "admin-stage4"
+        ]
+      }
+    },
+    "/admin/v1/image-jobs/{job_id}/cancel": {
+      "post": {
+        "description": "Cancel an image job that has not yet completed.",
+        "operationId": "cancel_image_job_admin_v1_image_jobs__job_id__cancel_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Job Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageJobActionResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBasic": []
+          }
+        ],
+        "summary": "Cancel a queued or running image job",
+        "tags": [
+          "admin-stage4"
+        ]
+      }
+    },
+    "/admin/v1/image-jobs/{job_id}/reject": {
+      "post": {
+        "description": "Find the gallery item linked to this job and reject it.",
+        "operationId": "reject_image_job_admin_v1_image_jobs__job_id__reject_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Job Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageJobActionResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBasic": []
+          }
+        ],
+        "summary": "Manually reject an image job's gallery item",
+        "tags": [
+          "admin-stage4"
+        ]
+      }
+    },
+    "/admin/v1/image-jobs/{job_id}/retry": {
+      "post": {
+        "description": "Reset a failed job to 'queued' for regeneration (if attempts allow).\n\nDelegates to ``ImageQCService.mark_regenerate``.",
+        "operationId": "retry_image_job_admin_v1_image_jobs__job_id__retry_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Job Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageJobActionResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBasic": []
+          }
+        ],
+        "summary": "Retry a failed or dead-letter image job",
+        "tags": [
+          "admin-stage4"
+        ]
+      }
+    },
+    "/admin/v1/model-endpoints": {
+      "get": {
+        "description": "Return all registered model endpoints with health and capability details.\n\nReturns an empty list when the capability registry is not yet wired\n(e.g. before S4-MODEL-001 integration).",
+        "operationId": "list_model_endpoints_admin_v1_model_endpoints_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ModelEndpointRead"
+                  },
+                  "title": "Response List Model Endpoints Admin V1 Model Endpoints Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBasic": []
+          }
+        ],
+        "summary": "List all model endpoints from the capability registry",
+        "tags": [
+          "admin-stage4"
+        ]
+      }
+    },
+    "/admin/v1/visual-profiles": {
+      "get": {
+        "description": "Return visual profiles for the given world.\n\nIf both ``subject_type`` and ``subject_id`` are provided, returns the active\nprofile for that subject.  World-wide listing is not yet exposed by the\nVisualProfileRepository Protocol; returns empty list in that case.\nA follow-up task should add ``list_for_world()`` to the Protocol.",
+        "operationId": "list_visual_profiles_admin_v1_visual_profiles_get",
+        "parameters": [
+          {
+            "description": "World UUID",
+            "in": "query",
+            "name": "world_id",
+            "required": true,
+            "schema": {
+              "description": "World UUID",
+              "format": "uuid",
+              "title": "World Id",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter by subject_type: character|location|world",
+            "in": "query",
+            "name": "subject_type",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by subject_type: character|location|world",
+              "title": "Subject Type"
+            }
+          },
+          {
+            "description": "Filter to a specific subject entity UUID",
+            "in": "query",
+            "name": "subject_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter to a specific subject entity UUID",
+              "title": "Subject Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/VisualProfileRead"
+                  },
+                  "title": "Response List Visual Profiles Admin V1 Visual Profiles Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBasic": []
+          }
+        ],
+        "summary": "List visual profiles for a world",
+        "tags": [
+          "admin-stage4"
+        ]
+      }
+    },
+    "/admin/v1/workers": {
+      "get": {
+        "description": "Return all workers currently registered in the worker registry.\n\nWorkers with status ``draining`` or ``drained`` are included so the operator can\nmonitor drain progress.\n\nUses ``find_lost`` with a very large grace period to enumerate all workers;\na dedicated ``list_all`` repository method is deferred to a follow-up task.",
+        "operationId": "list_workers_admin_v1_workers_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/WorkerRead"
+                  },
+                  "title": "Response List Workers Admin V1 Workers Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBasic": []
+          }
+        ],
+        "summary": "List all registered workers",
+        "tags": [
+          "admin-stage4"
+        ]
+      }
+    },
     "/api/v1/worlds/{world_id}/advance": {
       "post": {
         "operationId": "advance_stage1_world_api_v1_worlds__world_id__advance_post",

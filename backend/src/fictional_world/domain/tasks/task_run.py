@@ -32,6 +32,7 @@ class TaskRun(StrictContract):
     lease_owner: str | None = Field(default=None, max_length=200)
     lease_expires_at: datetime | None = None
     heartbeat_at: datetime | None = None
+    fencing_token: int = Field(default=0, ge=0)
     result_reference: JsonObject | None = None
     error_code: str | None = Field(default=None, max_length=100)
     error_detail: JsonObject | None = None

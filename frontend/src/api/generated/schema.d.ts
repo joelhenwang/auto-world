@@ -4,6 +4,230 @@
  */
 
 export interface paths {
+    "/admin/v1/gallery": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List gallery items for a world
+         * @description Return gallery items for the given world, optionally filtered by display_status.
+         */
+        get: operations["list_gallery_admin_v1_gallery_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/v1/hosts/{host_key}/drain": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Drain all workers on a named host
+         * @description Mark all workers on ``host_key`` as draining.
+         *
+         *     New tasks will not be routed to draining workers.  In-flight tasks complete
+         *     or their leases expire and are re-queued.
+         *
+         *     Handbook: 29 §S4-OPS-001; runbook-drain-failover.md §1.
+         */
+        post: operations["drain_host_admin_v1_hosts__host_key__drain_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/v1/image-jobs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List image jobs for a world
+         * @description Return image jobs for the given world, optionally filtered by status.
+         */
+        get: operations["list_image_jobs_admin_v1_image_jobs_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/v1/image-jobs/{job_id}/approve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Manually approve an image job's gallery item
+         * @description Find the gallery item linked to this job and approve it.
+         *
+         *     Delegates to ``ImageQCService.approve`` on the most-recent gallery item
+         *     for the job.
+         */
+        post: operations["approve_image_job_admin_v1_image_jobs__job_id__approve_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/v1/image-jobs/{job_id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Cancel a queued or running image job
+         * @description Cancel an image job that has not yet completed.
+         */
+        post: operations["cancel_image_job_admin_v1_image_jobs__job_id__cancel_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/v1/image-jobs/{job_id}/reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Manually reject an image job's gallery item
+         * @description Find the gallery item linked to this job and reject it.
+         */
+        post: operations["reject_image_job_admin_v1_image_jobs__job_id__reject_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/v1/image-jobs/{job_id}/retry": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Retry a failed or dead-letter image job
+         * @description Reset a failed job to 'queued' for regeneration (if attempts allow).
+         *
+         *     Delegates to ``ImageQCService.mark_regenerate``.
+         */
+        post: operations["retry_image_job_admin_v1_image_jobs__job_id__retry_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/v1/model-endpoints": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List all model endpoints from the capability registry
+         * @description Return all registered model endpoints with health and capability details.
+         *
+         *     Returns an empty list when the capability registry is not yet wired
+         *     (e.g. before S4-MODEL-001 integration).
+         */
+        get: operations["list_model_endpoints_admin_v1_model_endpoints_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/v1/visual-profiles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List visual profiles for a world
+         * @description Return visual profiles for the given world.
+         *
+         *     If both ``subject_type`` and ``subject_id`` are provided, returns the active
+         *     profile for that subject.  World-wide listing is not yet exposed by the
+         *     VisualProfileRepository Protocol; returns empty list in that case.
+         *     A follow-up task should add ``list_for_world()`` to the Protocol.
+         */
+        get: operations["list_visual_profiles_admin_v1_visual_profiles_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/v1/workers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List all registered workers
+         * @description Return all workers currently registered in the worker registry.
+         *
+         *     Workers with status ``draining`` or ``drained`` are included so the operator can
+         *     monitor drain progress.
+         *
+         *     Uses ``find_lost`` with a very large grace period to enumerate all workers;
+         *     a dedicated ``list_all`` repository method is deferred to a follow-up task.
+         */
+        get: operations["list_workers_admin_v1_workers_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/worlds/{world_id}/advance": {
         parameters: {
             query?: never;
@@ -986,6 +1210,20 @@ export interface components {
             /** Metrics */
             metrics: components["schemas"]["NarrativeMetricRead"][];
         };
+        /** DrainHostResponse */
+        DrainHostResponse: {
+            /** Drained Workers */
+            drained_workers: number;
+            /**
+             * Host Id
+             * Format: uuid
+             */
+            host_id: string;
+            /** Host Key */
+            host_key: string;
+            /** Status */
+            status: string;
+        };
         /** EventRead */
         EventRead: {
             /** Absolute Phase Index */
@@ -1057,6 +1295,49 @@ export interface components {
              */
             world_id: string;
         };
+        /** GalleryItemRead */
+        GalleryItemRead: {
+            /** Asset Class */
+            asset_class: string;
+            /**
+             * Asset Object Id
+             * Format: uuid
+             */
+            asset_object_id: string;
+            /** Created At */
+            created_at?: string | null;
+            /** Display Status */
+            display_status: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Image Job Id
+             * Format: uuid
+             */
+            image_job_id: string;
+            /** Is Canonical Illustration */
+            is_canonical_illustration: boolean;
+            /** Qc Passed */
+            qc_passed: boolean;
+            /** Qc Report */
+            qc_report?: {
+                [key: string]: unknown;
+            };
+            /** Source Event Id */
+            source_event_id?: string | null;
+            /** Source Scene Id */
+            source_scene_id?: string | null;
+            /** Version */
+            version: number;
+            /**
+             * World Id
+             * Format: uuid
+             */
+            world_id: string;
+        };
         /** GoalRead */
         GoalRead: {
             /**
@@ -1101,6 +1382,73 @@ export interface components {
             detail?: string | null;
             /** Status */
             status: string;
+        };
+        /** ImageJobActionResponse */
+        ImageJobActionResponse: {
+            /** Action */
+            action: string;
+            /**
+             * Job Id
+             * Format: uuid
+             */
+            job_id: string;
+            /** Message */
+            message: string;
+            /** Status */
+            status: string;
+        };
+        /** ImageJobRead */
+        ImageJobRead: {
+            /** Asset Class */
+            asset_class: string;
+            /** Attempt */
+            attempt: number;
+            /** Completed At */
+            completed_at?: string | null;
+            /** Created At */
+            created_at?: string | null;
+            /** Error Class */
+            error_class?: string | null;
+            /** Error Detail */
+            error_detail?: string | null;
+            /** External Prompt Id */
+            external_prompt_id?: string | null;
+            /** Generation Number */
+            generation_number: number;
+            /** Height Px */
+            height_px?: number | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Idempotency Key */
+            idempotency_key: string;
+            /** Max Attempts */
+            max_attempts: number;
+            /** Priority */
+            priority: number;
+            /** Seed */
+            seed?: number | null;
+            /** Source Event Id */
+            source_event_id?: string | null;
+            /** Source Scene Id */
+            source_scene_id?: string | null;
+            /** Started At */
+            started_at?: string | null;
+            /** Status */
+            status: string;
+            /** Version */
+            version: number;
+            /** Width Px */
+            width_px?: number | null;
+            /** Workflow Version */
+            workflow_version?: string | null;
+            /**
+             * World Id
+             * Format: uuid
+             */
+            world_id: string;
         };
         /** LocationMapRead */
         LocationMapRead: {
@@ -1170,6 +1518,53 @@ export interface components {
             routes: components["schemas"]["RouteMapRead"][];
             /** Travel Progress */
             travel_progress: components["schemas"]["TravelProgressSummaryRead"][];
+        };
+        /** ModelEndpointRead */
+        ModelEndpointRead: {
+            /** Available Memory Bytes */
+            available_memory_bytes?: number | null;
+            /** Base Url */
+            base_url: string;
+            /** Context Limit */
+            context_limit: number;
+            /** Cost Class */
+            cost_class: string;
+            /** Embedding Dimensions */
+            embedding_dimensions?: number | null;
+            /** Endpoint Id */
+            endpoint_id: string;
+            /** Health */
+            health: string;
+            /** Host Id */
+            host_id: string;
+            /** Last Error */
+            last_error?: string | null;
+            /** Last Probe At */
+            last_probe_at?: string | null;
+            /** Loaded State */
+            loaded_state: string;
+            /** Max Concurrency */
+            max_concurrency: number;
+            /** Model Hash */
+            model_hash?: string | null;
+            /** Model Id */
+            model_id: string;
+            /** Privacy Policy */
+            privacy_policy: string;
+            /** Provider Kind */
+            provider_kind: string;
+            /** Quantization */
+            quantization?: string | null;
+            /** Queue Depth */
+            queue_depth: number;
+            /** Recent Error Rate */
+            recent_error_rate: number;
+            /** Roles */
+            roles: string[];
+            /** Structured Output Mode */
+            structured_output_mode: string;
+            /** Supports Embeddings */
+            supports_embeddings: boolean;
         };
         /** MonthFinalizeSummaryRead */
         MonthFinalizeSummaryRead: {
@@ -1765,6 +2160,79 @@ export interface components {
             /** Error Type */
             type: string;
         };
+        /** VisualProfileRead */
+        VisualProfileRead: {
+            /** Created At */
+            created_at?: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Negative Constraints */
+            negative_constraints?: string[];
+            /** Profile Version */
+            profile_version: number;
+            /** Reference Asset Ids */
+            reference_asset_ids?: string[];
+            /** Status */
+            status: string;
+            /** Style Spec */
+            style_spec?: {
+                [key: string]: unknown;
+            };
+            /**
+             * Subject Id
+             * Format: uuid
+             */
+            subject_id: string;
+            /** Subject Type */
+            subject_type: string;
+            /** Supersedes Profile Id */
+            supersedes_profile_id?: string | null;
+            /** Valid From Event Id */
+            valid_from_event_id?: string | null;
+            /** Version */
+            version: number;
+            /**
+             * World Id
+             * Format: uuid
+             */
+            world_id: string;
+        };
+        /** WorkerRead */
+        WorkerRead: {
+            /** Capabilities */
+            capabilities: string[];
+            /** Drain Requested At */
+            drain_requested_at?: string | null;
+            /**
+             * Heartbeat At
+             * Format: date-time
+             */
+            heartbeat_at: string;
+            /**
+             * Host Id
+             * Format: uuid
+             */
+            host_id: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Last Task Claimed At */
+            last_task_claimed_at?: string | null;
+            /**
+             * Registered At
+             * Format: date-time
+             */
+            registered_at: string;
+            /** Status */
+            status: string;
+            /** Worker Key */
+            worker_key: string;
+        };
         /** WorldRead */
         WorldRead: {
             /** Current Event Sequence */
@@ -1792,6 +2260,308 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    list_gallery_admin_v1_gallery_get: {
+        parameters: {
+            query: {
+                /** @description World UUID */
+                world_id: string;
+                /** @description Filter by display_status: auto_selected|user_selected|rejected|hidden|superseded */
+                display_status?: string | null;
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalleryItemRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    drain_host_admin_v1_hosts__host_key__drain_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                host_key: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DrainHostResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_image_jobs_admin_v1_image_jobs_get: {
+        parameters: {
+            query: {
+                /** @description World UUID to filter image jobs */
+                world_id: string;
+                /** @description Filter by job status: queued|running|succeeded|failed|rejected|approved|cancelled|dead_letter */
+                status?: string | null;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImageJobRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    approve_image_job_admin_v1_image_jobs__job_id__approve_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                job_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImageJobActionResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    cancel_image_job_admin_v1_image_jobs__job_id__cancel_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                job_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImageJobActionResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reject_image_job_admin_v1_image_jobs__job_id__reject_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                job_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImageJobActionResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    retry_image_job_admin_v1_image_jobs__job_id__retry_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                job_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImageJobActionResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_model_endpoints_admin_v1_model_endpoints_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ModelEndpointRead"][];
+                };
+            };
+        };
+    };
+    list_visual_profiles_admin_v1_visual_profiles_get: {
+        parameters: {
+            query: {
+                /** @description World UUID */
+                world_id: string;
+                /** @description Filter by subject_type: character|location|world */
+                subject_type?: string | null;
+                /** @description Filter to a specific subject entity UUID */
+                subject_id?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VisualProfileRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_workers_admin_v1_workers_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkerRead"][];
+                };
+            };
+        };
+    };
     advance_stage1_world_api_v1_worlds__world_id__advance_post: {
         parameters: {
             query?: never;

@@ -1,60 +1,64 @@
 # Current Stage
 
-**Updated:** 2026-07-30T00:40:00Z  
-**Updated by:** parent coding agent (Stage 3)  
+**Updated:** 2026-07-30T14:00:00Z  
+**Updated by:** S4-QA-001 subagent  
 **Repository:** autonomous-fictional-world  
-**Current branch:** `cursor/s3-mem-rules-world-03fc`  
-**Stage:** 3 — Autonomous Month and Long-Term Coherence | **Status:** GATE_PASS / FROZEN  
-**Previous stage:** 2 — Coherent Seven-Day World | **Status:** GATE_PASS / FROZEN @ `9294a5a`  
-**Next stage:** 4 — READY (not started)
+**Current branch:** `cursor/s4-integration-8b4a`  
+**Stage:** 4 — Local Distribution, Durable Orchestration, and Images | **Status:** GATE_PASS  
+**Previous stage:** 3 — Autonomous Month and Long-Term Coherence | **Status:** GATE_PASS / FROZEN @ `05db78a` (main)  
+**Next stage:** 5 — not started
 
-## Current objective
+## Stage 4 gate result
 
-Stage 3 deterministic gate **PASS** (`docs/status/evidence/stage-3/`).  
-Parent merge of Stage 3 PRs to main, then Stage 4 kickoff.
+**GATE_PASS** — all deterministic Stage 4 hard gates pass.
 
-## Stage 0–2 (frozen — do not break)
+Evidence under `docs/status/evidence/stage-4/`.
+Gate script: `scripts/run_stage4_gate.py`.
+
+Deferred (non-blocking):
+- 24h live Halo soak — requires physical Strix Halo A/B hardware
+- Visual continuity human review — rubric in `human-review-worksheet.md`
+
+## Stage 0–4 (frozen — do not break)
 
 | Stage | Migration head | Evidence |
 |---|---|---|
 | 0–1 | through `0003` | `docs/status/evidence/stage-0/`, `stage-1/` |
 | 2 | `0004_stage2_continuity_tables` | `docs/status/evidence/stage-2/` (**PASS**) |
+| 3 | `0005_stage3_long_term_tables` | `docs/status/evidence/stage-3/` (**PASS**) |
+| 4 | `0007_stage4_img` | `docs/status/evidence/stage-4/` (**PASS**) |
 
-## Stage 3 (frozen — do not break)
+See `docs/status/CONTRACT_FREEZE.md`. Stage 5 may add migrations **after** `0007` only.
 
-| Item | Rule |
-|---|---|
-| Migration `0005` | new revisions only |
-| Long-term memory | owner/visibility filters in query layer |
-| Embeddings | version registry; relational fallback when unavailable |
-| Rules/combat/magic | deterministic envelopes; no HP |
-| Evaluator | diagnostics only; cannot mutate canon |
-| Thirty-day orch | day barrier + monthly barrier; restart-safe |
-| OpenAPI/WS Stage 3 | additive |
-| Default tests | no live OpenRouter |
-
-Evidence: `docs/status/evidence/stage-3/stage-gate-report.md` (**PASS**)
-
-## Stage 3 task matrix
+## Stage 4 task matrix
 
 | Task ID | Status |
 |---|---|
-| S3-DB-001 | COMPLETE |
-| S3-MEM-001 | COMPLETE |
-| S3-MEM-002 | COMPLETE |
-| S3-MEM-003 | COMPLETE |
-| S3-RULES-001 | COMPLETE |
-| S3-RULES-002 | COMPLETE |
-| S3-RULES-003 | COMPLETE |
-| S3-WORLD-001 | COMPLETE |
-| S3-WORLD-002 | COMPLETE |
-| S3-GRAPH-001 | COMPLETE |
-| S3-ORCH-001 | COMPLETE |
-| S3-API-001 | COMPLETE |
-| S3-UI-001 | COMPLETE |
-| S3-QA-001 | COMPLETE (GATE_PASS) |
+| S4-BENCH-001 | COMPLETE |
+| S4-MODEL-001 | COMPLETE |
+| S4-MODEL-002 | COMPLETE |
+| S4-ORCH-001 | COMPLETE |
+| S4-ORCH-002 | COMPLETE (ADR-0003 DEFER Temporal; noop port) |
+| S4-STORAGE-001 | COMPLETE |
+| S4-IMG-001 | COMPLETE |
+| S4-IMG-002 | COMPLETE |
+| S4-IMG-003 | COMPLETE |
+| S4-OPS-001 | COMPLETE |
+| S4-API-001 | COMPLETE |
+| S4-UI-001 | COMPLETE |
+| S4-QA-001 | COMPLETE |
+
+## Gate baseline
+
+| Item | Value |
+|---|---|
+| `origin/main` tip at kickoff | `05db78a` |
+| Alembic head | `0007_stage4_img` |
+| Scenario | `stage4-distributed-local-v1` |
+| Seed | `caldris-embervale-v1`, `content_version: 2` |
+| Model mode | fake |
+| Stage 4 gate commit | `cursor/s4-integration-8b4a` HEAD |
 
 ## Next concrete step
 
-Parent review/merge of Stage 3 PRs (#36 schema, #37 integration); instantiate Stage 4
-kickoff. Do not weaken Stage 0–3 invariants.
+Begin Stage 5 planning. Stage 4 contracts are frozen per `CONTRACT_FREEZE.md`.
