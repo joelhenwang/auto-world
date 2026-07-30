@@ -224,7 +224,7 @@ async def test_stage3_tables_exist_and_roundtrip(postgres_container: dict[str, s
     url = _normalize_url(postgres_container["url"])
     heads = _alembic(url, "heads").stdout.strip().splitlines()
     assert len(heads) == 1
-    assert "0006_stage4_distributed_workers" in heads[0]
+    assert "0007_stage4_img" in heads[0]
     _alembic(url, "upgrade", "head")
     engine = create_async_engine(url)
     async with engine.connect() as conn:

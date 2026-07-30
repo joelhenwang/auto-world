@@ -340,4 +340,4 @@ async def test_alembic_head_is_0005(postgres_container: dict[str, str]) -> None:
     url = _normalize_url(postgres_container["url"])
     heads = _alembic(url, "heads").stdout.strip().splitlines()
     assert len(heads) == 1
-    assert "0006_stage4_distributed_workers" in heads[0]
+    assert "0007_stage4_img" in heads[0]

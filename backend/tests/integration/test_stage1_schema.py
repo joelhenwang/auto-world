@@ -244,7 +244,7 @@ async def test_stage1_migration_roundtrip(postgres_container: dict[str, str]) ->
     url = _normalize_url(postgres_container["url"])
     heads = _alembic(url, "heads").stdout.strip().splitlines()
     assert len(heads) == 1
-    assert "0006_stage4_distributed_workers" in heads[0]
+    assert "0007_stage4_img" in heads[0]
     _alembic(url, "upgrade", "head")
     _alembic(url, "downgrade", "-1")
     _alembic(url, "upgrade", "head")
