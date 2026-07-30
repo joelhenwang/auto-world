@@ -1,32 +1,41 @@
 # Integration Status
 
-**Updated:** 2026-07-30T00:40:00Z  
-**Integration owner:** Stage 3 parent coding agent  
-**Integration branch/worktree:** `cursor/s3-mem-rules-world-03fc`  
-**Target stage:** 3 (GATE_PASS / FROZEN)  
-**Main tip at Stage 3 kickoff:** `9294a5a`
+**Updated:** 2026-07-30T01:14:00Z  
+**Integration owner:** Stage 4 parent coding agent  
+**Integration branch/worktree:** `cursor/s4-integration-8b4a`  
+**Target stage:** 4 (ACTIVE)  
+**Main tip at Stage 4 kickoff:** `05db78a`
 
 ## Contract baseline
 
 | Contract | Status | Notes |
 |---|---|---|
-| Stage 0–2 | FROZEN | see `CONTRACT_FREEZE.md` |
-| Stage 3 | FROZEN (QA PASS) | `0005` + thirty-day scenario; see evidence |
-| Stage 4 | READY | not started |
+| Stage 0–3 | FROZEN | see `CONTRACT_FREEZE.md` |
+| Migration head | `0005_stage3_long_term_tables` | Stage 4 adds `0006+` only |
+| Stage 4 | ACTIVE | S4-BENCH-001 first |
 
 ## Task matrix
 
-All S3-* packets COMPLETE (GATE_PASS). See `CURRENT_STAGE.md`.
+| Task | Status | Notes |
+|---|---|---|
+| S4-BENCH-001 | COMPLETE | corpus + harness + ADR-0002 |
+| S4-MODEL-001 | IN_PROGRESS | local adapters + registry |
+| S4-MODEL-002 | READY | packet authored |
+| S4-ORCH-001 | READY | packet authored; owns `0006` if needed |
+| S4-ORCH-002 | READY | evaluate Temporal; adopt optional |
+| S4-STORAGE-001 … S4-QA-001 | PENDING | packets to follow |
 
-## Gate commands
+## Gate commands (regression)
 
 ```bash
+sudo service docker start
 sudo chmod 666 /var/run/docker.sock
-uv run python scripts/run_stage1_gate.py
-uv run python scripts/run_stage2_gate.py
+uv run pytest -q
 uv run python scripts/run_stage3_gate.py
+# Stage 4 gate (when S4-QA-001 lands):
+# uv run python scripts/run_stage4_gate.py
 ```
 
 ## Current failures
 
-None. Stage 3 automated gate PASS at `b055f5b`.
+None at kickoff. Offline baseline green on main `05db78a`.

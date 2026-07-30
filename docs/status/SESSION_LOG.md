@@ -323,3 +323,30 @@ uv run pytest backend/tests/integration/test_stage3_schema.py \
 ### Handoff
 
 `docs/handoffs/2026-07-29_S3-DB-001.md`
+
+## 2026-07-30T01:25:00Z — Stage 4 kickoff / S4-BENCH-001
+
+**Agent/person:** parent coding agent (Stage 4)
+**Branch/worktree:** `cursor/s4-integration-8b4a`
+**Task IDs:** Stage 4 kickoff, `S4-BENCH-001`
+**Starting HEAD:** `05db78a`
+
+### Intended outcome
+
+Mark Stage 4 ACTIVE; freeze workload corpus; ship local serving bench harness and
+selection ADR without hard-coding a stack before evidence.
+
+### Completed
+
+- Baseline: main `05db78a`, Alembic `0005`, offline pytest green
+- Status/kickoff/packets for BENCH + MODEL + ORCH
+- Corpus, inventory, harness, candidate runners, evidence, ADR-0002
+- Offline unit/contract tests for bench
+
+### Next
+
+S4-MODEL-001 local adapters + capability registry.
+
+### Handoff
+
+`docs/handoffs/2026-07-30_S4-KICKOFF.md`, `docs/handoffs/2026-07-30_S4-BENCH-001.md`

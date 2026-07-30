@@ -1,0 +1,27 @@
+{
+  "corpus_id": "stage4-bench-stage3-rep-v1",
+  "path": "backend/tests/fixtures/benchmarks/stage4/stage3_representative_requests.jsonl",
+  "entry_count": 18,
+  "roles": [
+    "character_decision",
+    "character_reaction",
+    "daily_summarizer",
+    "director_proposal",
+    "embedding",
+    "monthly_reflector",
+    "quality_evaluator",
+    "resolver",
+    "scene_narrator"
+  ],
+  "case_kinds": [
+    "cancellation",
+    "concurrency_fanout",
+    "long_context",
+    "malformed",
+    "unicode",
+    "valid"
+  ],
+  "source_stage": 3,
+  "scenario_ref": "stage3-autonomous-month-v1",
+  "notes": "Frozen representative requests for S4-BENCH-001. Do not edit prompts to favour a stack."
+}
