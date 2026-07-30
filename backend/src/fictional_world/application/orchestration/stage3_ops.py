@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 from dataclasses import dataclass
 from uuid import UUID, uuid4
 
@@ -12,6 +13,8 @@ from fictional_world.application.memory.monthly_reflection import (
 )
 from fictional_world.application.orchestration.protocol import DayAdvanceResult
 from fictional_world.application.orchestration.stage2_ops import STAGE2_CHARACTER_IDS
+from fictional_world.application.ports.repositories import UnitOfWork
+from fictional_world.domain.common.errors import DomainError
 from fictional_world.domain.stage3.persistence import (
     MemoryPersistenceRecord,
     MonthRunPersistenceRecord,
@@ -54,7 +57,20 @@ def month_phase_bounds(month_index: int) -> tuple[int, int]:
 
 
 class Stage3PhaseOps:
-    """Mixin requiring DeterministicPhaseRunner Stage 2 day APIs."""
+    """Mixin: thirty-day + monthly barrier.
+
+    Attribute stubs declared for basedpyright; concrete values live on
+    ``DeterministicPhaseRunner`` / ``Stage2PhaseOps``.
+    """
+
+    _uow: UnitOfWork
+    _stage2: bool
+
+    def _stage2_error(self, message: str) -> DomainError:
+        raise NotImplementedError
+
+    async def run_day(self, world_id: UUID) -> DayAdvanceResult:
+        raise NotImplementedError
 
     async def finalize_month(
         self,
@@ -80,7 +96,6 @@ class Stage3PhaseOps:
         start_day = (month_index - 1) * DAYS_PER_MONTH
         end_day = start_day + DAYS_PER_MONTH - 1
 
-        # Promote recent_memory rows into long-term memory surface for reflection.
         chapter_ids: list[UUID] = []
         reflection_ids: list[UUID] = []
         for character_id in STAGE2_CHARACTER_IDS:
@@ -117,10 +132,8 @@ class Stage3PhaseOps:
                 )
                 existing_mem = await self._uow.long_term_memories.get(record.id)
                 if existing_mem is None:
-                    try:
+                    with contextlib.suppress(Exception):
                         await self._uow.long_term_memories.insert(record)
-                    except Exception:  # noqa: BLE001 — duplicate hash race; continue
-                        pass
                 long_term.append(record)
 
             chapter = build_monthly_chapter(
@@ -131,8 +144,6 @@ class Stage3PhaseOps:
                 start_phase_index=start_phase,
                 end_phase_index=end_phase,
             )
-            # Persist chapter via summaries table is Stage2; Stage3 monthly_chapter
-            # repository is not yet on UoW — store extract on month_run metrics.
             chapter_ids.append(chapter.id)
             reflection = build_reflection_run(
                 world_id=world_id,
