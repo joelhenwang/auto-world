@@ -7,6 +7,18 @@ from datetime import datetime, timedelta
 from typing import Protocol
 from uuid import UUID
 
+from fictional_world.application.ports.stage3_repositories import (
+    ArcRepository,
+    EmbeddingJobRepository,
+    EmbeddingModelVersionRepository,
+    EvaluatorRunRepository,
+    FactionRepository,
+    InjuryRepository,
+    LongTermMemoryRepository,
+    MemoryEmbeddingRepository,
+    MonthRunRepository,
+    StatStateRepository,
+)
 from fictional_world.domain.characters.records import (
     CharacterRecord,
     CharacterStateRecord,
@@ -695,6 +707,16 @@ class UnitOfWork(Protocol):
     diary_entries: DiaryEntryRepository
     day_runs: DayRunRepository
     daily_audits: DailyAuditRepository
+    long_term_memories: LongTermMemoryRepository
+    memory_embeddings: MemoryEmbeddingRepository
+    embedding_model_versions: EmbeddingModelVersionRepository
+    embedding_jobs: EmbeddingJobRepository
+    stat_states: StatStateRepository
+    injuries: InjuryRepository
+    factions: FactionRepository
+    arcs: ArcRepository
+    evaluator_runs: EvaluatorRunRepository
+    month_runs: MonthRunRepository
 
     async def __aenter__(self) -> UnitOfWork: ...
 
