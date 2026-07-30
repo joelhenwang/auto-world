@@ -76,6 +76,83 @@
         "title": "AdvancePhaseResponse",
         "type": "object"
       },
+      "ArcRead": {
+        "additionalProperties": false,
+        "properties": {
+          "arc_key": {
+            "title": "Arc Key",
+            "type": "string"
+          },
+          "arc_scope": {
+            "title": "Arc Scope",
+            "type": "string"
+          },
+          "dominant_genres": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Dominant Genres",
+            "type": "array"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "objective": {
+            "title": "Objective",
+            "type": "string"
+          },
+          "participant_entity_ids": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Participant Entity Ids",
+            "type": "array"
+          },
+          "premise": {
+            "title": "Premise",
+            "type": "string"
+          },
+          "progress": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Progress",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "version": {
+            "title": "Version",
+            "type": "integer"
+          },
+          "world_id": {
+            "format": "uuid",
+            "title": "World Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "world_id",
+          "arc_key",
+          "title",
+          "arc_scope",
+          "status",
+          "premise",
+          "objective",
+          "progress",
+          "version"
+        ],
+        "title": "ArcRead",
+        "type": "object"
+      },
       "BeliefRead": {
         "additionalProperties": false,
         "properties": {
@@ -854,6 +931,81 @@
         "title": "EventRead",
         "type": "object"
       },
+      "ExportListRead": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "title": "ExportListRead",
+        "type": "object"
+      },
+      "FactionRead": {
+        "additionalProperties": false,
+        "properties": {
+          "faction_key": {
+            "title": "Faction Key",
+            "type": "string"
+          },
+          "faction_type": {
+            "title": "Faction Type",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "plot_armour_bias": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Plot Armour Bias",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "territory_location_ids": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Territory Location Ids",
+            "type": "array"
+          },
+          "version": {
+            "title": "Version",
+            "type": "integer"
+          },
+          "world_id": {
+            "format": "uuid",
+            "title": "World Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "world_id",
+          "faction_key",
+          "name",
+          "faction_type",
+          "status",
+          "plot_armour_bias",
+          "version"
+        ],
+        "title": "FactionRead",
+        "type": "object"
+      },
       "GoalRead": {
         "additionalProperties": false,
         "properties": {
@@ -1034,6 +1186,87 @@
         "title": "LocationMapRead",
         "type": "object"
       },
+      "LongTermMemoryRead": {
+        "additionalProperties": false,
+        "properties": {
+          "confidence": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Confidence",
+            "type": "string"
+          },
+          "content": {
+            "title": "Content",
+            "type": "string"
+          },
+          "created_phase_index": {
+            "title": "Created Phase Index",
+            "type": "integer"
+          },
+          "decay_score": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Decay Score",
+            "type": "string"
+          },
+          "emotional_weight": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Emotional Weight",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "memory_type": {
+            "title": "Memory Type",
+            "type": "string"
+          },
+          "occurred_phase_index": {
+            "title": "Occurred Phase Index",
+            "type": "integer"
+          },
+          "owner_character_id": {
+            "format": "uuid",
+            "title": "Owner Character Id",
+            "type": "string"
+          },
+          "salience": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Salience",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "visibility": {
+            "title": "Visibility",
+            "type": "string"
+          },
+          "world_id": {
+            "format": "uuid",
+            "title": "World Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "world_id",
+          "owner_character_id",
+          "memory_type",
+          "content",
+          "salience",
+          "confidence",
+          "emotional_weight",
+          "visibility",
+          "occurred_phase_index",
+          "created_phase_index",
+          "status",
+          "decay_score"
+        ],
+        "title": "LongTermMemoryRead",
+        "type": "object"
+      },
       "MapStateRead": {
         "additionalProperties": false,
         "properties": {
@@ -1065,6 +1298,106 @@
           "travel_progress"
         ],
         "title": "MapStateRead",
+        "type": "object"
+      },
+      "MonthFinalizeSummaryRead": {
+        "additionalProperties": false,
+        "properties": {
+          "already_finalized": {
+            "title": "Already Finalized",
+            "type": "boolean"
+          },
+          "chapter_count": {
+            "default": 0,
+            "title": "Chapter Count",
+            "type": "integer"
+          },
+          "month_index": {
+            "title": "Month Index",
+            "type": "integer"
+          },
+          "month_run_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Month Run Id"
+          },
+          "reflection_count": {
+            "default": 0,
+            "title": "Reflection Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "month_index",
+          "month_run_id",
+          "already_finalized"
+        ],
+        "title": "MonthFinalizeSummaryRead",
+        "type": "object"
+      },
+      "MonthRunRead": {
+        "additionalProperties": false,
+        "properties": {
+          "completed_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed At"
+          },
+          "end_day_index": {
+            "title": "End Day Index",
+            "type": "integer"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "metrics": {
+            "additionalProperties": true,
+            "title": "Metrics",
+            "type": "object"
+          },
+          "month_index": {
+            "title": "Month Index",
+            "type": "integer"
+          },
+          "start_day_index": {
+            "title": "Start Day Index",
+            "type": "integer"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "world_id": {
+            "format": "uuid",
+            "title": "World Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "world_id",
+          "month_index",
+          "status",
+          "start_day_index",
+          "end_day_index"
+        ],
+        "title": "MonthRunRead",
         "type": "object"
       },
       "NarrativeMetricRead": {
@@ -1921,6 +2254,44 @@
         "title": "RouteMapRead",
         "type": "object"
       },
+      "RunThirtyDaysResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "day_results": {
+            "items": {
+              "$ref": "#/components/schemas/DayAdvanceResponse"
+            },
+            "title": "Day Results",
+            "type": "array"
+          },
+          "days_completed": {
+            "title": "Days Completed",
+            "type": "integer"
+          },
+          "month": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MonthFinalizeSummaryRead"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "world_id": {
+            "format": "uuid",
+            "title": "World Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "world_id",
+          "days_completed",
+          "day_results"
+        ],
+        "title": "RunThirtyDaysResponse",
+        "type": "object"
+      },
       "RunUntilDayRequest": {
         "additionalProperties": false,
         "properties": {
@@ -2549,6 +2920,53 @@
         ]
       }
     },
+    "/api/v1/worlds/{world_id}/arcs": {
+      "get": {
+        "operationId": "list_arcs_api_v1_worlds__world_id__arcs_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "world_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "World Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ArcRead"
+                  },
+                  "title": "Response List Arcs Api V1 Worlds  World Id  Arcs Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Arcs",
+        "tags": [
+          "stage3"
+        ]
+      }
+    },
     "/api/v1/worlds/{world_id}/characters": {
       "get": {
         "operationId": "characters_api_v1_worlds__world_id__characters_get",
@@ -2757,6 +3175,64 @@
         "summary": "Character Diaries",
         "tags": [
           "stage2"
+        ]
+      }
+    },
+    "/api/v1/worlds/{world_id}/characters/{character_id}/memories": {
+      "get": {
+        "description": "Perspective-safe: only returns long-term memories owned by ``character_id``.",
+        "operationId": "list_character_memories_api_v1_worlds__world_id__characters__character_id__memories_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "world_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "World Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "character_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Character Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/LongTermMemoryRead"
+                  },
+                  "title": "Response List Character Memories Api V1 Worlds  World Id  Characters  Character Id  Memories Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Character Memories",
+        "tags": [
+          "stage3"
         ]
       }
     },
@@ -3006,6 +3482,49 @@
         ]
       }
     },
+    "/api/v1/worlds/{world_id}/commands/run-thirty-days": {
+      "post": {
+        "operationId": "run_thirty_days_api_v1_worlds__world_id__commands_run_thirty_days_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "world_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "World Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunThirtyDaysResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Run Thirty Days",
+        "tags": [
+          "stage3"
+        ]
+      }
+    },
     "/api/v1/worlds/{world_id}/day-progress": {
       "get": {
         "operationId": "day_progress_api_v1_worlds__world_id__day_progress_get",
@@ -3209,6 +3728,96 @@
         ]
       }
     },
+    "/api/v1/worlds/{world_id}/exports": {
+      "get": {
+        "operationId": "list_exports_api_v1_worlds__world_id__exports_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "world_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "World Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExportListRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Exports",
+        "tags": [
+          "stage3"
+        ]
+      }
+    },
+    "/api/v1/worlds/{world_id}/factions": {
+      "get": {
+        "operationId": "list_factions_api_v1_worlds__world_id__factions_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "world_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "World Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/FactionRead"
+                  },
+                  "title": "Response List Factions Api V1 Worlds  World Id  Factions Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Factions",
+        "tags": [
+          "stage3"
+        ]
+      }
+    },
     "/api/v1/worlds/{world_id}/map": {
       "get": {
         "operationId": "map_state_api_v1_worlds__world_id__map_get",
@@ -3249,6 +3858,53 @@
         "summary": "Map State",
         "tags": [
           "stage2"
+        ]
+      }
+    },
+    "/api/v1/worlds/{world_id}/month-runs": {
+      "get": {
+        "operationId": "list_month_runs_api_v1_worlds__world_id__month_runs_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "world_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "World Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/MonthRunRead"
+                  },
+                  "title": "Response List Month Runs Api V1 Worlds  World Id  Month Runs Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Month Runs",
+        "tags": [
+          "stage3"
         ]
       }
     },

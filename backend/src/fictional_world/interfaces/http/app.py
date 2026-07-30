@@ -12,7 +12,7 @@ from fictional_world import __version__
 from fictional_world.config import AppSettings, settings_from_profile, validate_settings
 from fictional_world.infrastructure.database.session import create_engine, create_session_factory
 from fictional_world.interfaces.http.middleware import CorrelationIdMiddleware
-from fictional_world.interfaces.http.routes import health, stage1, stage2, websocket, worlds
+from fictional_world.interfaces.http.routes import health, stage1, stage2, stage3, websocket, worlds
 from fictional_world.observability.logging import configure_logging
 
 
@@ -74,6 +74,7 @@ def create_app(
     application.include_router(worlds.router)
     application.include_router(stage1.router)
     application.include_router(stage2.router)
+    application.include_router(stage3.router)
     application.include_router(websocket.router)
     application.state.settings = app_settings
     if engine is not None:

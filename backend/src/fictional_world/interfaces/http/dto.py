@@ -450,6 +450,79 @@ class ProposeDirectorEventResponse(ApiModel):
     already_existed: bool
 
 
+class MonthRunRead(ApiModel):
+    id: UUID
+    world_id: UUID
+    month_index: int
+    status: str
+    start_day_index: int
+    end_day_index: int
+    metrics: dict[str, Any] = Field(default_factory=dict)
+    completed_at: datetime | None = None
+
+
+class LongTermMemoryRead(ApiModel):
+    id: UUID
+    world_id: UUID
+    owner_character_id: UUID
+    memory_type: str
+    content: str
+    salience: Decimal
+    confidence: Decimal
+    emotional_weight: Decimal
+    visibility: str
+    occurred_phase_index: int
+    created_phase_index: int
+    status: str
+    decay_score: Decimal
+
+
+class ArcRead(ApiModel):
+    id: UUID
+    world_id: UUID
+    arc_key: str
+    title: str
+    arc_scope: str
+    status: str
+    premise: str
+    objective: str
+    progress: Decimal
+    participant_entity_ids: list[UUID] = Field(default_factory=list)
+    dominant_genres: list[str] = Field(default_factory=list)
+    version: int
+
+
+class FactionRead(ApiModel):
+    id: UUID
+    world_id: UUID
+    faction_key: str
+    name: str
+    faction_type: str
+    status: str
+    territory_location_ids: list[UUID] = Field(default_factory=list)
+    plot_armour_bias: Decimal
+    version: int
+
+
+class ExportListRead(ApiModel):
+    items: list[dict[str, Any]] = Field(default_factory=list)
+
+
+class MonthFinalizeSummaryRead(ApiModel):
+    month_index: int
+    month_run_id: UUID | None
+    already_finalized: bool
+    chapter_count: int = 0
+    reflection_count: int = 0
+
+
+class RunThirtyDaysResponse(ApiModel):
+    world_id: UUID
+    days_completed: int
+    day_results: list[DayAdvanceResponse]
+    month: MonthFinalizeSummaryRead | None = None
+
+
 class WebSocketEnvelopeRead(ApiModel):
     """Documented WebSocket message shapes (additive Stage 2 event types)."""
 

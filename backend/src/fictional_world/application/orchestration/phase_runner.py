@@ -28,6 +28,7 @@ from fictional_world.application.orchestration.protocol import (
 )
 from fictional_world.application.orchestration.scripted_actions import mira_stage0_effects
 from fictional_world.application.orchestration.stage2_ops import Stage2PhaseOps
+from fictional_world.application.orchestration.stage3_ops import Stage3PhaseOps
 from fictional_world.application.orchestration.task_queue import CreateTaskCommand, TaskQueueService
 from fictional_world.application.ports.repositories import UnitOfWork
 from fictional_world.application.simulation.activation import ActivationResult
@@ -108,8 +109,8 @@ def _manifest_hash(manifest: dict[str, Any]) -> str:
     return hashlib.sha256(raw).hexdigest()
 
 
-class DeterministicPhaseRunner(Stage2PhaseOps):
-    """Postgres-backed Stage 0 runner with additive Stage 1 / Stage 2 profiles."""
+class DeterministicPhaseRunner(Stage2PhaseOps, Stage3PhaseOps):
+    """Postgres-backed Stage 0 runner with additive Stage 1 / Stage 2 / Stage 3 profiles."""
 
     def __init__(
         self,
