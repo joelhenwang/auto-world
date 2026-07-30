@@ -102,19 +102,29 @@ class TaskQueueService:
         worker_id: str,
         lease_duration: timedelta = timedelta(seconds=90),
         now: datetime | None = None,
+        fencing_token: int | None = None,
     ) -> TaskRun:
         return await self._uow.tasks.heartbeat(
             task_id,
             worker_id=worker_id,
             lease_duration=lease_duration,
             now=now or datetime.now(UTC),
+            fencing_token=fencing_token,
         )
 
     async def mark_running(
-        self, task_id: UUID, *, worker_id: str, now: datetime | None = None
+        self,
+        task_id: UUID,
+        *,
+        worker_id: str,
+        now: datetime | None = None,
+        fencing_token: int | None = None,
     ) -> TaskRun:
         return await self._uow.tasks.mark_running(
-            task_id, worker_id=worker_id, now=now or datetime.now(UTC)
+            task_id,
+            worker_id=worker_id,
+            now=now or datetime.now(UTC),
+            fencing_token=fencing_token,
         )
 
     async def complete(
@@ -124,12 +134,14 @@ class TaskQueueService:
         worker_id: str,
         result_reference: Mapping[str, object] | None = None,
         now: datetime | None = None,
+        fencing_token: int | None = None,
     ) -> TaskRun:
         return await self._uow.tasks.complete_success(
             task_id,
             worker_id=worker_id,
             now=now or datetime.now(UTC),
             result_reference=result_reference,
+            fencing_token=fencing_token,
         )
 
     async def fail(
@@ -141,6 +153,7 @@ class TaskQueueService:
         error_detail: Mapping[str, object] | None = None,
         retry_delay: timedelta = timedelta(seconds=5),
         now: datetime | None = None,
+        fencing_token: int | None = None,
     ) -> TaskRun:
         return await self._uow.tasks.fail_or_retry(
             task_id,
@@ -149,4 +162,5 @@ class TaskQueueService:
             error_code=error_code,
             error_detail=error_detail,
             retry_delay=retry_delay,
+            fencing_token=fencing_token,
         )

@@ -31,6 +31,7 @@ from fictional_world.domain.seed.records import (
 )
 from fictional_world.domain.tasks.budget import RequestBudgetRecord
 from fictional_world.domain.tasks.task_run import TaskRun
+from fictional_world.domain.tasks.workers import HostRecord, WorkerRecord
 from fictional_world.domain.world.records import (
     AggregateVersionRecord,
     WorldClockRecord,
@@ -43,6 +44,7 @@ from fictional_world.infrastructure.database.models import (
     CharacterStateRow,
     EntityRow,
     EventEffectRow,
+    HostRegistryRow,
     LocationRow,
     ObservationRow,
     OutboxMessageRow,
@@ -52,6 +54,7 @@ from fictional_world.infrastructure.database.models import (
     RecentMemoryRow,
     RequestBudgetLedgerRow,
     TaskRunRow,
+    WorkerRegistryRow,
     WorldClockRow,
     WorldConfigRow,
     WorldEventRow,
@@ -443,6 +446,7 @@ def task_to_record(row: TaskRunRow) -> TaskRun:
         lease_owner=row.lease_owner,
         lease_expires_at=row.lease_expires_at,
         heartbeat_at=row.heartbeat_at,
+        fencing_token=int(row.fencing_token),
         result_reference=_json_obj(row.result_reference) if row.result_reference else None,
         error_code=row.error_code,
         error_detail=_json_obj(row.error_detail) if row.error_detail else None,
@@ -503,3 +507,30 @@ def snapshot_to_record(
 def parse_aggregate_key(key: str) -> tuple[str, UUID]:
     aggregate_type, aggregate_id = key.split(":", 1)
     return aggregate_type, UUID(aggregate_id)
+
+
+def host_to_record(row: HostRegistryRow) -> HostRecord:
+    caps = tuple(row.capabilities) if row.capabilities else ()
+    return HostRecord(
+        id=row.id,
+        host_key=row.host_key,
+        capabilities=caps,
+        status=row.status,
+        first_seen_at=row.first_seen_at,
+        last_seen_at=row.last_seen_at,
+    )
+
+
+def worker_to_record(row: WorkerRegistryRow) -> WorkerRecord:
+    caps = tuple(row.capabilities) if row.capabilities else ()
+    return WorkerRecord(
+        id=row.id,
+        host_id=row.host_id,
+        worker_key=row.worker_key,
+        capabilities=caps,
+        status=row.status,
+        heartbeat_at=row.heartbeat_at,
+        registered_at=row.registered_at,
+        drain_requested_at=row.drain_requested_at,
+        last_task_claimed_at=row.last_task_claimed_at,
+    )

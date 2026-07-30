@@ -68,6 +68,10 @@ from fictional_world.infrastructure.database.repositories.tasks import SqlAlchem
 from fictional_world.infrastructure.database.repositories.user_commands import (
     SqlAlchemyUserCommandRepository,
 )
+from fictional_world.infrastructure.database.repositories.workers import (
+    SqlAlchemyHostRepository,
+    SqlAlchemyWorkerRepository,
+)
 from fictional_world.infrastructure.database.repositories.worlds import SqlAlchemyWorldRepository
 
 
@@ -123,6 +127,8 @@ class SqlAlchemyUnitOfWork:
         self.arcs = cast(SqlAlchemyArcRepository, None)
         self.evaluator_runs = cast(SqlAlchemyEvaluatorRunRepository, None)
         self.month_runs = cast(SqlAlchemyMonthRunRepository, None)
+        self.hosts = cast(SqlAlchemyHostRepository, None)
+        self.workers = cast(SqlAlchemyWorkerRepository, None)
 
     async def __aenter__(self) -> SqlAlchemyUnitOfWork:
         self.session = self._session_factory()
@@ -172,6 +178,8 @@ class SqlAlchemyUnitOfWork:
         self.arcs = SqlAlchemyArcRepository(self.session)
         self.evaluator_runs = SqlAlchemyEvaluatorRunRepository(self.session)
         self.month_runs = SqlAlchemyMonthRunRepository(self.session)
+        self.hosts = SqlAlchemyHostRepository(self.session)
+        self.workers = SqlAlchemyWorkerRepository(self.session)
         return self
 
     async def __aexit__(

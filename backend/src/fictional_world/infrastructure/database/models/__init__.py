@@ -1,4 +1,4 @@
-"""SQLAlchemy ORM models for Stage 0-3 schema."""
+"""SQLAlchemy ORM models for Stage 0-4 schema."""
 
 from fictional_world.infrastructure.database.models.character import (
     CharacterCardVersionRow,
@@ -102,6 +102,10 @@ from fictional_world.infrastructure.database.models.stage3 import (
     StatStateRow,
     TropeUsageRow,
 )
+from fictional_world.infrastructure.database.models.workers import (
+    HostRegistryRow,
+    WorkerRegistryRow,
+)
 from fictional_world.infrastructure.database.models.world import (
     WorldClockRow,
     WorldConfigRow,
@@ -141,6 +145,7 @@ __all__ = [
     "FactionStateRow",
     "GoalRow",
     "HookRow",
+    "HostRegistryRow",
     "InjuryRow",
     "InventoryEntryRow",
     "ItemRow",
@@ -199,6 +204,7 @@ __all__ = [
     "TravelProgressRow",
     "TropeUsageRow",
     "UserCommandRow",
+    "WorkerRegistryRow",
     "WorldClockRow",
     "WorldConfigRow",
     "WorldEventRow",

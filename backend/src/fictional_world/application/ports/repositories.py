@@ -1,4 +1,4 @@
-"""Repository and unit-of-work ports (handbook ``19`` §12)."""
+"""Repository and unit-of-work ports (handbook ``19`` §12, S4-ORCH-001)."""
 
 from __future__ import annotations
 
@@ -76,6 +76,7 @@ from fictional_world.domain.seed.records import (
 from fictional_world.domain.tasks.budget import RequestBudgetRecord
 from fictional_world.domain.tasks.task_run import TaskRun
 from fictional_world.domain.tasks.user_command import UserCommandRecord
+from fictional_world.domain.tasks.workers import HostRecord, WorkerRecord
 from fictional_world.domain.world.records import (
     AggregateVersionRecord,
     WorldClockRecord,
@@ -312,9 +313,17 @@ class TaskRepository(Protocol):
         worker_id: str,
         lease_duration: timedelta,
         now: datetime,
+        fencing_token: int | None = None,
     ) -> TaskRun: ...
 
-    async def mark_running(self, task_id: UUID, *, worker_id: str, now: datetime) -> TaskRun: ...
+    async def mark_running(
+        self,
+        task_id: UUID,
+        *,
+        worker_id: str,
+        now: datetime,
+        fencing_token: int | None = None,
+    ) -> TaskRun: ...
 
     async def complete_success(
         self,
@@ -323,6 +332,7 @@ class TaskRepository(Protocol):
         worker_id: str,
         now: datetime,
         result_reference: Mapping[str, object] | None = None,
+        fencing_token: int | None = None,
     ) -> TaskRun: ...
 
     async def fail_or_retry(
@@ -334,6 +344,7 @@ class TaskRepository(Protocol):
         error_code: str,
         error_detail: Mapping[str, object] | None,
         retry_delay: timedelta,
+        fencing_token: int | None = None,
     ) -> TaskRun: ...
 
     async def cancel(self, task_id: UUID, *, now: datetime) -> TaskRun: ...
@@ -344,6 +355,63 @@ class TaskRepository(Protocol):
         *,
         limit: int = 50,
     ) -> Sequence[TaskRun]: ...
+
+    async def reset_abandoned_leases(
+        self,
+        *,
+        worker_keys: Sequence[str],
+        now: datetime,
+    ) -> int: ...
+
+
+class HostRepository(Protocol):
+    async def get(self, host_id: UUID) -> HostRecord | None: ...
+
+    async def find_by_key(self, host_key: str) -> HostRecord | None: ...
+
+    async def register(
+        self,
+        *,
+        host_key: str,
+        capabilities: Sequence[str] = (),
+        now: datetime,
+    ) -> HostRecord: ...
+
+    async def update_last_seen(self, host_id: UUID, *, now: datetime) -> HostRecord: ...
+
+    async def mark_lost(self, host_id: UUID) -> HostRecord: ...
+
+
+class WorkerRepository(Protocol):
+    async def get(self, worker_id: UUID) -> WorkerRecord | None: ...
+
+    async def find_by_key(self, worker_key: str) -> WorkerRecord | None: ...
+
+    async def register(
+        self,
+        *,
+        host_id: UUID,
+        worker_key: str,
+        capabilities: Sequence[str] = (),
+        now: datetime,
+    ) -> WorkerRecord: ...
+
+    async def heartbeat(self, worker_id: UUID, *, now: datetime) -> WorkerRecord: ...
+
+    async def drain(self, worker_id: UUID, *, now: datetime) -> WorkerRecord: ...
+
+    async def mark_drained(self, worker_id: UUID) -> WorkerRecord: ...
+
+    async def mark_lost(self, worker_id: UUID) -> WorkerRecord: ...
+
+    async def find_lost(
+        self,
+        *,
+        now: datetime,
+        heartbeat_grace: timedelta,
+    ) -> Sequence[WorkerRecord]: ...
+
+    async def note_task_claimed(self, worker_key: str, *, now: datetime) -> None: ...
 
 
 class BudgetRepository(Protocol):
@@ -682,6 +750,8 @@ class UnitOfWork(Protocol):
     outbox: OutboxRepository
     tasks: TaskRepository
     budgets: BudgetRepository
+    hosts: HostRepository
+    workers: WorkerRepository
     action_proposals: ActionProposalRepository
     scenes: SceneRepository
     reactions: ReactionProposalRepository

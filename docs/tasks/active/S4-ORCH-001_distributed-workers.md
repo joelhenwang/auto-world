@@ -34,8 +34,30 @@ No reinterpretation of Stage 0–3 task semantics
 
 ## 4. Acceptance criteria
 
-- [ ] Stale worker cannot commit after fencing token superseded
-- [ ] Heartbeats, drain, reconciliation tested
-- [ ] Phase fan-out/fan-in across workers
-- [ ] Migration upgrade/downgrade cycle clean
-- [ ] Stage 0–3 scenarios still green
+- [x] Stale worker cannot commit after fencing token superseded
+- [x] Heartbeats, drain, reconciliation tested
+- [ ] Phase fan-out/fan-in across workers (deferred to S4-ORCH-002)
+- [x] Migration upgrade/downgrade cycle clean
+- [x] Stage 0–3 scenarios still green
+
+## 5. Implementation notes (2026-07-30)
+
+**Revision:** `0006_stage4_distributed_workers`  
+**Branch:** `cursor/s4-integration-8b4a`
+
+### What was delivered
+- Alembic migration `0006` adding `worldsim.host_registry`, `worldsim.worker_registry`, and `worldsim.task_run.fencing_token (bigint DEFAULT 0)`.
+- `HostRecord`, `WorkerRecord` Pydantic domain records in `domain/tasks/workers.py`.
+- `HostRegistryRow`, `WorkerRegistryRow` SQLAlchemy ORM models in `infrastructure/database/models/workers.py`.
+- `SqlAlchemyHostRepository`, `SqlAlchemyWorkerRepository` in `infrastructure/database/repositories/workers.py`.
+- `fencing_token` parameter (optional, backward-compatible) added to `TaskRepository.heartbeat`, `mark_running`, `complete_success`, `fail_or_retry`. When provided, a mismatch raises `OptimisticConcurrencyError`.
+- `TaskRepository.reset_abandoned_leases(worker_keys, now)` bulk-resets CLAIMED/RUNNING tasks back to PENDING.
+- `WorkerLifecycleService` in `application/orchestration/worker_lifecycle.py`.
+- `ReconcileAbandonedService` in `application/orchestration/reconcile.py`.
+- `HostRepository`, `WorkerRepository` Protocol ports added; `UnitOfWork` extended.
+- 20 unit tests + 7 integration tests (all green).
+- `docs/generated/database-schema.sql` regenerated.
+
+### Deferred
+- Phase fan-out/fan-in task dispatch: deferred to S4-ORCH-002 which can use `claim_available` filtered by capabilities.
+- Worker capability-based routing: the `capabilities` field is stored but routing logic is not yet wired into the phase runner.
