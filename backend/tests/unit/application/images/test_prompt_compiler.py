@@ -84,8 +84,6 @@ def test_compile_includes_action_outcome() -> None:
 def test_compile_source_ids_in_spec() -> None:
     event_id = uuid.uuid4()
     scene_id = uuid.uuid4()
-    spec = compile_prompt(
-        _make_input(source_event_id=event_id, source_scene_id=scene_id)
-    )
+    spec = compile_prompt(_make_input(source_event_id=event_id, source_scene_id=scene_id))
     assert str(event_id) == spec["source_event_id"]
     assert str(scene_id) == spec["source_scene_id"]

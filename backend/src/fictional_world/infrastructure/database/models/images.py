@@ -68,13 +68,9 @@ class AssetObjectRow(Base):
     checksum_sha256: Mapped[str] = mapped_column(Text, nullable=False)
     width_px: Mapped[int | None] = mapped_column(Integer, nullable=True)
     height_px: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    asset_class: Mapped[str] = mapped_column(
-        Text, nullable=False, server_default=text("'UNKNOWN'")
-    )
+    asset_class: Mapped[str] = mapped_column(Text, nullable=False, server_default=text("'UNKNOWN'"))
     source_job_id: Mapped[uuid.UUID | None] = mapped_column(Uuid(as_uuid=True), nullable=True)
-    status: Mapped[str] = mapped_column(
-        Text, nullable=False, server_default=text("'active'")
-    )
+    status: Mapped[str] = mapped_column(Text, nullable=False, server_default=text("'active'"))
     extra_meta: Mapped[dict[str, Any]] = mapped_column(
         JSONB, nullable=False, server_default=text("'{}'::jsonb")
     )
@@ -89,9 +85,7 @@ class ImageJobRow(Base):
 
     __tablename__ = "image_job"
     __table_args__ = (
-        UniqueConstraint(
-            "world_id", "idempotency_key", name="uq_image_job_world_idempotency_key"
-        ),
+        UniqueConstraint("world_id", "idempotency_key", name="uq_image_job_world_idempotency_key"),
         CheckConstraint(
             "status IN ('queued','running','succeeded','failed','rejected',"
             "'approved','cancelled','dead_letter')",
@@ -115,31 +109,19 @@ class ImageJobRow(Base):
         nullable=False,
     )
     idempotency_key: Mapped[str] = mapped_column(Text, nullable=False)
-    source_event_id: Mapped[uuid.UUID | None] = mapped_column(
-        Uuid(as_uuid=True), nullable=True
-    )
-    source_scene_id: Mapped[uuid.UUID | None] = mapped_column(
-        Uuid(as_uuid=True), nullable=True
-    )
+    source_event_id: Mapped[uuid.UUID | None] = mapped_column(Uuid(as_uuid=True), nullable=True)
+    source_scene_id: Mapped[uuid.UUID | None] = mapped_column(Uuid(as_uuid=True), nullable=True)
     asset_class: Mapped[str] = mapped_column(
         Text, nullable=False, server_default=text("'EVENT_CG'")
     )
-    status: Mapped[str] = mapped_column(
-        Text, nullable=False, server_default=text("'queued'")
-    )
-    priority: Mapped[int] = mapped_column(
-        Integer, nullable=False, server_default=text("50")
-    )
+    status: Mapped[str] = mapped_column(Text, nullable=False, server_default=text("'queued'"))
+    priority: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("50"))
     generation_number: Mapped[int] = mapped_column(
         Integer, nullable=False, server_default=text("1")
     )
     attempt: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("0"))
-    max_attempts: Mapped[int] = mapped_column(
-        Integer, nullable=False, server_default=text("3")
-    )
-    workflow_profile_id: Mapped[uuid.UUID | None] = mapped_column(
-        Uuid(as_uuid=True), nullable=True
-    )
+    max_attempts: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("3"))
+    workflow_profile_id: Mapped[uuid.UUID | None] = mapped_column(Uuid(as_uuid=True), nullable=True)
     workflow_version: Mapped[str | None] = mapped_column(Text, nullable=True)
     external_prompt_id: Mapped[str | None] = mapped_column(Text, nullable=True)
     seed: Mapped[int | None] = mapped_column(BigInteger, nullable=True)
@@ -157,9 +139,7 @@ class ImageJobRow(Base):
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
     started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
-    completed_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), nullable=True
-    )
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     version: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("1"))
 
 
@@ -204,12 +184,8 @@ class VisualProfileRow(Base):
     )
     subject_type: Mapped[str] = mapped_column(Text, nullable=False)
     subject_id: Mapped[uuid.UUID] = mapped_column(Uuid(as_uuid=True), nullable=False)
-    profile_version: Mapped[int] = mapped_column(
-        Integer, nullable=False, server_default=text("1")
-    )
-    valid_from_event_id: Mapped[uuid.UUID | None] = mapped_column(
-        Uuid(as_uuid=True), nullable=True
-    )
+    profile_version: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("1"))
+    valid_from_event_id: Mapped[uuid.UUID | None] = mapped_column(Uuid(as_uuid=True), nullable=True)
     supersedes_profile_id: Mapped[uuid.UUID | None] = mapped_column(
         Uuid(as_uuid=True), nullable=True
     )
@@ -222,9 +198,7 @@ class VisualProfileRow(Base):
     reference_asset_ids: Mapped[list[str]] = mapped_column(
         ARRAY(Text), nullable=False, server_default=text("'{}'::text[]")
     )
-    status: Mapped[str] = mapped_column(
-        Text, nullable=False, server_default=text("'active'")
-    )
+    status: Mapped[str] = mapped_column(Text, nullable=False, server_default=text("'active'"))
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
@@ -263,12 +237,8 @@ class GalleryItemRow(Base):
         ForeignKey(f"{WORLDSIM_SCHEMA}.asset_object.id"),
         nullable=False,
     )
-    source_event_id: Mapped[uuid.UUID | None] = mapped_column(
-        Uuid(as_uuid=True), nullable=True
-    )
-    source_scene_id: Mapped[uuid.UUID | None] = mapped_column(
-        Uuid(as_uuid=True), nullable=True
-    )
+    source_event_id: Mapped[uuid.UUID | None] = mapped_column(Uuid(as_uuid=True), nullable=True)
+    source_scene_id: Mapped[uuid.UUID | None] = mapped_column(Uuid(as_uuid=True), nullable=True)
     asset_class: Mapped[str] = mapped_column(
         Text, nullable=False, server_default=text("'EVENT_CG'")
     )
@@ -278,9 +248,7 @@ class GalleryItemRow(Base):
     is_canonical_illustration: Mapped[bool] = mapped_column(
         Boolean, nullable=False, server_default=text("false")
     )
-    qc_passed: Mapped[bool] = mapped_column(
-        Boolean, nullable=False, server_default=text("false")
-    )
+    qc_passed: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text("false"))
     qc_report: Mapped[dict[str, Any]] = mapped_column(
         JSONB, nullable=False, server_default=text("'{}'::jsonb")
     )

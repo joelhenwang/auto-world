@@ -470,9 +470,7 @@ def downgrade() -> None:
         table_name="visual_profile",
         schema="worldsim",
     )
-    op.drop_index(
-        "ix_visual_profile_world_subject", table_name="visual_profile", schema="worldsim"
-    )
+    op.drop_index("ix_visual_profile_world_subject", table_name="visual_profile", schema="worldsim")
     op.drop_table("visual_profile", schema="worldsim")
 
     op.drop_index("ix_image_job_source_scene", table_name="image_job", schema="worldsim")

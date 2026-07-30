@@ -52,9 +52,7 @@ class ImageJobRepository(Protocol):
         expected_version: int,
     ) -> ImageJobRecord: ...
 
-    async def increment_attempt(
-        self, job_id: UUID, *, expected_version: int
-    ) -> ImageJobRecord: ...
+    async def increment_attempt(self, job_id: UUID, *, expected_version: int) -> ImageJobRecord: ...
 
     async def list_by_status(
         self,

@@ -138,9 +138,7 @@ class ModelCapabilityRegistry:
             last_error=last_error,
             queue_depth=queue_depth if queue_depth is not None else current.queue_depth,
             recent_error_rate=(
-                recent_error_rate
-                if recent_error_rate is not None
-                else current.recent_error_rate
+                recent_error_rate if recent_error_rate is not None else current.recent_error_rate
             ),
             last_probe_at=datetime.now(tz=UTC),
         )

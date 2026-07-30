@@ -202,9 +202,7 @@ class ImageQCService:
             if job is None:
                 raise ValueError(f"image_job {job_id} not found")
             if job.attempt >= job.max_attempts:
-                raise ValueError(
-                    f"image_job {job_id} has exhausted {job.max_attempts} attempts"
-                )
+                raise ValueError(f"image_job {job_id} has exhausted {job.max_attempts} attempts")
             updated = await uow.image_jobs.update_status(
                 job_id, status="queued", expected_version=job.version
             )
