@@ -1,7 +1,7 @@
 # Current Stage
 
-**Updated:** 2026-07-30T03:00:00Z  
-**Updated by:** Stage 4 STORAGE+IMG subagent (S4-STORAGE-001, S4-IMG-001/002/003)  
+**Updated:** 2026-07-30T12:00:00Z  
+**Updated by:** S4-OPS-001 / S4-API-001 subagent  
 **Repository:** autonomous-fictional-world  
 **Current branch:** `cursor/s4-integration-8b4a`  
 **Stage:** 4 — Local Distribution, Durable Orchestration, and Images | **Status:** ACTIVE  
@@ -40,8 +40,8 @@ See `docs/status/CONTRACT_FREEZE.md`. Stage 4 may add migrations **after** `0005
 | S4-IMG-001 | COMPLETE |
 | S4-IMG-002 | COMPLETE |
 | S4-IMG-003 | COMPLETE |
-| S4-OPS-001 | PENDING |
-| S4-API-001 | PENDING |
+| S4-OPS-001 | COMPLETE |
+| S4-API-001 | COMPLETE |
 | S4-UI-001 | COMPLETE |
 | S4-QA-001 | PENDING |
 
