@@ -1,8 +1,8 @@
 {
   "alembic_head": "0005_stage3_long_term_tables",
-  "collected_at": "20260730T003010Z",
-  "gate_script_exit_nonzero_count": 1,
-  "git_commit": "9d62af8949c1a491bd57366b14cd3dd1048ed7c2",
+  "collected_at": "20260730T003422Z",
+  "gate_script_exit_nonzero_count": 0,
+  "git_commit": "b055f5bdb69b8b176c37abc297537d1119e47ad1",
   "hashes": {
     "database-schema.sql": "cb79fd74e891f2fcac02ddbb57f89f26e5f07dc415d27b64ff10d582f1ac9168",
     "frontend/pnpm-lock.yaml": "22002950d79c21ad580902db44355d4e0f817b76e7a4ed2d4b8c3ed0520c32ac",

@@ -1,6 +1,6 @@
 # Stage 2 fault, retry, and day-boundary restart report
 
-**Result:** FAIL
+**Result:** PASS
 **Raw evidence:** `fault-and-retry.txt` — 30 passed
 
 | Boundary | Injection/proof | Recovery |

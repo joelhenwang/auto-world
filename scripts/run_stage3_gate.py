@@ -267,17 +267,17 @@ def _write_reports(
                 "**Stage owner:** parent coding agent",
                 "**QA owner:** S3-QA-001 subagent",
                 f"**Tested integration commit:** `{commit}`",
-                "**Release candidate:** `cursor/s2-qa-001-gate-085f`",
-                "**Previous verified stage:** Stage 1 first complete day (FROZEN)",
+                "**Release candidate:** `cursor/s3-mem-rules-world-03fc`",
+                "**Previous verified stage:** Stage 2 seven-day world (FROZEN)",
                 "**Environment/profile:** Linux cloud agent, fake provider default, "
                 "PostgreSQL 16 + pgvector",
-                "**Handbook:** v1.0 / `28_STAGE_3_AUTONOMOUS_MONTH.md` §10",
+                "**Handbook:** v1.0 / `28_STAGE_3_AUTONOMOUS_MONTH.md` §9",
                 "",
                 "## 1. Intended outcome",
                 "",
                 "Four primary characters complete thirty autonomous days x ten phases from one",
                 "sealed snapshot per phase. Day-finalization is restart-safe; knowledge",
-                "isolation holds across perspective packages; Stage 1 remains green.",
+                "isolation holds across perspective packages; Stage 1–2 remain green.",
                 "",
                 "## 2. Build and version manifest",
                 "",
@@ -316,9 +316,9 @@ def _write_reports(
                 "",
                 "| Scenario | Expected | Result |",
                 "|---|---|---|",
-                f"| `{SCENARIO_ID}` | 7 days x 10 phases, 4 characters | "
+                f"| `{SCENARIO_ID}` | 30 days x 10 phases, 4 characters | "
                 f"{'PASS' if 'passed' in scenario_log else 'FAIL'} |",
-                "| `stage1-first-day-v1` regression | dawn/morning/evening | "
+                "| `stage2-seven-day-world-v1` + stage1 regression | dawn/morning/evening | "
                 "included in scenario.txt |",
                 "",
                 "## 5. Knowledge / leakage",
@@ -336,7 +336,7 @@ def _write_reports(
                 f"- Fault subset passed count: {_passed_count(fault_log)}",
                 "- Detail: `fault-injection-report.md`",
                 "",
-                "## 7. Stage 3 hard exit checklist (handbook §10)",
+                "## 7. Stage 3 hard exit checklist (handbook §9)",
                 "",
                 f"- [{'x' if decision == 'PASS' else ' '}] thirty autonomous days / ten phases "
                 "without manual DB repair",
@@ -358,7 +358,7 @@ def _write_reports(
                 f"### {decision}",
                 "",
                 (
-                    "All deterministic Stage 2 hard gates pass at the tested commit. "
+                    "All deterministic Stage 3 hard gates pass at the tested commit. "
                     "Human narrative rubric scores remain blank in "
                     "`human-review-worksheet.md` (non-blocking for automated gate)."
                     if decision == "PASS"
@@ -371,7 +371,7 @@ def _write_reports(
                 "| Role | Decision | Date | Notes |",
                 "|---|---|---|---|",
                 f"| QA owner (automated) | {decision} | {stamp[:10]} | "
-                "evidence under `docs/status/evidence/stage-2/` |",
+                "evidence under `docs/status/evidence/stage-3/` |",
                 "| Stage owner | pending parent review | — | merge/freeze owner |",
                 "| Project owner | pending | — | human promotion / rubric |",
                 "",

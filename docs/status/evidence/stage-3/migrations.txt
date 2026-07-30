@@ -1,7 +1,6 @@
  Container fictional-world-postgres Running
 DROP DATABASE
 CREATE DATABASE
-NOTICE:  database "fictional_world_stage3_gate" does not exist, skipping
 + uv run alembic -c /workspace/backend/alembic.ini heads
 0005_stage3_long_term_tables (head)
 + uv run alembic -c /workspace/backend/alembic.ini upgrade head

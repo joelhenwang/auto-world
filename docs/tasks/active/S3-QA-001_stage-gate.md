@@ -2,7 +2,7 @@
 
 **Stage:** 3
 **Workstream:** QA
-**Status:** READY
+**Status:** COMPLETE
 **Priority:** P0
 **Owner:** parent coding agent
 **Branch/worktree:** `cursor/s3-mem-rules-world-03fc` (shared Stage 3 integration tip until split)
@@ -36,5 +36,5 @@ Out of scope: Stage 4+, live OpenRouter in default CI, weakening Stage 0–2 inv
 
 ## 5. Acceptance criteria
 
-- [ ] Behaviour + tests per handbook `S3-QA-001`
-- [ ] Handoff written
+- [x] Behaviour + tests per handbook `S3-QA-001`
+- [x] Handoff written

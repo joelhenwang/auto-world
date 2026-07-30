@@ -1,6 +1,6 @@
 # Stage 2 knowledge and perspective leakage report
 
-**Result:** FAIL
+**Result:** PASS
 **Command:** `uv run pytest backend/tests/unit/application/knowledge/test_leakage.py backend/tests/unit/application/knowledge/test_leakage_corpus.py backend/tests/unit/application/context/test_assembler_leakage.py -s`
 **Raw evidence:** `leakage.txt` — 11 passed
 **Corpus assertion count:** 496
@@ -13,4 +13,4 @@ Verified:
 - unauthorized secret phrases are scrubbed from consolidation text;
 - Stage 1 assembler leakage suite remains green.
 
-Hard leakage or corpus threshold failure — see `leakage.txt`.
+No hard leakage finding was observed.

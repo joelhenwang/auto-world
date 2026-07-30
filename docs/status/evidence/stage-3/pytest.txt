@@ -1,57 +1,8 @@
-....................................F............................F.....F [ 22%]
+........................................................................ [ 22%]
 ........................................................................ [ 45%]
 ........................................................................ [ 68%]
 ........................................................................ [ 91%]
 ............................                                             [100%]
-=================================== FAILURES ===================================
-__________________________ test_alembic_head_is_0004 ___________________________
-
-postgres_container = {'host': '172.17.0.1', 'port': '32785', 'user': 'fictional_world', 'password': 'change-me-local', ...}
-
-    @pytest.mark.integration
-    @pytest.mark.migration
-    @pytest.mark.requires_docker
-    @pytest.mark.asyncio
-    async def test_alembic_head_is_0004(postgres_container: dict[str, str]) -> None:
-        url = _normalize_url(postgres_container["url"])
-        heads = _alembic(url, "heads").stdout.strip().splitlines()
-        assert len(heads) == 1
->       assert "0004_stage2_continuity_tables" in heads[0]
-E       AssertionError: assert '0004_stage2_continuity_tables' in '0005_stage3_long_term_tables (head)'
-
-backend/tests/integration/test_core_schema_constraints.py:343: AssertionError
-_______________________ test_stage1_migration_roundtrip ________________________
-
-postgres_container = {'host': '172.17.0.1', 'port': '32785', 'user': 'fictional_world', 'password': 'change-me-local', ...}
-
-    @pytest.mark.integration
-    @pytest.mark.migration
-    @pytest.mark.requires_docker
-    @pytest.mark.asyncio
-    async def test_stage1_migration_roundtrip(postgres_container: dict[str, str]) -> None:
-        url = _normalize_url(postgres_container["url"])
-        heads = _alembic(url, "heads").stdout.strip().splitlines()
-        assert len(heads) == 1
->       assert "0004_stage2_continuity_tables" in heads[0]
-E       AssertionError: assert '0004_stage2_continuity_tables' in '0005_stage3_long_term_tables (head)'
-
-backend/tests/integration/test_stage1_schema.py:247: AssertionError
-_______________________ test_stage2_migration_roundtrip ________________________
-
-postgres_container = {'host': '172.17.0.1', 'port': '32785', 'user': 'fictional_world', 'password': 'change-me-local', ...}
-
-    @pytest.mark.integration
-    @pytest.mark.migration
-    @pytest.mark.requires_docker
-    @pytest.mark.asyncio
-    async def test_stage2_migration_roundtrip(postgres_container: dict[str, str]) -> None:
-        url = _normalize_url(postgres_container["url"])
-        heads = _alembic(url, "heads").stdout.strip().splitlines()
-        assert len(heads) == 1
->       assert "0004_stage2_continuity_tables" in heads[0]
-E       AssertionError: assert '0004_stage2_continuity_tables' in '0005_stage3_long_term_tables (head)'
-
-backend/tests/integration/test_stage2_schema.py:243: AssertionError
 =============================== warnings summary ===============================
 .venv/lib/python3.12/site-packages/fastapi/testclient.py:1
   /workspace/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
@@ -62,8 +13,4 @@ backend/tests/integration/test_stage1_api.py::test_stage1_runtime_reads_and_play
     return await dependant.call(**values)
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-=========================== short test summary info ============================
-FAILED backend/tests/integration/test_core_schema_constraints.py::test_alembic_head_is_0004
-FAILED backend/tests/integration/test_stage1_schema.py::test_stage1_migration_roundtrip
-FAILED backend/tests/integration/test_stage2_schema.py::test_stage2_migration_roundtrip
-3 failed, 313 passed, 2 deselected, 2 warnings in 138.90s (0:02:18)
+316 passed, 2 deselected, 2 warnings in 145.59s (0:02:25)
