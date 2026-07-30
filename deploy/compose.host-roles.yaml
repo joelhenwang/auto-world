@@ -1,0 +1,221 @@
+# compose.host-roles.yaml — Host-role overlay for Stage 4 multi-host deployment
+#
+# Purpose:
+#   This file documents the intended service-to-host assignment and startup order
+#   for the three-host topology described in docs/ops/multi-host/README.md.
+#
+#   It is NOT a standalone Compose file.  Use it as an override on each host:
+#
+#     # On rtx-4060-ti (control plane):
+#     docker compose -f compose.yaml -f deploy/compose.host-roles.yaml up -d
+#
+#     # On strix-halo-a and strix-halo-b (inference):
+#     docker compose -f compose.inference.yaml up -d
+#
+# Role assignment (docs/ops/multi-host/README.md §1):
+#
+#   rtx-4060-ti  → postgres, minio, orchestration-worker, model-gateway, api, frontend, comfyui
+#   strix-halo-a → text-server (primary large replica)
+#   strix-halo-b → text-server (secondary / failover)
+#
+# Startup order (docs/ops/multi-host/README.md §3):
+#
+#   1. postgres          (base; all services depend on it)
+#   2. minio             (image assets; comfyui and api depend on it)
+#   3. orchestration-worker
+#   4. model-gateway     (depends on postgres for capability persistence)
+#   5. api               (depends on postgres + model-gateway)
+#   6. frontend          (depends on api)
+#   7. comfyui           (depends on minio; independent of api)
+#
+# Inference hosts (strix-halo-a, strix-halo-b) start their text-server
+# independently and self-register with model-gateway on first request.
+
+version: "3.9"
+
+# ---------------------------------------------------------------------------
+# RTX 4060 Ti — control-plane services
+# ---------------------------------------------------------------------------
+
+services:
+
+  # --------------------------------------------------------------------------
+  # PostgreSQL + pgvector
+  # Place on the most continuously available host (rtx-4060-ti).
+  # DO NOT distribute. Tested backups mandatory (see runbook-drain-failover.md §5).
+  # --------------------------------------------------------------------------
+  postgres:
+    # image: pgvector/pgvector:pg16 — pin exact digest in production
+    profiles: ["control-plane"]
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: fictional_world
+      POSTGRES_PASSWORD_FILE: /run/secrets/pg_password
+      POSTGRES_DB: fictional_world
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    secrets:
+      - pg_password
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fictional_world"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # No ports exposed externally; api/orchestration connect via internal network.
+    networks: [internal]
+
+  # --------------------------------------------------------------------------
+  # MinIO — S3-compatible object storage for image assets
+  # Handbook: 29 §S4-STORAGE-001
+  # --------------------------------------------------------------------------
+  minio:
+    # image: minio/minio:RELEASE.xxxx-xx-xx — pin exact tag
+    profiles: ["control-plane"]
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER_FILE: /run/secrets/minio_user
+      MINIO_ROOT_PASSWORD_FILE: /run/secrets/minio_password
+    volumes:
+      - minio_data:/data
+    secrets:
+      - minio_user
+      - minio_password
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+    networks: [internal]
+
+  # --------------------------------------------------------------------------
+  # Orchestration worker — task queue, lease management, reconciliation
+  # Handbook: 14; S4-ORCH-001
+  # --------------------------------------------------------------------------
+  orchestration-worker:
+    profiles: ["control-plane"]
+    restart: unless-stopped
+    env_file: /etc/fictional-world/secrets/service.env
+    environment:
+      APP_PROFILE: stage4
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks: [internal]
+
+  # --------------------------------------------------------------------------
+  # Model gateway — health-aware routing between local endpoints + OpenRouter
+  # Handbook: 12; S4-MODEL-001/002
+  # --------------------------------------------------------------------------
+  model-gateway:
+    profiles: ["control-plane"]
+    restart: unless-stopped
+    env_file: /etc/fictional-world/secrets/service.env
+    environment:
+      APP_PROFILE: stage4
+      # Text-server base URLs for Halo A/B — set to actual LAN addresses:
+      #   HALO_A_ENDPOINT: http://strix-halo-a:8080
+      #   HALO_B_ENDPOINT: http://strix-halo-b:8080
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks: [internal]
+
+  # --------------------------------------------------------------------------
+  # FastAPI application (api)
+  # Handbook: 17; S4-API-001
+  # --------------------------------------------------------------------------
+  api:
+    profiles: ["control-plane"]
+    restart: unless-stopped
+    env_file: /etc/fictional-world/secrets/service.env
+    environment:
+      APP_PROFILE: stage4
+    ports:
+      - "127.0.0.1:8000:8000"   # Bind loopback; Caddy or nginx terminates TLS
+    depends_on:
+      postgres:
+        condition: service_healthy
+      model-gateway:
+        condition: service_started
+    networks: [internal]
+
+  # --------------------------------------------------------------------------
+  # Vue 3 frontend (served by Caddy/nginx in production, Vite in dev)
+  # Handbook: 18; S4-UI-001
+  # --------------------------------------------------------------------------
+  frontend:
+    profiles: ["control-plane"]
+    restart: unless-stopped
+    depends_on:
+      - api
+    networks: [internal]
+
+  # --------------------------------------------------------------------------
+  # ComfyUI image worker
+  # Handbook: 16; S4-IMG-001/002/003
+  # Runs on rtx-4060-ti (GPU available).
+  # NEVER blocks phase completion.
+  # --------------------------------------------------------------------------
+  comfyui:
+    # image: ghcr.io/comfyanonymous/comfyui:latest — pin exact digest
+    profiles: ["control-plane"]
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+    depends_on:
+      minio:
+        condition: service_healthy
+    networks: [internal]
+
+# ---------------------------------------------------------------------------
+# Inference hosts — strix-halo-a and strix-halo-b
+# These are defined in a separate compose.inference.yaml on each Halo host.
+# They self-register with model-gateway via its LAN address on first request.
+# ---------------------------------------------------------------------------
+#
+# compose.inference.yaml (deployed to each Halo host) should contain:
+#
+#   text-server:
+#     # image: chosen vLLM / llama.cpp image — pin exact digest
+#     restart: unless-stopped
+#     environment:
+#       MODEL_ID: <selected model>
+#       GATEWAY_REGISTER_URL: http://rtx-4060-ti:8000/admin/v1/model-endpoints
+#       HOST_KEY: strix-halo-a   # or strix-halo-b
+#     deploy:
+#       resources:
+#         reservations:
+#           devices:
+#             - capabilities: [gpu]   # for ROCm: driver: amdgpu
+#
+# Character identity must NOT be bound to a specific Halo.
+# A character is a context package; it runs on whichever endpoint the gateway selects.
+
+# ---------------------------------------------------------------------------
+# Volumes and secrets
+# ---------------------------------------------------------------------------
+
+volumes:
+  postgres_data:
+    driver: local
+  minio_data:
+    driver: local
+
+secrets:
+  pg_password:
+    file: /etc/fictional-world/secrets/pg.password
+  minio_user:
+    file: /etc/fictional-world/secrets/minio.user
+  minio_password:
+    file: /etc/fictional-world/secrets/minio.password
+
+networks:
+  internal:
+    driver: bridge
+    # For multi-host overlay networking, replace 'bridge' with 'overlay'
+    # and configure Docker Swarm or an equivalent CNI.
+    # Stage 4 does NOT require Swarm; per-host Compose is preferred.
