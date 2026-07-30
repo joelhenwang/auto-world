@@ -1,4 +1,7 @@
-"""Stage 0 recent_memory table (handbook ``06`` §12.1 subset)."""
+"""Stage 0 recent_memory table (handbook ``06`` §12.1 subset).
+
+Full long-term ``memory`` ORM lives in ``stage3.MemoryRow``.
+"""
 
 from __future__ import annotations
 
@@ -27,7 +30,7 @@ from fictional_world.infrastructure.database.naming import WORLDSIM_SCHEMA
 
 
 class RecentMemoryRow(Base):
-    """Stage-0 memory surface; full ``memory`` table arrives in a later revision."""
+    """Stage-0 memory surface; full ``memory`` table is ``MemoryRow`` in ``stage3``."""
 
     __tablename__ = "recent_memory"
     __table_args__ = (
