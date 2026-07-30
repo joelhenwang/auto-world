@@ -12,6 +12,7 @@ import type {
   RunProgressRead,
   SummaryRead,
 } from './stage2-types'
+import type { ArcRead, FactionRead, LongTermMemoryRead, MonthRunRead } from './stage3-types'
 
 export type WorldRead = components['schemas']['WorldRead']
 export type ClockRead = components['schemas']['ClockRead']
@@ -36,6 +37,8 @@ export type {
   RunProgressRead,
   SummaryRead,
 }
+
+export type { ArcRead, FactionRead, LongTermMemoryRead, MonthRunRead }
 
 type RequestOptions = Omit<RequestInit, 'body'> & {
   body?: object
@@ -189,6 +192,24 @@ export class WorldApiClient {
       404,
       501,
     ])
+  }
+
+  getMonthRuns(worldId: string): Promise<MonthRunRead[]> {
+    return this.optionalArray(`/api/v1/worlds/${worldId}/month-runs`)
+  }
+
+  getArcs(worldId: string): Promise<ArcRead[]> {
+    return this.optionalArray(`/api/v1/worlds/${worldId}/arcs`)
+  }
+
+  getFactions(worldId: string): Promise<FactionRead[]> {
+    return this.optionalArray(`/api/v1/worlds/${worldId}/factions`)
+  }
+
+  getMemories(worldId: string, characterId: string): Promise<LongTermMemoryRead[]> {
+    return this.optionalArray(
+      `/api/v1/worlds/${worldId}/characters/${characterId}/memories`,
+    )
   }
 
   advance(worldId: string): Promise<AdvancePhaseResponse> {
