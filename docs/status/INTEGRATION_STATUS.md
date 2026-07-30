@@ -1,6 +1,6 @@
 # Integration Status
 
-**Updated:** 2026-07-30T01:14:00Z  
+**Updated:** 2026-07-30T01:35:00Z  
 **Integration owner:** Stage 4 parent coding agent  
 **Integration branch/worktree:** `cursor/s4-integration-8b4a`  
 **Target stage:** 4 (ACTIVE)  
@@ -22,7 +22,7 @@
 | S4-MODEL-001 | IN_PROGRESS | local adapters + registry |
 | S4-MODEL-002 | READY | packet authored |
 | S4-ORCH-001 | READY | packet authored; owns `0006` if needed |
-| S4-ORCH-002 | READY | evaluate Temporal; adopt optional |
+| S4-ORCH-002 | COMPLETE | ADR-0003 DEFER; DB orchestrator = Stage 4 prod path; noop port |
 | S4-STORAGE-001 … S4-QA-001 | PENDING | packets to follow |
 
 ## Gate commands (regression)

@@ -29,14 +29,24 @@ from fictional_world.application.orchestration.task_queue import (
     TaskQueueError,
     TaskQueueService,
 )
+from fictional_world.application.orchestration.temporal_port import (
+    TEMPORAL_ADOPTION_STATUS,
+    TEMPORAL_DEFER_REASON,
+    NoopTemporalOrchestrator,
+    TemporalDeferredError,
+    TemporalOrchestratorPort,
+)
 
 __all__ = [
+    "TEMPORAL_ADOPTION_STATUS",
+    "TEMPORAL_DEFER_REASON",
     "BudgetService",
     "CreateTaskCommand",
     "CreateTaskResult",
     "DayAdvanceResult",
     "DeterministicPhaseRunner",
     "DispatchResult",
+    "NoopTemporalOrchestrator",
     "OutboxDispatcher",
     "PauseMode",
     "PhaseAdvanceResult",
@@ -47,6 +57,8 @@ __all__ = [
     "SevenDayRunResult",
     "TaskQueueError",
     "TaskQueueService",
+    "TemporalDeferredError",
+    "TemporalOrchestratorPort",
     "WorldOrchestrator",
     "advance_world_clock",
     "mira_stage0_effects",
