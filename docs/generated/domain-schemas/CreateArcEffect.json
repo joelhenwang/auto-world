@@ -1,0 +1,85 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "arc_id": {
+      "format": "uuid",
+      "title": "Arc Id",
+      "type": "string"
+    },
+    "arc_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Arc Key",
+      "type": "string"
+    },
+    "arc_scope": {
+      "default": "major",
+      "maxLength": 50,
+      "minLength": 1,
+      "title": "Arc Scope",
+      "type": "string"
+    },
+    "effect_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Effect Key",
+      "type": "string"
+    },
+    "justification": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Justification",
+      "type": "string"
+    },
+    "kind": {
+      "const": "create_arc",
+      "default": "create_arc",
+      "title": "Kind",
+      "type": "string"
+    },
+    "objective": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Objective",
+      "type": "string"
+    },
+    "premise": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Premise",
+      "type": "string"
+    },
+    "source_attempt_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Attempt Ids",
+      "type": "array"
+    },
+    "title": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    },
+    "world_id": {
+      "format": "uuid",
+      "title": "World Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "effect_key",
+    "justification",
+    "arc_id",
+    "world_id",
+    "arc_key",
+    "title",
+    "premise",
+    "objective"
+  ],
+  "title": "CreateArcEffect",
+  "type": "object"
+}

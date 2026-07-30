@@ -1,40 +1,26 @@
 {
   "additionalProperties": false,
   "properties": {
-    "causal_condition_ids": {
-      "default": [],
-      "items": {
-        "format": "uuid",
-        "type": "string"
-      },
-      "title": "Causal Condition Ids",
-      "type": "array"
-    },
-    "causal_injury_ids": {
-      "default": [],
-      "items": {
-        "format": "uuid",
-        "type": "string"
-      },
-      "title": "Causal Injury Ids",
-      "type": "array"
-    },
-    "cause": {
-      "maxLength": 1000,
-      "minLength": 1,
-      "title": "Cause",
-      "type": "string"
-    },
     "effect_key": {
       "maxLength": 100,
       "minLength": 1,
       "title": "Effect Key",
       "type": "string"
     },
-    "entity_id": {
+    "faction_id": {
       "format": "uuid",
-      "title": "Entity Id",
+      "title": "Faction Id",
       "type": "string"
+    },
+    "indicator_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Indicator Key",
+      "type": "string"
+    },
+    "indicator_value": {
+      "title": "Indicator Value",
+      "type": "number"
     },
     "justification": {
       "maxLength": 1000,
@@ -43,9 +29,15 @@
       "type": "string"
     },
     "kind": {
-      "const": "mark_death",
-      "default": "mark_death",
+      "const": "update_faction_state",
+      "default": "update_faction_state",
       "title": "Kind",
+      "type": "string"
+    },
+    "reason": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Reason",
       "type": "string"
     },
     "source_attempt_ids": {
@@ -61,9 +53,11 @@
   "required": [
     "effect_key",
     "justification",
-    "entity_id",
-    "cause"
+    "faction_id",
+    "indicator_key",
+    "indicator_value",
+    "reason"
   ],
-  "title": "MarkDeathEffect",
+  "title": "UpdateFactionStateEffect",
   "type": "object"
 }

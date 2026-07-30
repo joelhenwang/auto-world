@@ -1,0 +1,63 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "effect_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Effect Key",
+      "type": "string"
+    },
+    "indicator_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Indicator Key",
+      "type": "string"
+    },
+    "indicator_value": {
+      "title": "Indicator Value",
+      "type": "number"
+    },
+    "justification": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Justification",
+      "type": "string"
+    },
+    "kind": {
+      "const": "update_settlement_indicator",
+      "default": "update_settlement_indicator",
+      "title": "Kind",
+      "type": "string"
+    },
+    "reason": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    },
+    "settlement_location_id": {
+      "format": "uuid",
+      "title": "Settlement Location Id",
+      "type": "string"
+    },
+    "source_attempt_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Attempt Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "effect_key",
+    "justification",
+    "settlement_location_id",
+    "indicator_key",
+    "indicator_value",
+    "reason"
+  ],
+  "title": "UpdateSettlementIndicatorEffect",
+  "type": "object"
+}

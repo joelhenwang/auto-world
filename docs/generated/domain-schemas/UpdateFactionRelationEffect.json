@@ -1,39 +1,17 @@
 {
   "additionalProperties": false,
   "properties": {
-    "causal_condition_ids": {
-      "default": [],
-      "items": {
-        "format": "uuid",
-        "type": "string"
-      },
-      "title": "Causal Condition Ids",
-      "type": "array"
-    },
-    "causal_injury_ids": {
-      "default": [],
-      "items": {
-        "format": "uuid",
-        "type": "string"
-      },
-      "title": "Causal Injury Ids",
-      "type": "array"
-    },
-    "cause": {
-      "maxLength": 1000,
+    "dimension": {
+      "default": "stance",
+      "maxLength": 100,
       "minLength": 1,
-      "title": "Cause",
+      "title": "Dimension",
       "type": "string"
     },
     "effect_key": {
       "maxLength": 100,
       "minLength": 1,
       "title": "Effect Key",
-      "type": "string"
-    },
-    "entity_id": {
-      "format": "uuid",
-      "title": "Entity Id",
       "type": "string"
     },
     "justification": {
@@ -43,10 +21,16 @@
       "type": "string"
     },
     "kind": {
-      "const": "mark_death",
-      "default": "mark_death",
+      "const": "update_faction_relation",
+      "default": "update_faction_relation",
       "title": "Kind",
       "type": "string"
+    },
+    "relation_delta": {
+      "maximum": 1,
+      "minimum": -1,
+      "title": "Relation Delta",
+      "type": "number"
     },
     "source_attempt_ids": {
       "default": [],
@@ -56,14 +40,25 @@
       },
       "title": "Source Attempt Ids",
       "type": "array"
+    },
+    "source_faction_id": {
+      "format": "uuid",
+      "title": "Source Faction Id",
+      "type": "string"
+    },
+    "target_faction_id": {
+      "format": "uuid",
+      "title": "Target Faction Id",
+      "type": "string"
     }
   },
   "required": [
     "effect_key",
     "justification",
-    "entity_id",
-    "cause"
+    "source_faction_id",
+    "target_faction_id",
+    "relation_delta"
   ],
-  "title": "MarkDeathEffect",
+  "title": "UpdateFactionRelationEffect",
   "type": "object"
 }

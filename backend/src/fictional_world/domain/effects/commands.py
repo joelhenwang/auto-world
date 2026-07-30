@@ -1,4 +1,4 @@
-"""Typed effect commands (handbook ``05`` §7 + Stage-0 ASSUMP-S0-001)."""
+"""Typed effect commands (handbook ``05`` §7 + Stage-0 ASSUMP-S0-001 + Stage 3 §4.2)."""
 
 from __future__ import annotations
 
@@ -83,6 +83,8 @@ class ApplyInjuryEffect(EffectBase):
     mobility_impact: int = Field(default=0, ge=0, le=5)
     consciousness_impact: int = Field(default=0, ge=0, le=5)
     potentially_permanent: bool = False
+    injury_id: UUID | None = None
+    idempotency_key: str | None = Field(default=None, max_length=200)
 
 
 class ApplyConditionEffect(EffectBase):
@@ -153,6 +155,175 @@ class MarkDeathEffect(EffectBase):
     kind: Literal["mark_death"] = "mark_death"
     entity_id: UUID
     cause: str = Field(min_length=1, max_length=1_000)
+    causal_injury_ids: tuple[UUID, ...] = ()
+    causal_condition_ids: tuple[UUID, ...] = ()
+
+
+# --- Stage 3 additive kinds (handbook 28 §4.2) ---
+
+
+class UpdateInjuryEffect(EffectBase):
+    kind: Literal["update_injury"] = "update_injury"
+    injury_id: UUID
+    entity_id: UUID
+    severity: float | None = Field(default=None, ge=0, le=100)
+    bleeding: float | None = Field(default=None, ge=0, le=100)
+    pain: float | None = Field(default=None, ge=0, le=100)
+    mobility_penalty: float | None = Field(default=None, ge=0, le=100)
+    healing_progress: float | None = Field(default=None, ge=0, le=100)
+    status: str | None = Field(default=None, min_length=1, max_length=50)
+    permanent_consequence: bool | None = None
+
+
+class RemoveConditionEffect(EffectBase):
+    kind: Literal["remove_condition"] = "remove_condition"
+    condition_id: UUID
+    entity_id: UUID
+    reason: str = Field(min_length=1, max_length=500)
+
+
+class CreateItemEffect(EffectBase):
+    kind: Literal["create_item"] = "create_item"
+    item_id: UUID
+    world_id: UUID
+    name: str = Field(min_length=1, max_length=200)
+    item_kind: str = Field(min_length=1, max_length=100)
+    owner_character_id: UUID | None = None
+    quantity: int = Field(default=1, ge=1)
+    item_code: str | None = Field(default=None, max_length=100)
+
+
+class DestroyItemEffect(EffectBase):
+    kind: Literal["destroy_item"] = "destroy_item"
+    item_id: UUID
+    reason: str = Field(min_length=1, max_length=500)
+
+
+class UpdateSkillEvidenceEffect(EffectBase):
+    kind: Literal["update_skill_evidence"] = "update_skill_evidence"
+    character_id: UUID
+    skill_id: UUID
+    evidence_delta: float = Field(gt=0)
+    difficulty: float = Field(ge=0, le=1)
+    practice_quality: float = Field(ge=0, le=1)
+    source_event_id: UUID | None = None
+
+
+class AwardSkillProgressEffect(EffectBase):
+    kind: Literal["award_skill_progress"] = "award_skill_progress"
+    character_id: UUID
+    skill_id: UUID
+    proficiency_delta: float = Field(gt=0, le=100)
+    evidence_event_ids: tuple[UUID, ...] = Field(min_length=1)
+    extraordinary: bool = False
+
+
+class RevealSecretEffect(EffectBase):
+    kind: Literal["reveal_secret"] = "reveal_secret"
+    secret_memory_id: UUID
+    revealer_id: UUID
+    listener_ids: tuple[UUID, ...] = Field(min_length=1)
+    disclosure_level: str = Field(default="partial", min_length=1, max_length=50)
+
+
+class UpdateFactionStateEffect(EffectBase):
+    kind: Literal["update_faction_state"] = "update_faction_state"
+    faction_id: UUID
+    indicator_key: str = Field(min_length=1, max_length=100)
+    indicator_value: float
+    reason: str = Field(min_length=1, max_length=500)
+
+
+class UpdateFactionRelationEffect(EffectBase):
+    kind: Literal["update_faction_relation"] = "update_faction_relation"
+    source_faction_id: UUID
+    target_faction_id: UUID
+    relation_delta: float = Field(ge=-1, le=1)
+    dimension: str = Field(default="stance", min_length=1, max_length=100)
+
+
+class UpdateSettlementIndicatorEffect(EffectBase):
+    kind: Literal["update_settlement_indicator"] = "update_settlement_indicator"
+    settlement_location_id: UUID
+    indicator_key: str = Field(min_length=1, max_length=100)
+    indicator_value: float
+    reason: str = Field(min_length=1, max_length=500)
+
+
+class CreateArcEffect(EffectBase):
+    kind: Literal["create_arc"] = "create_arc"
+    arc_id: UUID
+    world_id: UUID
+    arc_key: str = Field(min_length=1, max_length=100)
+    title: str = Field(min_length=1, max_length=200)
+    arc_scope: str = Field(default="major", min_length=1, max_length=50)
+    premise: str = Field(min_length=1, max_length=2_000)
+    objective: str = Field(min_length=1, max_length=2_000)
+
+
+class UpdateArcEffect(EffectBase):
+    kind: Literal["update_arc"] = "update_arc"
+    arc_id: UUID
+    progress: float | None = Field(default=None, ge=0, le=1)
+    status: str | None = Field(default=None, min_length=1, max_length=50)
+    milestone_key: str | None = Field(default=None, max_length=100)
+
+
+class CloseArcEffect(EffectBase):
+    kind: Literal["close_arc"] = "close_arc"
+    arc_id: UUID
+    closure_reason: str = Field(min_length=1, max_length=500)
+    outcome: str = Field(min_length=1, max_length=100)
+
+
+class CreateHookEffect(EffectBase):
+    kind: Literal["create_hook"] = "create_hook"
+    hook_id: UUID
+    world_id: UUID
+    hook_key: str = Field(min_length=1, max_length=100)
+    title: str = Field(min_length=1, max_length=200)
+    premise: str = Field(min_length=1, max_length=2_000)
+    status: str = Field(default="dormant", min_length=1, max_length=50)
+
+
+class UpdateHookEffect(EffectBase):
+    kind: Literal["update_hook"] = "update_hook"
+    hook_id: UUID
+    status: str | None = Field(default=None, min_length=1, max_length=50)
+    progress_note: str | None = Field(default=None, max_length=1_000)
+
+
+class CloseHookEffect(EffectBase):
+    kind: Literal["close_hook"] = "close_hook"
+    hook_id: UUID
+    closure_reason: str = Field(min_length=1, max_length=500)
+
+
+class ReturnFromDeathEffect(EffectBase):
+    kind: Literal["return_from_death"] = "return_from_death"
+    entity_id: UUID
+    mechanism: str = Field(min_length=1, max_length=200)
+    lore_rule_id: str = Field(min_length=1, max_length=200)
+    cost_summary: str = Field(min_length=1, max_length=1_000)
+    high_impact_authorized: bool = False
+
+
+class AlterCharacterCardEffect(EffectBase):
+    kind: Literal["alter_character_card"] = "alter_character_card"
+    character_id: UUID
+    field_path: str = Field(min_length=1, max_length=200)
+    new_value_summary: str = Field(min_length=1, max_length=2_000)
+    evidence_event_ids: tuple[UUID, ...] = Field(min_length=1)
+    high_impact_authorized: bool = False
+
+
+class AlterWorldLoreEffect(EffectBase):
+    kind: Literal["alter_world_lore"] = "alter_world_lore"
+    world_id: UUID
+    lore_key: str = Field(min_length=1, max_length=200)
+    change_summary: str = Field(min_length=1, max_length=2_000)
+    permission_grant: str = Field(min_length=1, max_length=200)
+    high_impact_authorized: bool = False
 
 
 EffectCommand = Annotated[
@@ -171,7 +342,26 @@ EffectCommand = Annotated[
     | SkillProgressEvidenceEffect
     | ScheduleEffect
     | RegisterNpcEffect
-    | MarkDeathEffect,
+    | MarkDeathEffect
+    | UpdateInjuryEffect
+    | RemoveConditionEffect
+    | CreateItemEffect
+    | DestroyItemEffect
+    | UpdateSkillEvidenceEffect
+    | AwardSkillProgressEffect
+    | RevealSecretEffect
+    | UpdateFactionStateEffect
+    | UpdateFactionRelationEffect
+    | UpdateSettlementIndicatorEffect
+    | CreateArcEffect
+    | UpdateArcEffect
+    | CloseArcEffect
+    | CreateHookEffect
+    | UpdateHookEffect
+    | CloseHookEffect
+    | ReturnFromDeathEffect
+    | AlterCharacterCardEffect
+    | AlterWorldLoreEffect,
     Field(discriminator="kind"),
 ]
 
@@ -192,4 +382,23 @@ EFFECT_COMMAND_TYPES: tuple[type[EffectBase], ...] = (
     ScheduleEffect,
     RegisterNpcEffect,
     MarkDeathEffect,
+    UpdateInjuryEffect,
+    RemoveConditionEffect,
+    CreateItemEffect,
+    DestroyItemEffect,
+    UpdateSkillEvidenceEffect,
+    AwardSkillProgressEffect,
+    RevealSecretEffect,
+    UpdateFactionStateEffect,
+    UpdateFactionRelationEffect,
+    UpdateSettlementIndicatorEffect,
+    CreateArcEffect,
+    UpdateArcEffect,
+    CloseArcEffect,
+    CreateHookEffect,
+    UpdateHookEffect,
+    CloseHookEffect,
+    ReturnFromDeathEffect,
+    AlterCharacterCardEffect,
+    AlterWorldLoreEffect,
 )

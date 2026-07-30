@@ -1,39 +1,15 @@
 {
   "additionalProperties": false,
   "properties": {
-    "causal_condition_ids": {
-      "default": [],
-      "items": {
-        "format": "uuid",
-        "type": "string"
-      },
-      "title": "Causal Condition Ids",
-      "type": "array"
-    },
-    "causal_injury_ids": {
-      "default": [],
-      "items": {
-        "format": "uuid",
-        "type": "string"
-      },
-      "title": "Causal Injury Ids",
-      "type": "array"
-    },
-    "cause": {
-      "maxLength": 1000,
-      "minLength": 1,
-      "title": "Cause",
-      "type": "string"
-    },
     "effect_key": {
       "maxLength": 100,
       "minLength": 1,
       "title": "Effect Key",
       "type": "string"
     },
-    "entity_id": {
+    "hook_id": {
       "format": "uuid",
-      "title": "Entity Id",
+      "title": "Hook Id",
       "type": "string"
     },
     "justification": {
@@ -43,10 +19,23 @@
       "type": "string"
     },
     "kind": {
-      "const": "mark_death",
-      "default": "mark_death",
+      "const": "update_hook",
+      "default": "update_hook",
       "title": "Kind",
       "type": "string"
+    },
+    "progress_note": {
+      "anyOf": [
+        {
+          "maxLength": 1000,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Progress Note"
     },
     "source_attempt_ids": {
       "default": [],
@@ -56,14 +45,27 @@
       },
       "title": "Source Attempt Ids",
       "type": "array"
+    },
+    "status": {
+      "anyOf": [
+        {
+          "maxLength": 50,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Status"
     }
   },
   "required": [
     "effect_key",
     "justification",
-    "entity_id",
-    "cause"
+    "hook_id"
   ],
-  "title": "MarkDeathEffect",
+  "title": "UpdateHookEffect",
   "type": "object"
 }

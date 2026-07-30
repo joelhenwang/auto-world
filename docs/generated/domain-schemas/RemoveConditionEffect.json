@@ -1,28 +1,9 @@
 {
   "additionalProperties": false,
   "properties": {
-    "causal_condition_ids": {
-      "default": [],
-      "items": {
-        "format": "uuid",
-        "type": "string"
-      },
-      "title": "Causal Condition Ids",
-      "type": "array"
-    },
-    "causal_injury_ids": {
-      "default": [],
-      "items": {
-        "format": "uuid",
-        "type": "string"
-      },
-      "title": "Causal Injury Ids",
-      "type": "array"
-    },
-    "cause": {
-      "maxLength": 1000,
-      "minLength": 1,
-      "title": "Cause",
+    "condition_id": {
+      "format": "uuid",
+      "title": "Condition Id",
       "type": "string"
     },
     "effect_key": {
@@ -43,9 +24,15 @@
       "type": "string"
     },
     "kind": {
-      "const": "mark_death",
-      "default": "mark_death",
+      "const": "remove_condition",
+      "default": "remove_condition",
       "title": "Kind",
+      "type": "string"
+    },
+    "reason": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Reason",
       "type": "string"
     },
     "source_attempt_ids": {
@@ -61,9 +48,10 @@
   "required": [
     "effect_key",
     "justification",
+    "condition_id",
     "entity_id",
-    "cause"
+    "reason"
   ],
-  "title": "MarkDeathEffect",
+  "title": "RemoveConditionEffect",
   "type": "object"
 }

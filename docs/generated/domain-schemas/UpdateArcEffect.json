@@ -1,0 +1,85 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "arc_id": {
+      "format": "uuid",
+      "title": "Arc Id",
+      "type": "string"
+    },
+    "effect_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Effect Key",
+      "type": "string"
+    },
+    "justification": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Justification",
+      "type": "string"
+    },
+    "kind": {
+      "const": "update_arc",
+      "default": "update_arc",
+      "title": "Kind",
+      "type": "string"
+    },
+    "milestone_key": {
+      "anyOf": [
+        {
+          "maxLength": 100,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Milestone Key"
+    },
+    "progress": {
+      "anyOf": [
+        {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Progress"
+    },
+    "source_attempt_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Attempt Ids",
+      "type": "array"
+    },
+    "status": {
+      "anyOf": [
+        {
+          "maxLength": 50,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Status"
+    }
+  },
+  "required": [
+    "effect_key",
+    "justification",
+    "arc_id"
+  ],
+  "title": "UpdateArcEffect",
+  "type": "object"
+}

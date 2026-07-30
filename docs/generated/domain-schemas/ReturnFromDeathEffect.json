@@ -1,28 +1,10 @@
 {
   "additionalProperties": false,
   "properties": {
-    "causal_condition_ids": {
-      "default": [],
-      "items": {
-        "format": "uuid",
-        "type": "string"
-      },
-      "title": "Causal Condition Ids",
-      "type": "array"
-    },
-    "causal_injury_ids": {
-      "default": [],
-      "items": {
-        "format": "uuid",
-        "type": "string"
-      },
-      "title": "Causal Injury Ids",
-      "type": "array"
-    },
-    "cause": {
+    "cost_summary": {
       "maxLength": 1000,
       "minLength": 1,
-      "title": "Cause",
+      "title": "Cost Summary",
       "type": "string"
     },
     "effect_key": {
@@ -36,6 +18,11 @@
       "title": "Entity Id",
       "type": "string"
     },
+    "high_impact_authorized": {
+      "default": false,
+      "title": "High Impact Authorized",
+      "type": "boolean"
+    },
     "justification": {
       "maxLength": 1000,
       "minLength": 1,
@@ -43,9 +30,21 @@
       "type": "string"
     },
     "kind": {
-      "const": "mark_death",
-      "default": "mark_death",
+      "const": "return_from_death",
+      "default": "return_from_death",
       "title": "Kind",
+      "type": "string"
+    },
+    "lore_rule_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Lore Rule Id",
+      "type": "string"
+    },
+    "mechanism": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Mechanism",
       "type": "string"
     },
     "source_attempt_ids": {
@@ -62,8 +61,10 @@
     "effect_key",
     "justification",
     "entity_id",
-    "cause"
+    "mechanism",
+    "lore_rule_id",
+    "cost_summary"
   ],
-  "title": "MarkDeathEffect",
+  "title": "ReturnFromDeathEffect",
   "type": "object"
 }
