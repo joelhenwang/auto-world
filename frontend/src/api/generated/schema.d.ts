@@ -21,6 +21,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/worlds/{world_id}/arcs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Arcs */
+        get: operations["list_arcs_api_v1_worlds__world_id__arcs_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/worlds/{world_id}/characters": {
         parameters: {
             query?: never;
@@ -84,6 +101,26 @@ export interface paths {
         };
         /** Character Diaries */
         get: operations["character_diaries_api_v1_worlds__world_id__characters__character_id__diaries_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/worlds/{world_id}/characters/{character_id}/memories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Character Memories
+         * @description Perspective-safe: only returns long-term memories owned by ``character_id``.
+         */
+        get: operations["list_character_memories_api_v1_worlds__world_id__characters__character_id__memories_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -160,6 +197,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/worlds/{world_id}/commands/run-thirty-days": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Run Thirty Days */
+        post: operations["run_thirty_days_api_v1_worlds__world_id__commands_run_thirty_days_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/worlds/{world_id}/day-progress": {
         parameters: {
             query?: never;
@@ -211,6 +265,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/worlds/{world_id}/exports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Exports */
+        get: operations["list_exports_api_v1_worlds__world_id__exports_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/worlds/{world_id}/factions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Factions */
+        get: operations["list_factions_api_v1_worlds__world_id__factions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/worlds/{world_id}/map": {
         parameters: {
             query?: never;
@@ -220,6 +308,23 @@ export interface paths {
         };
         /** Map State */
         get: operations["map_state_api_v1_worlds__world_id__map_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/worlds/{world_id}/month-runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Month Runs */
+        get: operations["list_month_runs_api_v1_worlds__world_id__month_runs_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -580,6 +685,39 @@ export interface components {
             /** Snapshot Id */
             snapshot_id: string | null;
         };
+        /** ArcRead */
+        ArcRead: {
+            /** Arc Key */
+            arc_key: string;
+            /** Arc Scope */
+            arc_scope: string;
+            /** Dominant Genres */
+            dominant_genres?: string[];
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Objective */
+            objective: string;
+            /** Participant Entity Ids */
+            participant_entity_ids?: string[];
+            /** Premise */
+            premise: string;
+            /** Progress */
+            progress: string;
+            /** Status */
+            status: string;
+            /** Title */
+            title: string;
+            /** Version */
+            version: number;
+            /**
+             * World Id
+             * Format: uuid
+             */
+            world_id: string;
+        };
         /** BeliefRead */
         BeliefRead: {
             /** Belief Text */
@@ -885,6 +1023,40 @@ export interface components {
              */
             world_id: string;
         };
+        /** ExportListRead */
+        ExportListRead: {
+            /** Items */
+            items?: {
+                [key: string]: unknown;
+            }[];
+        };
+        /** FactionRead */
+        FactionRead: {
+            /** Faction Key */
+            faction_key: string;
+            /** Faction Type */
+            faction_type: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /** Plot Armour Bias */
+            plot_armour_bias: string;
+            /** Status */
+            status: string;
+            /** Territory Location Ids */
+            territory_location_ids?: string[];
+            /** Version */
+            version: number;
+            /**
+             * World Id
+             * Format: uuid
+             */
+            world_id: string;
+        };
         /** GoalRead */
         GoalRead: {
             /**
@@ -952,6 +1124,44 @@ export interface components {
             /** Region Code */
             region_code: string;
         };
+        /** LongTermMemoryRead */
+        LongTermMemoryRead: {
+            /** Confidence */
+            confidence: string;
+            /** Content */
+            content: string;
+            /** Created Phase Index */
+            created_phase_index: number;
+            /** Decay Score */
+            decay_score: string;
+            /** Emotional Weight */
+            emotional_weight: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Memory Type */
+            memory_type: string;
+            /** Occurred Phase Index */
+            occurred_phase_index: number;
+            /**
+             * Owner Character Id
+             * Format: uuid
+             */
+            owner_character_id: string;
+            /** Salience */
+            salience: string;
+            /** Status */
+            status: string;
+            /** Visibility */
+            visibility: string;
+            /**
+             * World Id
+             * Format: uuid
+             */
+            world_id: string;
+        };
         /** MapStateRead */
         MapStateRead: {
             /** Locations */
@@ -960,6 +1170,52 @@ export interface components {
             routes: components["schemas"]["RouteMapRead"][];
             /** Travel Progress */
             travel_progress: components["schemas"]["TravelProgressSummaryRead"][];
+        };
+        /** MonthFinalizeSummaryRead */
+        MonthFinalizeSummaryRead: {
+            /** Already Finalized */
+            already_finalized: boolean;
+            /**
+             * Chapter Count
+             * @default 0
+             */
+            chapter_count: number;
+            /** Month Index */
+            month_index: number;
+            /** Month Run Id */
+            month_run_id: string | null;
+            /**
+             * Reflection Count
+             * @default 0
+             */
+            reflection_count: number;
+        };
+        /** MonthRunRead */
+        MonthRunRead: {
+            /** Completed At */
+            completed_at?: string | null;
+            /** End Day Index */
+            end_day_index: number;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Metrics */
+            metrics?: {
+                [key: string]: unknown;
+            };
+            /** Month Index */
+            month_index: number;
+            /** Start Day Index */
+            start_day_index: number;
+            /** Status */
+            status: string;
+            /**
+             * World Id
+             * Format: uuid
+             */
+            world_id: string;
         };
         /** NarrativeMetricRead */
         NarrativeMetricRead: {
@@ -1301,6 +1557,19 @@ export interface components {
             /** Status */
             status: string;
         };
+        /** RunThirtyDaysResponse */
+        RunThirtyDaysResponse: {
+            /** Day Results */
+            day_results: components["schemas"]["DayAdvanceResponse"][];
+            /** Days Completed */
+            days_completed: number;
+            month?: components["schemas"]["MonthFinalizeSummaryRead"] | null;
+            /**
+             * World Id
+             * Format: uuid
+             */
+            world_id: string;
+        };
         /** RunUntilDayRequest */
         RunUntilDayRequest: {
             /** Target Day Index */
@@ -1554,6 +1823,37 @@ export interface operations {
             };
         };
     };
+    list_arcs_api_v1_worlds__world_id__arcs_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                world_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ArcRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     characters_api_v1_worlds__world_id__characters_get: {
         parameters: {
             query?: never;
@@ -1668,6 +1968,38 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CharacterDiaryBundleRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_character_memories_api_v1_worlds__world_id__characters__character_id__memories_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                world_id: string;
+                character_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LongTermMemoryRead"][];
                 };
             };
             /** @description Validation Error */
@@ -1821,6 +2153,37 @@ export interface operations {
             };
         };
     };
+    run_thirty_days_api_v1_worlds__world_id__commands_run_thirty_days_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                world_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RunThirtyDaysResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     day_progress_api_v1_worlds__world_id__day_progress_get: {
         parameters: {
             query?: never;
@@ -1926,6 +2289,68 @@ export interface operations {
             };
         };
     };
+    list_exports_api_v1_worlds__world_id__exports_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                world_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExportListRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_factions_api_v1_worlds__world_id__factions_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                world_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FactionRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     map_state_api_v1_worlds__world_id__map_get: {
         parameters: {
             query?: never;
@@ -1944,6 +2369,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MapStateRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_month_runs_api_v1_worlds__world_id__month_runs_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                world_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MonthRunRead"][];
                 };
             };
             /** @description Validation Error */

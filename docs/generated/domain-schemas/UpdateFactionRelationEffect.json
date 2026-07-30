@@ -1,0 +1,64 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "dimension": {
+      "default": "stance",
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Dimension",
+      "type": "string"
+    },
+    "effect_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Effect Key",
+      "type": "string"
+    },
+    "justification": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Justification",
+      "type": "string"
+    },
+    "kind": {
+      "const": "update_faction_relation",
+      "default": "update_faction_relation",
+      "title": "Kind",
+      "type": "string"
+    },
+    "relation_delta": {
+      "maximum": 1,
+      "minimum": -1,
+      "title": "Relation Delta",
+      "type": "number"
+    },
+    "source_attempt_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Attempt Ids",
+      "type": "array"
+    },
+    "source_faction_id": {
+      "format": "uuid",
+      "title": "Source Faction Id",
+      "type": "string"
+    },
+    "target_faction_id": {
+      "format": "uuid",
+      "title": "Target Faction Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "effect_key",
+    "justification",
+    "source_faction_id",
+    "target_faction_id",
+    "relation_delta"
+  ],
+  "title": "UpdateFactionRelationEffect",
+  "type": "object"
+}

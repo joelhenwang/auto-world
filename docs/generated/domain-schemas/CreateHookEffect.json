@@ -1,0 +1,78 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "effect_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Effect Key",
+      "type": "string"
+    },
+    "hook_id": {
+      "format": "uuid",
+      "title": "Hook Id",
+      "type": "string"
+    },
+    "hook_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Hook Key",
+      "type": "string"
+    },
+    "justification": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Justification",
+      "type": "string"
+    },
+    "kind": {
+      "const": "create_hook",
+      "default": "create_hook",
+      "title": "Kind",
+      "type": "string"
+    },
+    "premise": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Premise",
+      "type": "string"
+    },
+    "source_attempt_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Attempt Ids",
+      "type": "array"
+    },
+    "status": {
+      "default": "dormant",
+      "maxLength": 50,
+      "minLength": 1,
+      "title": "Status",
+      "type": "string"
+    },
+    "title": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    },
+    "world_id": {
+      "format": "uuid",
+      "title": "World Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "effect_key",
+    "justification",
+    "hook_id",
+    "world_id",
+    "hook_key",
+    "title",
+    "premise"
+  ],
+  "title": "CreateHookEffect",
+  "type": "object"
+}

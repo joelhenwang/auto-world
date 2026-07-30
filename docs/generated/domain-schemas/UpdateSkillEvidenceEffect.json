@@ -1,0 +1,83 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "character_id": {
+      "format": "uuid",
+      "title": "Character Id",
+      "type": "string"
+    },
+    "difficulty": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Difficulty",
+      "type": "number"
+    },
+    "effect_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Effect Key",
+      "type": "string"
+    },
+    "evidence_delta": {
+      "exclusiveMinimum": 0,
+      "title": "Evidence Delta",
+      "type": "number"
+    },
+    "justification": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Justification",
+      "type": "string"
+    },
+    "kind": {
+      "const": "update_skill_evidence",
+      "default": "update_skill_evidence",
+      "title": "Kind",
+      "type": "string"
+    },
+    "practice_quality": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Practice Quality",
+      "type": "number"
+    },
+    "skill_id": {
+      "format": "uuid",
+      "title": "Skill Id",
+      "type": "string"
+    },
+    "source_attempt_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Attempt Ids",
+      "type": "array"
+    },
+    "source_event_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Source Event Id"
+    }
+  },
+  "required": [
+    "effect_key",
+    "justification",
+    "character_id",
+    "skill_id",
+    "evidence_delta",
+    "difficulty",
+    "practice_quality"
+  ],
+  "title": "UpdateSkillEvidenceEffect",
+  "type": "object"
+}

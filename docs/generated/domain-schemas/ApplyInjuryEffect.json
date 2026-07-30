@@ -32,6 +32,32 @@
       "title": "Entity Id",
       "type": "string"
     },
+    "idempotency_key": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Idempotency Key"
+    },
+    "injury_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Injury Id"
+    },
     "injury_type": {
       "maxLength": 100,
       "minLength": 1,

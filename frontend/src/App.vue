@@ -12,6 +12,7 @@ import {
   type DirectorPanelRead,
   type GoalRead,
   type MapStateRead,
+  type MonthRunRead,
   type NpcLifecycleRead,
   type PlanRead,
   type RelationshipRead,
@@ -19,6 +20,8 @@ import {
   type StreamEventRead,
   type SummaryRead,
   type WorldRead,
+  type ArcRead,
+  type FactionRead,
 } from './api/client'
 import {
   connectWorldStream,
@@ -30,6 +33,7 @@ import DayStrip from './features/runtime/DayStrip.vue'
 import DiaryPanel from './features/runtime/DiaryPanel.vue'
 import DirectorMetricsPanel from './features/runtime/DirectorMetricsPanel.vue'
 import MapPanel from './features/runtime/MapPanel.vue'
+import MonthExplorerPanel from './features/runtime/MonthExplorerPanel.vue'
 import NpcLifecyclePanel from './features/runtime/NpcLifecyclePanel.vue'
 import PlayerComposer from './features/runtime/PlayerComposer.vue'
 import RuntimeHeader from './features/runtime/RuntimeHeader.vue'
@@ -55,6 +59,10 @@ const summaries = ref<SummaryRead[]>([])
 const mapState = ref<MapStateRead>({ locations: [], routes: [], travel: [] })
 const npcs = ref<NpcLifecycleRead[]>([])
 const directorPanel = ref<DirectorPanelRead | null>(null)
+const monthRuns = ref<MonthRunRead[]>([])
+const arcs = ref<ArcRead[]>([])
+const factions = ref<FactionRead[]>([])
+const memoryCount = ref(0)
 const focusCharacterId = ref<string>()
 const timelineFilters = ref<{ characterId?: string; locationId?: string }>({})
 const loading = ref(true)
@@ -124,24 +132,34 @@ async function refreshCharacterDetail(characterId: string | undefined): Promise<
     beliefsAuthorized.value = true
     diaries.value = []
     summaries.value = []
+    memoryCount.value = 0
     return
   }
 
-  const [nextGoals, nextPlans, nextCommitments, nextRelationships, nextDiaries, nextSummaries] =
-    await Promise.all([
-      worldApi.getGoals(world.value.id, characterId),
-      worldApi.getPlans(world.value.id, characterId),
-      worldApi.getCommitments(world.value.id, characterId),
-      worldApi.getRelationships(world.value.id, characterId),
-      worldApi.getDiary(world.value.id, characterId),
-      worldApi.getSummaries(world.value.id, characterId),
-    ])
+  const [
+    nextGoals,
+    nextPlans,
+    nextCommitments,
+    nextRelationships,
+    nextDiaries,
+    nextSummaries,
+    nextMemories,
+  ] = await Promise.all([
+    worldApi.getGoals(world.value.id, characterId),
+    worldApi.getPlans(world.value.id, characterId),
+    worldApi.getCommitments(world.value.id, characterId),
+    worldApi.getRelationships(world.value.id, characterId),
+    worldApi.getDiary(world.value.id, characterId),
+    worldApi.getSummaries(world.value.id, characterId),
+    worldApi.getMemories(world.value.id, characterId),
+  ])
   goals.value = nextGoals
   plans.value = nextPlans
   commitments.value = nextCommitments
   relationships.value = nextRelationships
   diaries.value = nextDiaries
   summaries.value = nextSummaries
+  memoryCount.value = nextMemories.length
 
   // Player may only load beliefs for the controlled character; other views are unauthorized.
   const playerUnauthorized =
@@ -173,18 +191,25 @@ async function refreshProjections(): Promise<void> {
   if (!world.value) {
     return
   }
-  const [nextClock, nextCharacters, nextProgress, nextMap, nextNpcs] = await Promise.all([
-    worldApi.getClock(world.value.id),
-    worldApi.getCharacters(world.value.id),
-    worldApi.getRunProgress(world.value.id),
-    worldApi.getMap(world.value.id, session.observerId),
-    worldApi.getNpcs(world.value.id),
-  ])
+  const [nextClock, nextCharacters, nextProgress, nextMap, nextNpcs, nextMonths, nextArcs, nextFactions] =
+    await Promise.all([
+      worldApi.getClock(world.value.id),
+      worldApi.getCharacters(world.value.id),
+      worldApi.getRunProgress(world.value.id),
+      worldApi.getMap(world.value.id, session.observerId),
+      worldApi.getNpcs(world.value.id),
+      worldApi.getMonthRuns(world.value.id),
+      worldApi.getArcs(world.value.id),
+      worldApi.getFactions(world.value.id),
+    ])
   clock.value = nextClock
   characters.value = nextCharacters
   progress.value = nextProgress
   mapState.value = nextMap
   npcs.value = nextNpcs
+  monthRuns.value = nextMonths
+  arcs.value = nextArcs
+  factions.value = nextFactions
 
   if (session.canViewDirector) {
     try {
@@ -207,25 +232,40 @@ async function refreshAll(): Promise<void> {
   if (!world.value) {
     return
   }
-  const [nextClock, nextCharacters, nextEvents, nextProgress, nextMap, nextNpcs] =
-    await Promise.all([
-      worldApi.getClock(world.value.id),
-      worldApi.getCharacters(world.value.id),
-      worldApi.getTimeline(
-        world.value.id,
-        session.observerId,
-        timelineFilters.value,
-      ),
-      worldApi.getRunProgress(world.value.id),
-      worldApi.getMap(world.value.id, session.observerId),
-      worldApi.getNpcs(world.value.id),
-    ])
+  const [
+    nextClock,
+    nextCharacters,
+    nextEvents,
+    nextProgress,
+    nextMap,
+    nextNpcs,
+    nextMonths,
+    nextArcs,
+    nextFactions,
+  ] = await Promise.all([
+    worldApi.getClock(world.value.id),
+    worldApi.getCharacters(world.value.id),
+    worldApi.getTimeline(
+      world.value.id,
+      session.observerId,
+      timelineFilters.value,
+    ),
+    worldApi.getRunProgress(world.value.id),
+    worldApi.getMap(world.value.id, session.observerId),
+    worldApi.getNpcs(world.value.id),
+    worldApi.getMonthRuns(world.value.id),
+    worldApi.getArcs(world.value.id),
+    worldApi.getFactions(world.value.id),
+  ])
   clock.value = nextClock
   characters.value = nextCharacters
   events.value = nextEvents
   progress.value = nextProgress
   mapState.value = nextMap
   npcs.value = nextNpcs
+  monthRuns.value = nextMonths
+  arcs.value = nextArcs
+  factions.value = nextFactions
 
   if (session.canViewDirector) {
     try {
@@ -477,6 +517,13 @@ onUnmounted(() => stream?.close())
       />
       <MapPanel :map="mapState" :character-names="characterNames" />
       <NpcLifecyclePanel :npcs="npcs" />
+      <MonthExplorerPanel
+        :month-runs="monthRuns"
+        :memory-count="memoryCount"
+        :arcs="arcs"
+        :factions="factions"
+        :character-name="focusedCharacter?.name"
+      />
       <DirectorMetricsPanel
         v-if="session.canViewDirector && directorPanel"
         :panel="directorPanel"

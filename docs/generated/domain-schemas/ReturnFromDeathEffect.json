@@ -1,0 +1,70 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "cost_summary": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Cost Summary",
+      "type": "string"
+    },
+    "effect_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Effect Key",
+      "type": "string"
+    },
+    "entity_id": {
+      "format": "uuid",
+      "title": "Entity Id",
+      "type": "string"
+    },
+    "high_impact_authorized": {
+      "default": false,
+      "title": "High Impact Authorized",
+      "type": "boolean"
+    },
+    "justification": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Justification",
+      "type": "string"
+    },
+    "kind": {
+      "const": "return_from_death",
+      "default": "return_from_death",
+      "title": "Kind",
+      "type": "string"
+    },
+    "lore_rule_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Lore Rule Id",
+      "type": "string"
+    },
+    "mechanism": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Mechanism",
+      "type": "string"
+    },
+    "source_attempt_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Attempt Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "effect_key",
+    "justification",
+    "entity_id",
+    "mechanism",
+    "lore_rule_id",
+    "cost_summary"
+  ],
+  "title": "ReturnFromDeathEffect",
+  "type": "object"
+}

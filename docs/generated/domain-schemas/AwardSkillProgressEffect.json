@@ -1,0 +1,72 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "character_id": {
+      "format": "uuid",
+      "title": "Character Id",
+      "type": "string"
+    },
+    "effect_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Effect Key",
+      "type": "string"
+    },
+    "evidence_event_ids": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Evidence Event Ids",
+      "type": "array"
+    },
+    "extraordinary": {
+      "default": false,
+      "title": "Extraordinary",
+      "type": "boolean"
+    },
+    "justification": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Justification",
+      "type": "string"
+    },
+    "kind": {
+      "const": "award_skill_progress",
+      "default": "award_skill_progress",
+      "title": "Kind",
+      "type": "string"
+    },
+    "proficiency_delta": {
+      "exclusiveMinimum": 0,
+      "maximum": 100,
+      "title": "Proficiency Delta",
+      "type": "number"
+    },
+    "skill_id": {
+      "format": "uuid",
+      "title": "Skill Id",
+      "type": "string"
+    },
+    "source_attempt_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Attempt Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "effect_key",
+    "justification",
+    "character_id",
+    "skill_id",
+    "proficiency_delta",
+    "evidence_event_ids"
+  ],
+  "title": "AwardSkillProgressEffect",
+  "type": "object"
+}

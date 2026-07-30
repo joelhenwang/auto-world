@@ -1,0 +1,70 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "change_summary": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Change Summary",
+      "type": "string"
+    },
+    "effect_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Effect Key",
+      "type": "string"
+    },
+    "high_impact_authorized": {
+      "default": false,
+      "title": "High Impact Authorized",
+      "type": "boolean"
+    },
+    "justification": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Justification",
+      "type": "string"
+    },
+    "kind": {
+      "const": "alter_world_lore",
+      "default": "alter_world_lore",
+      "title": "Kind",
+      "type": "string"
+    },
+    "lore_key": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Lore Key",
+      "type": "string"
+    },
+    "permission_grant": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Permission Grant",
+      "type": "string"
+    },
+    "source_attempt_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Attempt Ids",
+      "type": "array"
+    },
+    "world_id": {
+      "format": "uuid",
+      "title": "World Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "effect_key",
+    "justification",
+    "world_id",
+    "lore_key",
+    "change_summary",
+    "permission_grant"
+  ],
+  "title": "AlterWorldLoreEffect",
+  "type": "object"
+}

@@ -1,0 +1,73 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "character_id": {
+      "format": "uuid",
+      "title": "Character Id",
+      "type": "string"
+    },
+    "effect_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Effect Key",
+      "type": "string"
+    },
+    "evidence_event_ids": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Evidence Event Ids",
+      "type": "array"
+    },
+    "field_path": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Field Path",
+      "type": "string"
+    },
+    "high_impact_authorized": {
+      "default": false,
+      "title": "High Impact Authorized",
+      "type": "boolean"
+    },
+    "justification": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Justification",
+      "type": "string"
+    },
+    "kind": {
+      "const": "alter_character_card",
+      "default": "alter_character_card",
+      "title": "Kind",
+      "type": "string"
+    },
+    "new_value_summary": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "New Value Summary",
+      "type": "string"
+    },
+    "source_attempt_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Attempt Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "effect_key",
+    "justification",
+    "character_id",
+    "field_path",
+    "new_value_summary",
+    "evidence_event_ids"
+  ],
+  "title": "AlterCharacterCardEffect",
+  "type": "object"
+}

@@ -1,0 +1,51 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "closure_reason": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Closure Reason",
+      "type": "string"
+    },
+    "effect_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Effect Key",
+      "type": "string"
+    },
+    "hook_id": {
+      "format": "uuid",
+      "title": "Hook Id",
+      "type": "string"
+    },
+    "justification": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Justification",
+      "type": "string"
+    },
+    "kind": {
+      "const": "close_hook",
+      "default": "close_hook",
+      "title": "Kind",
+      "type": "string"
+    },
+    "source_attempt_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Attempt Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "effect_key",
+    "justification",
+    "hook_id",
+    "closure_reason"
+  ],
+  "title": "CloseHookEffect",
+  "type": "object"
+}

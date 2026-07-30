@@ -334,6 +334,32 @@ class TropeUsagePersistenceRecord(StrictContract):
     created_at: datetime | None = None
 
 
+class NoveltySignaturePersistenceRecord(StrictContract):
+    id: UUID
+    world_id: UUID
+    signature_kind: str = Field(min_length=1, max_length=100)
+    signature_hash: str = Field(min_length=1, max_length=128)
+    normalized_text: str | None = None
+    phase_index: int = Field(ge=0)
+    day_index: int = Field(ge=0)
+    participant_ids: tuple[UUID, ...] = ()
+    location_id: UUID | None = None
+    action_family: str | None = Field(default=None, max_length=100)
+    created_at: datetime | None = None
+
+
+class SettlementIndicatorPersistenceRecord(StrictContract):
+    id: UUID
+    world_id: UUID
+    location_id: UUID
+    indicator_key: str = Field(min_length=1, max_length=100)
+    value: Decimal
+    day_index: int = Field(ge=0)
+    source_event_id: UUID | None = None
+    version: int = Field(default=0, ge=0)
+    recorded_at: datetime | None = None
+
+
 class EvaluatorRunPersistenceRecord(StrictContract):
     id: UUID
     world_id: UUID

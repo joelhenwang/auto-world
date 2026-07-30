@@ -1,0 +1,17 @@
+{
+  "active_characters": [
+    "Mira Talren",
+    "Dain Arcen",
+    "Iri Voss",
+    "Torren Kest"
+  ],
+  "content_version": 2,
+  "days": 7,
+  "expected_phase_hashes": 70,
+  "model": "fake/stage2-seven-day-v1",
+  "phases_per_day": 10,
+  "scenario_id": "stage3-autonomous-month-v1",
+  "scenario_test_passed": true,
+  "seed": "caldris-embervale-v1:stage2",
+  "stage1_regression_included": true
+}

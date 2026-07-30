@@ -1,15 +1,16 @@
-# Contract Freeze — Stages 0–2
+# Contract Freeze — Stages 0–3
 
-**Status:** FROZEN (Stage 0 + Stage 1 + Stage 2)  
-**Freeze date:** 2026-07-29  
+**Status:** FROZEN (Stage 0 + Stage 1 + Stage 2 + Stage 3)
+**Freeze date:** 2026-07-30
 **Freeze owner:** parent coding agent  
 **Stage 1 integration commit:** `7727c7f69d935bba58dd6608c9504efe86aa9ec5` (main after PR #19)  
 **Stage 2 freeze branch:** `cursor/s2-qa-001-gate-085f` (see `docs/status/evidence/stage-2/version-manifest.json`)  
-**Stage documents:** `25_STAGE_0_FOUNDATION.md`, `26_STAGE_1_FIRST_COMPLETE_DAY.md`, `27_STAGE_2_SEVEN_DAY_WORLD.md`  
+**Stage documents:** `25_STAGE_0_FOUNDATION.md`, `26_STAGE_1_FIRST_COMPLETE_DAY.md`, `27_STAGE_2_SEVEN_DAY_WORLD.md`, `28_STAGE_3_AUTONOMOUS_MONTH.md`
 **Gate reports:**  
 - Stage 0: `docs/status/evidence/stage-0/stage-gate-report.md`  
 - Stage 1: `docs/status/evidence/stage-1/stage-gate-report.md`  
 - Stage 2: `docs/status/evidence/stage-2/stage-gate-report.md`
+- Stage 3: `docs/status/evidence/stage-3/stage-gate-report.md`
 
 ## Frozen contracts — Stage 0
 
@@ -70,7 +71,31 @@ Key freeze hashes (recomputed by `scripts/run_stage2_gate.py`):
 | `docs/generated/openapi.json` | `ec9569b32e9308d771c90f357a3562829d28f218f099b22bc0b3599149b60bf2` |
 | `docs/generated/database-schema.sql` | `08236d04096262d07026aecb9e79bfeaf8aa9a6733d0c80d80a76f5cc77ccab2` |
 
-## Consumers (Stage 3)
+## Frozen contracts — Stage 3
+
+| Contract | Source | Generated artefact / evidence | Version/hash | Allowed change in Stage 4 |
+|---|---|---|---|---|
+| Migration head | S3-DB-001 | `docs/generated/database-schema.sql` | `cb79fd74…` / `0005_stage3_long_term_tables` | **new revisions only** |
+| Long-term memory / embeddings | S3-MEM-* | memory + embeddings + version registry | v1 | additive; keep owner filters in SQL |
+| Retrieval access policy | S3-MEM-002 | `application/memory/retrieval.py` | v1 | no prompt-layer filtering substitute |
+| Stats/skills/magic/combat | S3-RULES-* | `domain/rules/**` | v1 | additive formulas via ADR |
+| Effect-command union (Stage 3) | S3-RULES | `domain/effects/commands.py` | Stage 3 additive | additive kinds via ADR |
+| Arcs/factions/novelty | S3-WORLD-* | domain/application world helpers | v1 | preserve one-active-major-arc |
+| Thirty-day orch / monthly barrier | S3-ORCH-001 | `stage3_ops` + scenario | `stage3-autonomous-month-v1` | preserve month barrier |
+| Evaluator | S3-GRAPH-001 | `agents/evaluator` | v1 | cannot mutate canon |
+| REST Stage 3 queries | S3-API-001 | `docs/generated/openapi.json` | `01de8322…` | additive endpoints |
+| Observer UI Stage 3 | S3-UI-001 | `MonthExplorerPanel` | Stage 3 | additive views |
+
+Key Stage 3 freeze hashes (recomputed by `scripts/run_stage3_gate.py`):
+
+| Artefact | sha256 |
+|---|---|
+| `uv.lock` | `c43c220b80302e42f452d72c65a02e97ebd101ff73845fe866c1eb3010e5454e` |
+| `frontend/pnpm-lock.yaml` | `22002950d79c21ad580902db44355d4e0f817b76e7a4ed2d4b8c3ed0520c32ac` |
+| `docs/generated/openapi.json` | `01de832286da84744beb786a1d05e08ed14d081960597b7946b99ea8bafb39e5` |
+| `docs/generated/database-schema.sql` | `cb79fd74e891f2fcac02ddbb57f89f26e5f07dc415d27b64ff10d582f1ac9168` |
+
+## Consumers (Stage 4)
 
 | Contract | Consumer tasks |
 |---|---|
@@ -86,6 +111,7 @@ uv sync
 sudo chmod 666 /var/run/docker.sock
 uv run python scripts/run_stage1_gate.py
 uv run python scripts/run_stage2_gate.py
+uv run python scripts/run_stage3_gate.py
 ```
 
 ## Amendment procedure
@@ -106,3 +132,5 @@ uv run python scripts/run_stage2_gate.py
 | 2026-07-29 | Stage 1 gate merge → freeze Stage 1 contracts | candidate | FROZEN @ `7727c7f` | S2-* | parent |
 | 2026-07-29 | S2-DB-001 additive migration `0004_stage2_continuity_tables` | `0003_stage1_action_scene_tables` | `0004_stage2_continuity_tables` | S2-* | parent |
 | 2026-07-29 | Stage 2 gate → freeze Stage 2 contracts | candidate | FROZEN @ `e87fa14` (S2-QA-001) | S3-* | QA automated PASS; parent merge pending |
+| 2026-07-29 | S3-DB-001 additive migration `0005_stage3_long_term_tables` | `0004_stage2_continuity_tables` | `0005_stage3_long_term_tables` | S3-* | parent |
+| 2026-07-30 | Stage 3 gate → freeze Stage 3 contracts | candidate | FROZEN @ `b055f5b` | S4-* | QA automated PASS; parent merge pending |

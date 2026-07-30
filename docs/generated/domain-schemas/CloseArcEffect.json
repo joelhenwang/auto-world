@@ -1,0 +1,58 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "arc_id": {
+      "format": "uuid",
+      "title": "Arc Id",
+      "type": "string"
+    },
+    "closure_reason": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Closure Reason",
+      "type": "string"
+    },
+    "effect_key": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Effect Key",
+      "type": "string"
+    },
+    "justification": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Justification",
+      "type": "string"
+    },
+    "kind": {
+      "const": "close_arc",
+      "default": "close_arc",
+      "title": "Kind",
+      "type": "string"
+    },
+    "outcome": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Outcome",
+      "type": "string"
+    },
+    "source_attempt_ids": {
+      "default": [],
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Source Attempt Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "effect_key",
+    "justification",
+    "arc_id",
+    "closure_reason",
+    "outcome"
+  ],
+  "title": "CloseArcEffect",
+  "type": "object"
+}

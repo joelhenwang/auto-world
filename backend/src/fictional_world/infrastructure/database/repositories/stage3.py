@@ -343,6 +343,15 @@ class SqlAlchemyFactionRepository:
         await self._session.flush()
         return faction_to_record(row)
 
+    async def list_for_world(self, world_id: UUID) -> Sequence[FactionPersistenceRecord]:
+        stmt = (
+            select(FactionRow)
+            .where(FactionRow.world_id == world_id)
+            .order_by(FactionRow.faction_key.asc())
+        )
+        rows = (await self._session.scalars(stmt)).all()
+        return [faction_to_record(row) for row in rows]
+
 
 class SqlAlchemyArcRepository:
     def __init__(self, session: AsyncSession) -> None:
@@ -383,6 +392,11 @@ class SqlAlchemyArcRepository:
         self._session.add(row)
         await self._session.flush()
         return arc_to_record(row)
+
+    async def list_for_world(self, world_id: UUID) -> Sequence[ArcPersistenceRecord]:
+        stmt = select(ArcRow).where(ArcRow.world_id == world_id).order_by(ArcRow.arc_key.asc())
+        rows = (await self._session.scalars(stmt)).all()
+        return [arc_to_record(row) for row in rows]
 
 
 class SqlAlchemyEvaluatorRunRepository:
@@ -460,3 +474,12 @@ class SqlAlchemyMonthRunRepository:
         self._session.add(row)
         await self._session.flush()
         return month_run_to_record(row)
+
+    async def list_for_world(self, world_id: UUID) -> Sequence[MonthRunPersistenceRecord]:
+        stmt = (
+            select(MonthRunRow)
+            .where(MonthRunRow.world_id == world_id)
+            .order_by(MonthRunRow.month_index.asc())
+        )
+        rows = (await self._session.scalars(stmt)).all()
+        return [month_run_to_record(row) for row in rows]
